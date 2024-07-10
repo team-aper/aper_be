@@ -1,0 +1,68 @@
+spring:
+  config:
+    import:
+      - classpath:/yml/application-secret.yml
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${local-db.url}
+    username: ${local-db.username}
+    password: ${local-db.password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        use_sql_comments: true
+    show-sql: true
+
+  data:
+    redis:
+      host: ${local-redis.host}
+      port: ${local-redis.port}
+
+
+  mail:
+    host: smtp.gmail.com # 서버 호스트
+    port: 587 # 서버 포트
+    username: ${email-auth.username} # 이메일 발신자 아이디
+    password: ${email-auth.password} # 앱 비밀번호
+    properties:
+      mail:
+        smtp:
+          auth: true # 사용자 인증 시도 여부
+          timeout: 50000 # Socket Read Timeout 시간(ms)
+          starttls:
+            enable: true # StartTLS 활성화 여부
+
+#logging:
+#    level:
+#      root: DEBUG
+
+springdoc:
+  show-login-endpoint: true
+
+secret:
+  key:
+    access: ${jwt.secret.key.access}
+    refresh: ${jwt.secret.key.refresh}
+
+cloud:
+  aws:
+    region:
+      static: ${aws.region.static}
+    stack:
+      auto: ${aws.stack.auto}
+    credentials:
+      accessKey: ${aws.credentials.accessKey}
+      secretKey: ${aws.credentials.secretKey}
+    s3:
+      bucket: ${aws.s3.bucket}
+server:
+  port: 8080
+

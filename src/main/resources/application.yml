@@ -1,3 +1,7 @@
-spring
-  application
-  name=spring-aper
+spring:
+  config:
+    import:
+      - classpath:/yml/application-local.yml
+      - classpath:/yml/application-dev.yml
+  profiles:
+    active: local
