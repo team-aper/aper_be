@@ -1,12 +1,12 @@
 package org.example.springaper.domain.user.entity;
 public enum UserRoleEnum {
-    USER(Authority.USER),  // 사용자 권한
-    ADMIN(Authority.ADMIN);  // 관리자 권한
+    USER(Authority.USER),
+    ADMIN(Authority.ADMIN);
 
     private final String authority;
 
     UserRoleEnum(String authority) {
-        this.authority = authority;//role 설정해주는 ... 사진 3번째 박스 authorities가 role을 담는 곳이니까.
+        this.authority = authority;
     }
 
     public String getAuthority() {

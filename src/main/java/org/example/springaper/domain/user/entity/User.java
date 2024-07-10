@@ -2,38 +2,46 @@ package org.example.springaper.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
-@Table(name = "users") // users라고 설정했음.
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING) //enum type을 db에 저장하고자 할 떄 // Enum type이 만약 USER라고 할 때, USER 그대로 db에 저장되는
-    private UserRoleEnum role;
+    private String password;
 
-    public User(String username, String password, String email, UserRoleEnum role) {
-        this.username = username;
+    @Column
+    private String fieldImage;
+
+    @Column
+    private String description;
+
+    @Column
+    private String penName;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum authority;
+
+    @Column
+    private Long point;
+
+    public User() {
+    }
+
+    public User(String username, String password, String email) {
+        this.penName = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.authority = UserRoleEnum.USER;
+        this.point = 0L;
     }
+
 }

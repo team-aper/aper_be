@@ -28,36 +28,36 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Override//OncePerRequestfilter를 이용하면, HttpServletRequest, HttpServletResponse를 받아올 수 있다. 이전에는 다 받아오고 해당 형태로 바꾸어 줬었는데: Auth Filter 보면 알 수 있음.
+    @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
         String tokenValue = jwtUtil.getTokenFromRequest(req);
 
         if (StringUtils.hasText(tokenValue)) {
-            // JWT 토큰 substring
-            tokenValue = jwtUtil.substringToken(tokenValue);//bearal 떼어주기
+
+            tokenValue = jwtUtil.substringToken(tokenValue);
             log.info(tokenValue);
 
-            if (!jwtUtil.validateToken(tokenValue)) { // token이 유효한지 확인.
+            if (!jwtUtil.validateToken(tokenValue)) {
                 log.error("Token Error");
                 return;
             }
 
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue); // claims : 토큰에 포함된 정보의 조각의 의미.
+            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
 
             try {
-                setAuthentication(info.getSubject());//subject가 이름에 해당. token 만들 때.
+                setAuthentication(info.getSubject());
             } catch (Exception e) {
                 log.error(e.getMessage());
                 return;
             }
         }
 
-        filterChain.doFilter(req, res);//req에서 res로 필터 하기.
+        filterChain.doFilter(req, res);
     }
 
-    // 인증 처리
-    public void setAuthentication(String username) { // 박스 과정 처리하는 부분 securitycontextholder, securitycontext, authentication
+
+    public void setAuthentication(String username) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
@@ -65,8 +65,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    // 인증 객체 생성
-    private Authentication createAuthentication(String username) {//가장 작은 박스 3개 담는 곳
+
+    private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
