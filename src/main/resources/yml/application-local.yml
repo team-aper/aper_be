@@ -66,3 +66,7 @@ cloud:
 server:
   port: 8080
 
+import:
+  api:
+    key: ${import.api.key}
+    secret: ${import.api.secret}
