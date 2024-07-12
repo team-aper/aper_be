@@ -11,22 +11,24 @@ import java.util.List;
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long orderId;
+    private Long ordersId;
 
     @Column
     private Long totalAmount;
 
-    @OneToMany(mappedBy = "userId")
-    private List<User> user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @OneToOne(mappedBy = "paymentId")
+    @OneToOne
+    @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @Column(name = "order_date")
+    @Column(name = "orders_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime orderDate;
+    private LocalDateTime ordersDate;
 }

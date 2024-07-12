@@ -5,19 +5,20 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "order_detail")
-public class OrderDetail {
+@Table(name = "orders_detail")
+public class OrdersDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderdetail_id")
-    private Long orderDetailId;
+    @Column(name = "ordersdetail_id")
+    private Long ordersDetailId;
     @Column
     private Long amount;
     @Column(name = "payment_status")
     private String paymentStatus;
-    @OneToOne(mappedBy = "productId")
+    @OneToOne
+    @JoinColumn(name = "product_id")
     private DigitalProduct digitalProduct;
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "orders_id")
+    private Orders orders;
 }
