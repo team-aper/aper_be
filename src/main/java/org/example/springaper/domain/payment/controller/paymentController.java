@@ -4,7 +4,9 @@
 //import jakarta.validation.Valid;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;
+//import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
 //import org.example.springaper.global.security.UserDetailsImpl;
+//import org.springframework.http.HttpStatus;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,8 @@
 //    public ResponseEntity<Void> createPreOrder(
 //            @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
 //            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return new ResponseEntity<>() paymentService.createPreOrder(preOrderRequestDto);
+//        paymentService.createPreOrder(preOrderRequestDto, userDetails.getUser());
+//        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 //
 //}
