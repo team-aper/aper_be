@@ -24,7 +24,7 @@ public class Order {
     private List<User> user;
 
     @OneToOne(mappedBy = "paymentId")
-    private PaymentId paymentId;
+    private Payment payment;
 
     @Column(name = "order_date")
     @Temporal(TemporalType.TIMESTAMP)
