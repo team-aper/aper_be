@@ -1,6 +1,5 @@
 package org.example.springaper.domain.payment.controller;
 
-import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/payment")
 @Slf4j(topic = "결제 컨트롤러")
-public class paymentController {
+public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/pre")
