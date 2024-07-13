@@ -31,12 +31,14 @@ public class PaymentService {
     public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
-        Orders orders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, preOrderRequestDto);
-        ordersRepository.save(orders);
-        createOrdersDetail(orders, preOrderRequestDto);
         if (iamportResponse.getCode() != 0) {
             throw new IllegalArgumentException("사전 결제 실패");
         }
+        log.info("사전 결제 아임포트 추가 성공");
+        Orders orders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, preOrderRequestDto);
+        ordersRepository.save(orders);
+        log.info("사전 주문 테이블 생성 성공");
+        createOrdersDetail(orders, preOrderRequestDto);
     }
     public void createOrdersDetail(Orders orders, PreOrderRequestDto preOrderRequestDto) {
         preOrderRequestDto.getOrderItems().stream()
@@ -46,6 +48,7 @@ public class PaymentService {
                 );
                 OrdersDetail ordersDetail = new OrdersDetail(digitalProduct, orders);
                 ordersDetailRepository.save(ordersDetail);
+                log.info("주문 디테일 생성 성공");
             });
     }
 }
