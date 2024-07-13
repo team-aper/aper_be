@@ -27,7 +27,7 @@ public class PaymentService {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
 
-        Orders orders = new Orders(preOrderRequestDto.getTotalAmount(), user, )
+//        Orders orders = new Orders(preOrderRequestDto.getTotalAmount(), user, )
         if (iamportResponse.getCode() != 0) {
             throw new IllegalArgumentException("사전 결제 실패");
         }
