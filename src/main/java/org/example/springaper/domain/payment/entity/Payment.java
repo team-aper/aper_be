@@ -24,5 +24,5 @@ public class Payment {
 
     //DB에 추가될때까 아닌 아임포트에서 결제된 시간 기입
     @Column
-    private LocalDateTime payment_date;
+    private LocalDateTime paymentDate;
 }

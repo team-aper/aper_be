@@ -1,7 +1,10 @@
 package org.example.springaper.domain.payment.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,4 +24,23 @@ public class OrdersDetail {
     @ManyToOne
     @JoinColumn(name = "orders_id")
     private Orders orders;
+    @Column
+    @Nullable
+    private LocalDateTime paymentDate;
+    @Column
+    @Nullable
+    private LocalDateTime cancleDate;
+
+    public OrdersDetail(Long amount, DigitalProduct digitalProduct, Orders orders) {
+        this.amount = amount;
+        this.digitalProduct = digitalProduct;
+        this.orders = orders;
+        this.paymentStatus = "Pending";
+    }
+    public void updatePaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+    public void updateCancleDate(LocalDateTime cancleDate) {
+        this.cancleDate = cancleDate;
+    }
 }
