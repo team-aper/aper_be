@@ -18,7 +18,7 @@ public class OrdersDetail {
     private Long amount;
     @Column(name = "payment_status")
     private String paymentStatus;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private DigitalProduct digitalProduct;
     @ManyToOne
@@ -37,6 +37,7 @@ public class OrdersDetail {
         this.orders = orders;
         this.paymentStatus = PaymentStatusEnum.PENDING.getPaymentStatus();
     }
+
     public void updatePaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;
     }

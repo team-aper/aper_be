@@ -33,9 +33,9 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime ordersDate;
 
-    public Orders (Long totalAmount, User user, PreOrderRequestDto preOrderRequestDto) {
+    public Orders (Long totalAmount, User user, Payment payment) {
         this.totalAmount = totalAmount;
         this.user = user;
-        this.payment = new Payment(preOrderRequestDto);
+        this.payment = payment;
     }
 }

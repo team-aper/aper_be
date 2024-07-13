@@ -11,14 +11,15 @@ import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
 import org.example.springaper.domain.payment.entity.DigitalProduct;
 import org.example.springaper.domain.payment.entity.Orders;
 import org.example.springaper.domain.payment.entity.OrdersDetail;
+import org.example.springaper.domain.payment.entity.Payment;
 import org.example.springaper.domain.payment.repository.DigitalProductRepository;
 import org.example.springaper.domain.payment.repository.OrdersDetailRepository;
 import org.example.springaper.domain.payment.repository.OrdersRepository;
+import org.example.springaper.domain.payment.repository.PaymentRepository;
 import org.example.springaper.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class PaymentService {
     private final OrdersRepository ordersRepository;
     private final OrdersDetailRepository ordersDetailRepository;
     private final DigitalProductRepository digitalProductRepository;
+    private final PaymentRepository paymentRepository;
     public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
@@ -35,10 +37,12 @@ public class PaymentService {
             throw new IllegalArgumentException("사전 결제 실패");
         }
         log.info("사전 결제 아임포트 추가 성공");
-        Orders orders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, preOrderRequestDto);
-        ordersRepository.save(orders);
+        Payment prePayment = new Payment(preOrderRequestDto);
+        paymentRepository.save(prePayment);
+        Orders preOrders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, prePayment);
+        ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
-        createOrdersDetail(orders, preOrderRequestDto);
+        createOrdersDetail(preOrders, preOrderRequestDto);
     }
     public void createOrdersDetail(Orders orders, PreOrderRequestDto preOrderRequestDto) {
         preOrderRequestDto.getOrderItems().stream()
