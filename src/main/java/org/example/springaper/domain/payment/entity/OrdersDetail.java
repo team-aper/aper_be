@@ -31,11 +31,11 @@ public class OrdersDetail {
     @Nullable
     private LocalDateTime cancleDate;
 
-    public OrdersDetail(Long amount, DigitalProduct digitalProduct, Orders orders) {
-        this.amount = amount;
+    public OrdersDetail(DigitalProduct digitalProduct, Orders orders) {
+        this.amount = digitalProduct.getAmount();
         this.digitalProduct = digitalProduct;
         this.orders = orders;
-        this.paymentStatus = "Pending";
+        this.paymentStatus = PaymentStatusEnum.PENDING.getPaymentStatus();
     }
     public void updatePaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;

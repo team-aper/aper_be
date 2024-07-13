@@ -2,6 +2,7 @@ package org.example.springaper.domain.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
 import org.example.springaper.domain.user.entity.User;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -32,9 +33,9 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime ordersDate;
 
-    public Orders (Long totalAmount, User user, Payment payment) {
+    public Orders (Long totalAmount, User user, PreOrderRequestDto preOrderRequestDto) {
         this.totalAmount = totalAmount;
         this.user = user;
-        this.payment = payment;
+        this.payment = new Payment(preOrderRequestDto);
     }
 }
