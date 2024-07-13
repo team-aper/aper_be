@@ -32,15 +32,20 @@ public class PaymentService {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
         Orders orders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, preOrderRequestDto);
-        preOrderRequestDto.getOrderItems().stream()
-                .forEach(productId -> {
-                    DigitalProduct digitalProduct = digitalProductRepository.findById(productId.longValue()).orElseThrow(
-                            () -> new IllegalArgumentException("해당 상품이 없습니다.")
-                    );
-                    OrdersDetail ordersDetail = new OrdersDetail(digitalProduct, orders);
-                });
+        ordersRepository.save(orders);
+        createOrdersDetail(orders, preOrderRequestDto);
         if (iamportResponse.getCode() != 0) {
             throw new IllegalArgumentException("사전 결제 실패");
         }
+    }
+    public void createOrdersDetail(Orders orders, PreOrderRequestDto preOrderRequestDto) {
+        preOrderRequestDto.getOrderItems().stream()
+            .forEach(productId -> {
+                DigitalProduct digitalProduct = digitalProductRepository.findById(productId.longValue()).orElseThrow(
+                        () -> new IllegalArgumentException("해당 상품이 없습니다.")
+                );
+                OrdersDetail ordersDetail = new OrdersDetail(digitalProduct, orders);
+                ordersDetailRepository.save(ordersDetail);
+            });
     }
 }
