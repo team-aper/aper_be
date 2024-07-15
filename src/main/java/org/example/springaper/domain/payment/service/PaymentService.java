@@ -11,7 +11,7 @@ import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
 import org.example.springaper.domain.payment.entity.DigitalProduct;
 import org.example.springaper.domain.payment.entity.Orders;
 import org.example.springaper.domain.payment.entity.OrdersDetail;
-import org.example.springaper.domain.payment.entity.Payment;
+import org.example.springaper.domain.payment.entity.PaymentInfo;
 import org.example.springaper.domain.payment.repository.DigitalProductRepository;
 import org.example.springaper.domain.payment.repository.OrdersDetailRepository;
 import org.example.springaper.domain.payment.repository.OrdersRepository;
@@ -37,9 +37,9 @@ public class PaymentService {
             throw new IllegalArgumentException("사전 결제 실패");
         }
         log.info("사전 결제 아임포트 추가 성공");
-        Payment prePayment = new Payment(preOrderRequestDto);
-        paymentRepository.save(prePayment);
-        Orders preOrders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, prePayment);
+        PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
+        paymentRepository.save(prePaymentInfo);
+        Orders preOrders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, prePaymentInfo);
         ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
         createOrdersDetail(preOrders, preOrderRequestDto);
@@ -54,5 +54,10 @@ public class PaymentService {
                 ordersDetailRepository.save(ordersDetail);
                 log.info("주문 디테일 생성 성공");
             });
+    }
+
+    public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
+        IamportResponse<PaymentInfo> paymentResponse = iamportClient.paymentByImpUid(impUid);
+
     }
 }

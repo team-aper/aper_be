@@ -32,7 +32,7 @@ public class PaymentController {
     @PostMapping("/post/")
     public ResponseEntity<Void> postOrder(
             @PathVariable String impUid,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         paymentService.postOrder(impUid, userDetails.getUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }

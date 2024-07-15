@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Payment {
+public class PaymentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -30,7 +30,7 @@ public class Payment {
     @Nullable
     private LocalDateTime paymentDate;
 
-    public Payment(PreOrderRequestDto preOrderRequestDto){
+    public PaymentInfo(PreOrderRequestDto preOrderRequestDto){
         this.paymentMethod = preOrderRequestDto.getPaymentMethod();
         this.merchantUid = preOrderRequestDto.getMerchantUid();
     }
