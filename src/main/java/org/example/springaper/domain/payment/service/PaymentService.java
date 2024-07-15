@@ -68,14 +68,6 @@ public class PaymentService {
         log.info("사전 주문 테이블 생성 성공");
         createOrdersDetail(preOrders, orderedProducts);
     }
-    public void createOrdersDetail(Orders orders, List<DigitalProduct> productList) {
-        productList.stream()
-            .forEach(product -> {
-                OrdersDetail ordersDetail = new OrdersDetail(product, orders);
-                ordersDetailRepository.save(ordersDetail);
-                log.info("주문 디테일 생성 성공");
-            });
-    }
     @Transactional
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
@@ -115,6 +107,14 @@ public class PaymentService {
 
         user.updatePoint(point.get());
         userRepository.save(user);
+    }
+    public void createOrdersDetail(Orders orders, List<DigitalProduct> productList) {
+        List<OrdersDetail> ordersDetails = productList.stream()
+                .map(product -> new OrdersDetail(product, orders))
+                .toList();
+
+        ordersDetailRepository.saveAll(ordersDetails);
+        log.info("주문 디테일 생성 성공");
     }
     public LocalDateTime changePaidAtLocalDateTime(Date paidAt) {
         Instant instant = paidAt.toInstant();
