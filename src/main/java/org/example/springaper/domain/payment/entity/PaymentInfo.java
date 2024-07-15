@@ -25,6 +25,10 @@ public class PaymentInfo {
     @Column
     private String merchantUid;
 
+    @OneToOne
+    @JoinColumn(name = "orders_id")
+    private Orders orders;
+
     //DB에 추가될때까 아닌 아임포트에서 결제된 시간 기입
     @Column
     @Nullable
