@@ -66,22 +66,12 @@ public class PaymentService {
         Orders preOrders = new Orders(totalAmount.longValue(), user, prePaymentInfo);
         ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
-        createOrdersDetail(preOrders, preOrderRequestDto);
+        createOrdersDetail(preOrders, orderedProducts);
     }
-    public List<DigitalProduct> getProductList(List<Integer> productList) {
-        List<Long> productIds = productList.stream()
-                .map(Long::valueOf)
-                .toList();
-        return digitalProductRepository.findAllById(productIds);
-    }
-
-    public void createOrdersDetail(Orders orders, PreOrderRequestDto preOrderRequestDto) {
-        preOrderRequestDto.getOrderItems().stream()
-            .forEach(productId -> {
-                DigitalProduct digitalProduct = digitalProductRepository.findById(productId.longValue()).orElseThrow(
-                        () -> new IllegalArgumentException("해당 상품이 없습니다.")
-                );
-                OrdersDetail ordersDetail = new OrdersDetail(digitalProduct, orders);
+    public void createOrdersDetail(Orders orders, List<DigitalProduct> productList) {
+        productList.stream()
+            .forEach(product -> {
+                OrdersDetail ordersDetail = new OrdersDetail(product, orders);
                 ordersDetailRepository.save(ordersDetail);
                 log.info("주문 디테일 생성 성공");
             });
@@ -129,5 +119,11 @@ public class PaymentService {
     public LocalDateTime changePaidAtLocalDateTime(Date paidAt) {
         Instant instant = paidAt.toInstant();
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+    public List<DigitalProduct> getProductList(List<Integer> productList) {
+        List<Long> productIds = productList.stream()
+                .map(Long::valueOf)
+                .toList();
+        return digitalProductRepository.findAllById(productIds);
     }
 }
