@@ -13,7 +13,7 @@ public class PaymentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long paymentId;
+    private Long paymentinfoId;
 
     @Column
     private String paymentMethod;
@@ -33,5 +33,13 @@ public class PaymentInfo {
     public PaymentInfo(PreOrderRequestDto preOrderRequestDto){
         this.paymentMethod = preOrderRequestDto.getPaymentMethod();
         this.merchantUid = preOrderRequestDto.getMerchantUid();
+    }
+
+    public void updateImpUid(String impUid) {
+        this.impUid = impUid;
+    }
+
+    public void updatePaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
     }
 }

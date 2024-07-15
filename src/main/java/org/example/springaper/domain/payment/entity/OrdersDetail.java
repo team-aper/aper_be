@@ -44,4 +44,7 @@ public class OrdersDetail {
     public void updateCancleDate(LocalDateTime cancleDate) {
         this.cancleDate = cancleDate;
     }
+    public void updatePaymentStatusPaid() {
+        this.paymentStatus = "paid";
+    }
 }

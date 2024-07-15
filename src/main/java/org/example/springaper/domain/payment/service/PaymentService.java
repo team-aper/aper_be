@@ -6,6 +6,7 @@ import com.siot.IamportRestClient.request.PrepareData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import com.siot.IamportRestClient.response.Prepare;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
@@ -16,11 +17,17 @@ import org.example.springaper.domain.payment.entity.PaymentInfo;
 import org.example.springaper.domain.payment.repository.DigitalProductRepository;
 import org.example.springaper.domain.payment.repository.OrdersDetailRepository;
 import org.example.springaper.domain.payment.repository.OrdersRepository;
-import org.example.springaper.domain.payment.repository.PaymentRepository;
+import org.example.springaper.domain.payment.repository.PaymentInfoRepository;
 import org.example.springaper.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +37,7 @@ public class PaymentService {
     private final OrdersRepository ordersRepository;
     private final OrdersDetailRepository ordersDetailRepository;
     private final DigitalProductRepository digitalProductRepository;
-    private final PaymentRepository paymentRepository;
+    private final PaymentInfoRepository paymentInfoRepository;
     public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
@@ -39,7 +46,7 @@ public class PaymentService {
         }
         log.info("사전 결제 아임포트 추가 성공");
         PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
-        paymentRepository.save(prePaymentInfo);
+        paymentInfoRepository.save(prePaymentInfo);
         Orders preOrders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, prePaymentInfo);
         ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
@@ -56,13 +63,34 @@ public class PaymentService {
                 log.info("주문 디테일 생성 성공");
             });
     }
+    @Transactional
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
         Payment response = payment.getResponse();
         String responseMerchantUid = response.getMerchantUid();
-        PaymentInfo paymentInfo = paymentRepository.findByMerchantUid(responseMerchantUid).orElseThrow(() ->
-                new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
+        String responseImpUid = response.getImpUid();
+        LocalDateTime responsePaidAt = changePaidAtLocalDateTime(response.getPaidAt());
+
+        PaymentInfo paymentInfo = paymentInfoRepository.findByMerchantUid(responseMerchantUid).orElseThrow(() ->
+                new IllegalArgumentException("존재 하지 않는 결제 내용입니다.")
         );
 
+        paymentInfo.updateImpUid(responseImpUid);
+        paymentInfo.updatePaymentDate(responsePaidAt);
+
+        Orders orders = ordersRepository.findByPaymentInfoId(paymentInfo.getPaymentinfoId()).orElseThrow(() ->
+            new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
+        );
+
+        List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersId(orders.getOrdersId());
+        ordersDetailList.stream()
+            .forEach(ordersDetail -> {
+                ordersDetail.updatePaymentDate(responsePaidAt);
+                ordersDetail.updatePaymentStatusPaid();
+            });
+    }
+    public LocalDateTime changePaidAtLocalDateTime(Date paidAt) {
+        Instant instant = paidAt.toInstant();
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 }

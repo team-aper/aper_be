@@ -25,7 +25,7 @@ public class Orders {
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "payment_id")
+    @JoinColumn(name = "paymentinfo_id")
     private PaymentInfo paymentInfo;
 
     //주문의 생성 날짜, 실제 결제 날짜 x
