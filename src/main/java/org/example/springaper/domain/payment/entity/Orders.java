@@ -37,6 +37,5 @@ public class Orders {
         this.totalAmount = totalAmount;
         this.user = user;
         this.paymentInfo = paymentInfo;
-        this.ordersDate = LocalDateTime.now();
     }
 }
