@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +56,13 @@ public class PaymentService {
         log.info("사전 주문 테이블 생성 성공");
         createOrdersDetail(preOrders, preOrderRequestDto);
     }
+    public List<DigitalProduct> getProductList(PreOrderRequestDto requestDto) {
+        List<Long> productIds = requestDto.getOrderItems().stream()
+                .map(Long::valueOf) // Integer를 Long으로 변환
+                .toList();
+        return digitalProductRepository.findAllById(productIds);
+    }
+
     public void createOrdersDetail(Orders orders, PreOrderRequestDto preOrderRequestDto) {
         preOrderRequestDto.getOrderItems().stream()
             .forEach(productId -> {
