@@ -4,6 +4,7 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.PrepareData;
 import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import com.siot.IamportRestClient.response.Prepare;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class PaymentService {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
         if (iamportResponse.getCode() != 0) {
-            throw new IllegalArgumentException("사전 결제 실패");
+            throw new IllegalArgumentException(iamportResponse.getMessage());
         }
         log.info("사전 결제 아임포트 추가 성공");
         PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
@@ -55,9 +56,13 @@ public class PaymentService {
                 log.info("주문 디테일 생성 성공");
             });
     }
-
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
-        IamportResponse<PaymentInfo> paymentResponse = iamportClient.paymentByImpUid(impUid);
+        IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
+        Payment response = payment.getResponse();
+        String responseMerchantUid = response.getMerchantUid();
+        PaymentInfo paymentInfo = paymentRepository.findByMerchantUid(responseMerchantUid).orElseThrow(() ->
+                new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
+        );
 
     }
 }
