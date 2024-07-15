@@ -75,18 +75,19 @@ public class PaymentService {
                 new IllegalArgumentException("존재 하지 않는 결제 내용입니다.")
         );
 
-        paymentInfo.updateImpUid(responseImpUid);
-        paymentInfo.updatePaymentDate(responsePaidAt);
-
         Orders orders = ordersRepository.findByPaymentInfoPaymentinfoId(paymentInfo.getPaymentinfoId()).orElseThrow(() ->
             new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
         );
 
-        if (!Objects.equals(orders.getOrdersId(), user.getUserId())) {
+        if (!Objects.equals(orders.getUser().getUserId(), user.getUserId())) {
             throw new IllegalArgumentException("주문한 유저와 결제한 유저가 일치하지 않습니다.");
         }
 
         List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersOrdersId(orders.getOrdersId());
+
+        paymentInfo.updateImpUid(responseImpUid);
+        paymentInfo.updatePaymentDate(responsePaidAt);
+
         ordersDetailList.stream()
             .forEach(ordersDetail -> {
                 ordersDetail.updatePaymentDate(responsePaidAt);
