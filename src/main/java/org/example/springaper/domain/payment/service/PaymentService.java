@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -77,16 +78,21 @@ public class PaymentService {
         paymentInfo.updateImpUid(responseImpUid);
         paymentInfo.updatePaymentDate(responsePaidAt);
 
-        Orders orders = ordersRepository.findByPaymentInfoId(paymentInfo.getPaymentinfoId()).orElseThrow(() ->
+        Orders orders = ordersRepository.findByPaymentInfoPaymentinfoId(paymentInfo.getPaymentinfoId()).orElseThrow(() ->
             new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
         );
 
-        List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersId(orders.getOrdersId());
+        if (!Objects.equals(orders.getOrdersId(), user.getUserId())) {
+            throw new IllegalArgumentException("주문한 유저와 결제한 유저가 일치하지 않습니다.");
+        }
+
+        List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersOrdersId(orders.getOrdersId());
         ordersDetailList.stream()
             .forEach(ordersDetail -> {
                 ordersDetail.updatePaymentDate(responsePaidAt);
                 ordersDetail.updatePaymentStatusPaid();
             });
+
     }
     public LocalDateTime changePaidAtLocalDateTime(Date paidAt) {
         Instant instant = paidAt.toInstant();

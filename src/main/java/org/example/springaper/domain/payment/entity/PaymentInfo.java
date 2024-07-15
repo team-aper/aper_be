@@ -29,12 +29,11 @@ public class PaymentInfo {
     @Column
     @Nullable
     private LocalDateTime paymentDate;
-
     public PaymentInfo(PreOrderRequestDto preOrderRequestDto){
         this.paymentMethod = preOrderRequestDto.getPaymentMethod();
         this.merchantUid = preOrderRequestDto.getMerchantUid();
     }
-
+    public PaymentInfo() {}
     public void updateImpUid(String impUid) {
         this.impUid = impUid;
     }

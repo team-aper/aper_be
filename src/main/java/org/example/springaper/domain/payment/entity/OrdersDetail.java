@@ -37,7 +37,7 @@ public class OrdersDetail {
         this.orders = orders;
         this.paymentStatus = PaymentStatusEnum.PENDING.getPaymentStatus();
     }
-
+    public OrdersDetail() {}
     public void updatePaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;
     }

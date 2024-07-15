@@ -38,4 +38,8 @@ public class Orders {
         this.user = user;
         this.paymentInfo = paymentInfo;
     }
+
+    public Orders() {
+
+    }
 }

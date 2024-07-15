@@ -29,7 +29,7 @@ public class PaymentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/post/")
+    @PostMapping("/post/{impUid}")
     public ResponseEntity<Void> postOrder(
             @PathVariable String impUid,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
