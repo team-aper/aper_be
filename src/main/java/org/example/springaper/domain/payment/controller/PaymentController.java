@@ -10,10 +10,7 @@ import org.example.springaper.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -25,11 +22,20 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/pre")
-    public ResponseEntity<Void> PrepareOrder(
+    public ResponseEntity<Void> prepareOrder(
             @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         paymentService.prepareOrder(preOrderRequestDto, userDetails.getUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/post/")
+    public ResponseEntity<Void> postOrder(
+            @PathVariable String impUid,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        paymentService.postOrder(impUid, userDetails.getUser());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 }
