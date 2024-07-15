@@ -45,4 +45,7 @@ public class PaymentInfo {
     public void updatePaymentDate(LocalDateTime paymentDate) {
         this.paymentDate = paymentDate;
     }
+    public void updateOrders(Orders orders) {
+        this.orders = orders;
+    }
 }
