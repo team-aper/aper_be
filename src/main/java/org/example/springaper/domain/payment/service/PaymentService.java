@@ -19,6 +19,7 @@ import org.example.springaper.domain.payment.repository.OrdersDetailRepository;
 import org.example.springaper.domain.payment.repository.OrdersRepository;
 import org.example.springaper.domain.payment.repository.PaymentInfoRepository;
 import org.example.springaper.domain.user.entity.User;
+import org.example.springaper.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class PaymentService {
     private final OrdersDetailRepository ordersDetailRepository;
     private final DigitalProductRepository digitalProductRepository;
     private final PaymentInfoRepository paymentInfoRepository;
+    private final UserRepository userRepository;
     public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
         PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
@@ -88,12 +91,20 @@ public class PaymentService {
         paymentInfo.updateImpUid(responseImpUid);
         paymentInfo.updatePaymentDate(responsePaidAt);
 
+        AtomicReference<Long> point = new AtomicReference<>(0L);
         ordersDetailList.stream()
             .forEach(ordersDetail -> {
                 ordersDetail.updatePaymentDate(responsePaidAt);
                 ordersDetail.updatePaymentStatusPaid();
+                Long productId = ordersDetail.getDigitalProduct().getProductId();
+                DigitalProduct product = digitalProductRepository.findById(productId).orElseThrow(() ->
+                        new IllegalArgumentException("존재 하지 상품입니다.")
+                );
+                point.updateAndGet(v -> v + product.getValue());
             });
 
+        user.updatePoint(point.get());
+        userRepository.save(user);
     }
     public LocalDateTime changePaidAtLocalDateTime(Date paidAt) {
         Instant instant = paidAt.toInstant();
