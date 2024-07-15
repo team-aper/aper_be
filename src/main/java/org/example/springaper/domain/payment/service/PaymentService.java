@@ -23,6 +23,7 @@ import org.example.springaper.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -43,22 +44,33 @@ public class PaymentService {
     private final PaymentInfoRepository paymentInfoRepository;
     private final UserRepository userRepository;
     public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
-        PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), preOrderRequestDto.getTotalAmount());
+        List<DigitalProduct> orderedProducts = getProductList(preOrderRequestDto.getOrderItems());
+        if (preOrderRequestDto.getOrderItems().size() != orderedProducts.size()) {
+            throw new IllegalArgumentException("존재하지 않는 상품에 대한 주문입니다.");
+        }
+
+        BigDecimal totalAmount = orderedProducts.stream()
+                .map(product -> new BigDecimal(product.getAmount()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        PrepareData prepareData = new PrepareData(preOrderRequestDto.getMerchantUid(), totalAmount);
         IamportResponse<Prepare> iamportResponse = iamportClient.postPrepare(prepareData);
         if (iamportResponse.getCode() != 0) {
             throw new IllegalArgumentException(iamportResponse.getMessage());
         }
         log.info("사전 결제 아임포트 추가 성공");
+
         PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
         paymentInfoRepository.save(prePaymentInfo);
-        Orders preOrders = new Orders(preOrderRequestDto.getTotalAmount().longValue(), user, prePaymentInfo);
+
+        Orders preOrders = new Orders(totalAmount.longValue(), user, prePaymentInfo);
         ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
         createOrdersDetail(preOrders, preOrderRequestDto);
     }
-    public List<DigitalProduct> getProductList(PreOrderRequestDto requestDto) {
-        List<Long> productIds = requestDto.getOrderItems().stream()
-                .map(Long::valueOf) // Integer를 Long으로 변환
+    public List<DigitalProduct> getProductList(List<Integer> productList) {
+        List<Long> productIds = productList.stream()
+                .map(Long::valueOf)
                 .toList();
         return digitalProductRepository.findAllById(productIds);
     }

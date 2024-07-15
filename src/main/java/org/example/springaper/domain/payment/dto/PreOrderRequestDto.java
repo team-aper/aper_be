@@ -9,6 +9,5 @@ import java.util.List;
 public class PreOrderRequestDto {
     private String merchantUid;
     private String paymentMethod;
-    private BigDecimal totalAmount;
     private List<Integer> orderItems;
 }
