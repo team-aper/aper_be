@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,21 +76,26 @@ public class PaymentService {
         Payment response = payment.getResponse();
         LocalDateTime responsePaidAt = changePaidAtLocalDateTime(response.getPaidAt());
 
-        PaymentInfo paymentInfo = paymentInfoRepository.findPaymentInfoAndOrders(response.getMerchantUid()).orElseThrow(() ->
+        PaymentInfo paymentInfo = paymentInfoRepository.findPaymentInfoWithDetailsByMerchantUid(response.getMerchantUid()).orElseThrow(() ->
                 new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
         );
 
+        Orders orders = paymentInfo.getOrders();
 
-        if (!Objects.equals(paymentInfo.getOrders().getUser().getUserId(), user.getUserId())) {
+        if (!Objects.equals(orders.getUser().getUserId(), user.getUserId())) {
             throw new IllegalArgumentException("주문한 유저와 결제한 유저가 일치하지 않습니다.");
         }
 
-        List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersDetailOrdersIdAndProductId(paymentInfo.getOrders().getOrdersId());
+        List<OrdersDetail> ordersDetailList = orders.getOrdersDetailList();
 
         paymentInfo.updateImpUid(response.getImpUid());
         paymentInfo.updatePaymentDate(responsePaidAt);
         paymentInfo.updatePaymentMethod(response.getPayMethod());
 
+        user.updatePoint(processPaymentAndUpdatePoint(responsePaidAt, ordersDetailList));
+        userRepository.save(user);
+    }
+    public Long processPaymentAndUpdatePoint(LocalDateTime responsePaidAt, List<OrdersDetail> ordersDetailList) {
         AtomicReference<Long> point = new AtomicReference<>(0L);
         ordersDetailList.stream()
                 .forEach(ordersDetail -> {
@@ -99,9 +103,7 @@ public class PaymentService {
                     ordersDetail.updatePaymentStatusPaid();
                     point.updateAndGet(v -> v + ordersDetail.getDigitalProduct().getValue());
                 });
-
-        user.updatePoint(point.get());
-        userRepository.save(user);
+        return point.get();
     }
     public void createOrdersDetail(Orders orders, List<DigitalProduct> productList) {
         List<OrdersDetail> ordersDetails = productList.stream()

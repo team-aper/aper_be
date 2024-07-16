@@ -7,6 +7,7 @@ import org.hibernate.annotations.CurrentTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,9 @@ public class Orders {
     @OneToOne
     @JoinColumn(name = "paymentinfo_id")
     private PaymentInfo paymentInfo;
+
+    @OneToMany(mappedBy = "orders")
+    List<OrdersDetail> ordersDetailList;
 
     //주문의 생성 날짜, 실제 결제 날짜 x
     @Column(name = "orders_date")
