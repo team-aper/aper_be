@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
+import org.example.springaper.domain.payment.dto.PreOrderResponseDto;
 import org.example.springaper.domain.payment.entity.DigitalProduct;
 import org.example.springaper.domain.payment.entity.Orders;
 import org.example.springaper.domain.payment.entity.OrdersDetail;
@@ -43,7 +44,7 @@ public class PaymentService {
     private final DigitalProductRepository digitalProductRepository;
     private final PaymentInfoRepository paymentInfoRepository;
     private final UserRepository userRepository;
-    public void prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
+    public PreOrderResponseDto prepareOrder(PreOrderRequestDto preOrderRequestDto, User user) throws IamportResponseException, IOException {
         List<DigitalProduct> orderedProducts = getProductList(preOrderRequestDto.getOrderItems());
         if (preOrderRequestDto.getOrderItems().size() != orderedProducts.size()) {
             throw new IllegalArgumentException("존재하지 않는 상품에 대한 주문입니다.");
@@ -68,6 +69,7 @@ public class PaymentService {
         ordersRepository.save(preOrders);
         log.info("사전 주문 테이블 생성 성공");
         createOrdersDetail(preOrders, orderedProducts);
+        return new PreOrderResponseDto(totalAmount);
     }
 //    @Transactional
 //    public void postOrder(String impUid, User user) throws IamportResponseException, IOException {

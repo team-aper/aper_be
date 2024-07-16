@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
+import org.example.springaper.domain.payment.dto.PreOrderResponseDto;
 import org.example.springaper.domain.payment.service.PaymentService;
 import org.example.springaper.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/pre")
-    public ResponseEntity<Void> prepareOrder(
+    public ResponseEntity<PreOrderResponseDto> prepareOrder(
             @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
-        paymentService.prepareOrder(preOrderRequestDto, userDetails.getUser());
-        return new ResponseEntity<>(HttpStatus.OK);
+        PreOrderResponseDto responseDto = paymentService.prepareOrder(preOrderRequestDto, userDetails.getUser());
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @PostMapping("/post/{impUid}")
