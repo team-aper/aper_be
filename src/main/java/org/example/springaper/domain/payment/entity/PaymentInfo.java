@@ -34,7 +34,6 @@ public class PaymentInfo {
     @Nullable
     private LocalDateTime paymentDate;
     public PaymentInfo(PreOrderRequestDto preOrderRequestDto){
-        this.paymentMethod = preOrderRequestDto.getPaymentMethod();
         this.merchantUid = preOrderRequestDto.getMerchantUid();
     }
     public PaymentInfo() {}
@@ -47,5 +46,8 @@ public class PaymentInfo {
     }
     public void updateOrders(Orders orders) {
         this.orders = orders;
+    }
+    public void updatePaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

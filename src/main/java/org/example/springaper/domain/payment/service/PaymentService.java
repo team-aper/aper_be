@@ -71,57 +71,13 @@ public class PaymentService {
         createOrdersDetail(preOrders, orderedProducts);
         return new PreOrderResponseDto(totalAmount);
     }
-//    @Transactional
-//    public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
-//        IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
-//        Payment response = payment.getResponse();
-//        String responseMerchantUid = response.getMerchantUid();
-//        String responseImpUid = response.getImpUid();
-//        LocalDateTime responsePaidAt = changePaidAtLocalDateTime(response.getPaidAt());
-//
-//        PaymentInfo paymentInfo = paymentInfoRepository.findByMerchantUid(responseMerchantUid).orElseThrow(() ->
-//                new IllegalArgumentException("존재 하지 않는 결제 내용입니다.")
-//        );
-//
-//        Orders orders = ordersRepository.findByPaymentInfoPaymentinfoId(paymentInfo.getPaymentinfoId()).orElseThrow(() ->
-//            new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
-//        );
-//
-//
-//        if (!Objects.equals(orders.getUser().getUserId(), user.getUserId())) {
-//            throw new IllegalArgumentException("주문한 유저와 결제한 유저가 일치하지 않습니다.");
-//        }
-//
-//        List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersOrdersId(orders.getOrdersId());
-//
-//        paymentInfo.updateImpUid(responseImpUid);
-//        paymentInfo.updatePaymentDate(responsePaidAt);
-//
-//        AtomicReference<Long> point = new AtomicReference<>(0L);
-//        ordersDetailList.stream()
-//            .forEach(ordersDetail -> {
-//                ordersDetail.updatePaymentDate(responsePaidAt);
-//                ordersDetail.updatePaymentStatusPaid();
-//                Long productId = ordersDetail.getDigitalProduct().getProductId();
-//                DigitalProduct product = digitalProductRepository.findById(productId).orElseThrow(() ->
-//                        new IllegalArgumentException("존재 하지 상품입니다.")
-//                );
-//                point.updateAndGet(v -> v + product.getValue());
-//            });
-//
-//        user.updatePoint(point.get());
-//        userRepository.save(user);
-//    }
-
     @Transactional
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
         Payment response = payment.getResponse();
-        String responseMerchantUid = response.getMerchantUid();
-        String responseImpUid = response.getImpUid();
         LocalDateTime responsePaidAt = changePaidAtLocalDateTime(response.getPaidAt());
 
-        PaymentInfo paymentInfo = paymentInfoRepository.findPaymentInfoAndOrders(responseMerchantUid).orElseThrow(() ->
+        PaymentInfo paymentInfo = paymentInfoRepository.findPaymentInfoAndOrders(response.getMerchantUid()).orElseThrow(() ->
                 new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
         );
 
@@ -132,8 +88,9 @@ public class PaymentService {
 
         List<OrdersDetail> ordersDetailList = ordersDetailRepository.findAllByOrdersDetailOrdersIdAndProductId(paymentInfo.getOrders().getOrdersId());
 
-        paymentInfo.updateImpUid(responseImpUid);
+        paymentInfo.updateImpUid(response.getImpUid());
         paymentInfo.updatePaymentDate(responsePaidAt);
+        paymentInfo.updatePaymentMethod(response.getPayMethod());
 
         AtomicReference<Long> point = new AtomicReference<>(0L);
         ordersDetailList.stream()
