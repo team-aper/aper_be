@@ -21,6 +21,7 @@ import org.example.springaper.domain.payment.repository.OrdersRepository;
 import org.example.springaper.domain.payment.repository.PaymentInfoRepository;
 import org.example.springaper.domain.user.entity.User;
 import org.example.springaper.domain.user.repository.UserRepository;
+import org.hibernate.query.Order;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "결제 서비스")
+@Transactional
 public class PaymentService {
     private final IamportClient iamportClient;
     private final OrdersRepository ordersRepository;
@@ -63,14 +65,13 @@ public class PaymentService {
         PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
         paymentInfoRepository.save(prePaymentInfo);
 
-        Orders preOrders = new Orders(totalAmount.longValue(), user, prePaymentInfo);
-        prePaymentInfo.updateOrders(preOrders);
-        ordersRepository.save(preOrders);
+
+        Orders preOrders = createOrder(totalAmount.longValue(), user, prePaymentInfo);
         log.info("사전 주문 테이블 생성 성공");
+
         createOrdersDetail(preOrders, orderedProducts);
         return new PreOrderResponseDto(totalAmount);
     }
-    @Transactional
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);
         Payment response = payment.getResponse();
@@ -95,6 +96,8 @@ public class PaymentService {
         user.updatePoint(processPaymentAndUpdatePoint(responsePaidAt, ordersDetailList));
         userRepository.save(user);
     }
+
+
     public Long processPaymentAndUpdatePoint(LocalDateTime responsePaidAt, List<OrdersDetail> ordersDetailList) {
         AtomicReference<Long> point = new AtomicReference<>(0L);
         ordersDetailList.stream()
@@ -122,5 +125,10 @@ public class PaymentService {
                 .map(Long::valueOf)
                 .toList();
         return digitalProductRepository.findAllById(productIds);
+    }
+    public Orders createOrder(Long totalAmount, User user, PaymentInfo prePaymentInfo) {
+        Orders preOrders = new Orders(totalAmount, user, prePaymentInfo);
+        prePaymentInfo.updateOrders(preOrders);
+        return ordersRepository.save(preOrders);
     }
 }
