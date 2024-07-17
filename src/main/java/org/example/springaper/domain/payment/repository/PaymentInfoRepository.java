@@ -20,4 +20,16 @@ public interface PaymentInfoRepository extends JpaRepository<PaymentInfo, Long> 
             "AND o.ordersId = od.orders.ordersId " +
             "AND od.digitalProduct.productId = dp.productId")
     Optional<PaymentInfo> findPaymentInfoWithDetailsByMerchantUid(String merchantUid);
+
+    @Query("SELECT pi FROM PaymentInfo pi " +
+            "JOIN FETCH pi.orders o " +
+            "JOIN FETCH o.user u " +
+            "JOIN FETCH o.ordersDetailList od " +
+            "JOIN FETCH od.digitalProduct dp " +
+            "WHERE pi.orders.ordersId = :ordersId " +
+            "AND pi.orders.ordersId = o.ordersId " +
+            "AND o.user.userId = u.userId " +
+            "AND o.ordersId = od.orders.ordersId " +
+            "AND od.digitalProduct.productId = dp.productId")
+    Optional<PaymentInfo> findPaymentInfoWithDetailsByOrdersId(Long ordersId);
 }

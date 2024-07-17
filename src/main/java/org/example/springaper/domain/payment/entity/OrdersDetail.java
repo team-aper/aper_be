@@ -47,4 +47,5 @@ public class OrdersDetail {
     public void updatePaymentStatusPaid() {
         this.paymentStatus = "paid";
     }
+    public void updatePaymentStatusRefunded() { this. paymentStatus = "refunded"; }
 }

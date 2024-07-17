@@ -43,7 +43,7 @@ public class PaymentController {
     @PutMapping("/refunds/{ordersId}")
     public ResponseEntity<Void> refundsOrder(
             @PathVariable Long ordersId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         refundsService.refundOrder(ordersId, userDetails.getUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }
