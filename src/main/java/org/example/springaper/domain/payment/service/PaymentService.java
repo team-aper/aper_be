@@ -70,7 +70,7 @@ public class PaymentService {
         log.info("사전 주문 테이블 생성 성공");
 
         createOrdersDetail(preOrders, orderedProducts);
-        return new PreOrderResponseDto(totalAmount);
+        return new PreOrderResponseDto(totalAmount, "포인트 구매");
     }
     public void postOrder(String impUid, User user) throws IamportResponseException, IOException {
         IamportResponse<Payment> payment = iamportClient.paymentByImpUid(impUid);

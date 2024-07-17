@@ -4,7 +4,6 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.example.springaper.domain.payment.dto.PreOrderRequestDto;
 import org.example.springaper.domain.payment.dto.PreOrderResponseDto;
 import org.example.springaper.domain.payment.service.PaymentService;
@@ -24,7 +23,6 @@ import java.io.IOException;
 public class PaymentController {
     private final PaymentService paymentService;
     private final RefundsService refundsService;
-
     @PostMapping("/pre")
     public ResponseEntity<PreOrderResponseDto> prepareOrder(
             @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
@@ -44,7 +42,7 @@ public class PaymentController {
     public ResponseEntity<Void> refundsOrder(
             @PathVariable Long ordersId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
-        refundsService.refundOrder(ordersId, userDetails.getUser());
+        refundsService.refundsOrder(ordersId, userDetails.getUser());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -14,6 +14,7 @@ import org.example.springaper.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RefundsService {
     private final IamportClient iamportClient;
     private final PaymentInfoRepository paymentInfoRepository;
-    public void refundOrder(Long ordersId, User user) throws IamportResponseException, IOException {
+    public void refundsOrder(Long ordersId, User user) throws IamportResponseException, IOException {
         PaymentInfo paymentInfo = paymentInfoRepository.findPaymentInfoWithDetailsByOrdersId(ordersId).orElseThrow(() ->
                 new IllegalArgumentException("존재 하지 않는 주문 내용입니다.")
         );
@@ -55,7 +56,10 @@ public class RefundsService {
     public void updateRefundsPaymentInfo(PaymentInfo paymentInfo, Long refundPoint) {
         List<OrdersDetail> ordersDetailList = paymentInfo.getOrders().getOrdersDetailList();
         ordersDetailList.stream().
-                forEach(OrdersDetail::updatePaymentStatusRefunded);
+                forEach(ordersDetail -> {
+                    ordersDetail.updatePaymentStatusRefunded();
+                    ordersDetail.updateCancleDate(LocalDateTime.now());
+                });
         paymentInfo.getOrders().getUser().updatePoint(-refundPoint);
     }
 }
