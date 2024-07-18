@@ -45,6 +45,20 @@ spring:
 #      root: DEBUG
 
 springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+  api-docs:
+    path: /api-docs
+
+  default-consumes-media-type: application/json
+
+  default-produces-media-type: application/json
+
+  # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출
+  paths-to-match:
+    - /**
+  # 현재 시큐리티를 통해 로그인 처리를 하고 있기 때문에 로그인에 대한 엔드포인트 추가
   show-login-endpoint: true
 
 secret:
