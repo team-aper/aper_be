@@ -43,5 +43,7 @@ public class User {
         this.authority = UserRoleEnum.USER;
         this.point = 0L;
     }
-
+    public void updatePoint(Long point) {
+        this.point += point;
+    }
 }

@@ -80,3 +80,7 @@ cloud:
 server:
   port: 8080
 
+iamport:
+  api:
+    key: ${iamport.api.key}
+    secret: ${iamport.api.secret}
