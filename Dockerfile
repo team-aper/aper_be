@@ -1,7 +1,7 @@
 FROM nginx:latest                           
 LABEL name="demo"                           
 
-COPY ./resources/templates/login.html /usr/share/nginx/html/index.html   
+COPY ./src/main/resources/templates/login.html /usr/share/nginx/html/index.html   
 
 EXPOSE 80                                            
 
