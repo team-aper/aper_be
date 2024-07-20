@@ -8,8 +8,10 @@ import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 
@@ -18,10 +20,15 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
@@ -32,6 +39,20 @@ public class WebSecurityConfig {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.authenticationConfiguration = authenticationConfiguration;
+    }
+
+    public CorsConfigurationSource configurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(
+                List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
@@ -53,11 +74,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf((csrf) -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
+
+        // 시큐리티 CORS 빈 설정
+        http.cors((cors) -> cors.configurationSource(configurationSource()));
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
@@ -66,13 +90,17 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll()
         );
 
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http
+                .logout(logout -> logout
+                        .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
+                        .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트할 URL
+                        .deleteCookies("refreshToken") // 쿠키 삭제 (예: 세션 쿠키)
+                        .clearAuthentication(true) // 인증 정보 클리어
+                );
+
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-
-        http.exceptionHandling((exceptionHandling) ->
-                exceptionHandling.accessDeniedPage("/forbidden.html")
-        );
 
 
         return http.build();
