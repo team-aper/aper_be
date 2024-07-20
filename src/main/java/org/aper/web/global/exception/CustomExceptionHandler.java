@@ -26,14 +26,14 @@ public class CustomExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
-    public ResponseDto<?> handleBadRequestException(HttpServletRequest request, BadRequestException e) {
+    public ResponseDto<?> handleBadRequestException(BadRequestException e) {
         log.error("handleBadRequestException", e);
         return ResponseDto.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseDto<?> handleMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException e) {
+    public ResponseDto<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         Map<String, String> errorMap = new HashMap<>();
         BindingResult result = e.getBindingResult();
 
@@ -42,40 +42,40 @@ public class CustomExceptionHandler {
         }
 
         log.error("handleMethodArgumentNotValidException", e);
-        return ResponseDto.fail("유효성 검사 실패", errorMap);
+        return ResponseDto.fail(ErrorCode.INVALID_INPUT_VALUE.getMessage(), errorMap);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseDto<?> handleMethodArgumentTypeMismatchException(HttpServletRequest request, MethodArgumentTypeMismatchException e) {
+    public ResponseDto<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("handleMethodArgumentTypeMismatchException", e);
         return ResponseDto.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseDto<?> handleHttpRequestMethodNotSupportedException(HttpServletRequest request, HttpRequestMethodNotSupportedException e) {
+    public ResponseDto<?> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         log.error("handleHttpRequestMethodNotSupportedException", e);
         return ResponseDto.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseDto<?> handleAccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+    public ResponseDto<?> handleAccessDeniedException(AccessDeniedException e) {
         log.error("handleAccessDeniedException", e);
         return ResponseDto.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingRequestCookieException.class)
-    public ResponseDto<?> handleMissingRequestCookieException(HttpServletRequest request, MissingRequestCookieException e) {
+    public ResponseDto<?> handleMissingRequestCookieException(MissingRequestCookieException e) {
         log.error("handleMissingRequestCookieException", e);
         return ResponseDto.fail(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ResponseDto<?> handleException(HttpServletRequest request, Exception e) {
+    public ResponseDto<?> handleException(Exception e) {
         log.error("handleException", e);
         return ResponseDto.fail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
     }
