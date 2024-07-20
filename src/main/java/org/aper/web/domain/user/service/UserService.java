@@ -1,40 +1,43 @@
 package org.aper.web.domain.user.service;
 
-import org.aper.web.domain.user.dto.SignupRequestDto;
+import jakarta.validation.Valid;
+import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.jwt.JwtUtil;
+import org.aper.web.global.exception.ErrorCode;
+import org.aper.web.global.exception.ServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
     }
 
-    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    public SignupResponseDto signup(@Valid SignupRequestDto requestDto) {
+        String penName = requestDto.penName();
+        String email = requestDto.email();
+        String password = passwordEncoder.encode(requestDto.password());
 
-    public void signup(SignupRequestDto requestDto) {
-        String penName = requestDto.getPenName();
-        String email = requestDto.getEmail();
-        String password = passwordEncoder.encode(requestDto.getPassword());
-
-        Optional<User> checkUsername = userRepository.findByEmail(penName);
-        if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        if (userRepository.existsByEmail(email)) {
+            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
         }
 
-        User user = new User(penName, password, email);
+        User user = User.builder()
+                .email(email)
+                .password(password)
+                .penName(penName)
+                .build();
+
         userRepository.save(user);
+
+        return new SignupResponseDto(penName);
     }
 }

@@ -1,6 +1,7 @@
 package org.aper.web.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -36,8 +37,9 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email) {
-        this.penName = username;
+    @Builder
+    public User(String penName, String password, String email) {
+        this.penName = penName;
         this.password = password;
         this.email = email;
         this.authority = UserRoleEnum.USER;
