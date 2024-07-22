@@ -39,8 +39,11 @@ jobs:
           CREATE_SECRET: ${{secrets.APPLICATION_YML}}
           CREATE_SECRET_DIR: src/main/resources/yml
           CREATE_SECRET_DIR_FILE_NAME: application-secret.yml
-        run: echo $CREATE_SECRET | base64 --decode > $CREATE_SECRET_DIR/$CREATE_SECRET_DIR_FILE_NAME
+        run: |
+          mkdir -p $CREATE_SECRET_DIR
+          echo $CREATE_SECRET | base64 --decode > $CREATE_SECRET_DIR/$CREATE_SECRET_DIR_FILE_NAME
 
+          
       - name: Build with Gradle
         run: ./gradlew build
 
