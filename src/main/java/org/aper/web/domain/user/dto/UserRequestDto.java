@@ -1,9 +1,7 @@
 package org.aper.web.domain.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import org.aper.web.domain.user.valid.UserValidationGroup.*;
 
 public class UserRequestDto {
@@ -25,7 +23,10 @@ public class UserRequestDto {
     }
 
     public record LoginRequestDto(
+
+            @NotBlank(message = "이메일을 입력해 주세요.")
             String email,
+            @NotBlank(message = "비밀번호를 입력해 주세요.")
             String password
     ){}
 }
