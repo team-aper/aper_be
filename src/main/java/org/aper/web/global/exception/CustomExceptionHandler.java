@@ -73,10 +73,10 @@ public class CustomExceptionHandler {
         return ResponseDto.fail(e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public ResponseDto<?> handleException(HttpServletRequest request, Exception e) {
-        log.error("handleException", e);
-        return ResponseDto.fail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
-    }
+    // @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    // @ExceptionHandler(Exception.class)
+    // public ResponseDto<?> handleException(HttpServletRequest request, Exception e) {
+    //     log.error("handleException", e);
+    //     return ResponseDto.fail(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+    // }
 }
