@@ -2,7 +2,6 @@ package org.aper.web.global.config;
 
 
 import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.jwt.service.TokenValidationService;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -65,8 +64,8 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
         // 시큐리티 CORS 빈 설정
         http.cors((cors) -> cors.configurationSource(configurationSource()));

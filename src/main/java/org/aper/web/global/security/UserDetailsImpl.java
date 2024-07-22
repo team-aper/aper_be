@@ -1,6 +1,5 @@
 package org.aper.web.global.security;
 
-import lombok.Getter;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
