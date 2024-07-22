@@ -22,6 +22,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public User findUser(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+    }
+
     public SignupResponseDto signupUser(@Valid SignupRequestDto requestDto) {
         String penName = requestDto.penName();
         String email = requestDto.email();
