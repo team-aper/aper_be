@@ -7,10 +7,10 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: aper-repository
-  ECS_SERVICE: aper-service
-  ECS_CLUSTER: aper-cluster
-  ECS_TASK_DEFINITION: TaskRevision.json
-  CONTAINER_NAME: aper-container
+  ECS_SERVICE: aper-service4
+  ECS_CLUSTER: aper-cluster4
+  ECS_TASK_DEFINITION: TaskRevision4.json
+  CONTAINER_NAME: aper-container4
 
 jobs:
   deploy:
