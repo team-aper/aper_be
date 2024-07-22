@@ -1,4 +1,4 @@
-package org.aper.web.global.jwt;
+package org.aper.web.global.security.filter;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.handler.exception.TokenException;
+import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,57 +19,50 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Slf4j(topic = "JWT 검증 및 인가")
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
-        this.jwtUtil = jwtUtil;
+    public JwtAuthorizationFilter(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
+        this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.equals("/reissue") || path.equals("/signup") || path.equals("/login");
+    }
 
-        String tokenValue = jwtUtil.getTokenFromRequest(req);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String tokenValue = tokenProvider.getJwtFromHeader(request);
 
         if (StringUtils.hasText(tokenValue)) {
-
-            tokenValue = jwtUtil.substringToken(tokenValue);
-            log.info(tokenValue);
-
-            if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
-                return;
-            }
-
-            Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
             try {
+                Claims info = tokenProvider.getUserInfoFromAccessToken(tokenValue);
                 setAuthentication(info.getSubject());
-            } catch (Exception e) {
+            } catch (TokenException e) {
                 log.error(e.getMessage());
+                response.sendError(e.getStatus().value(), e.getMessage());
                 return;
             }
         }
-
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
-
 
     public void setAuthentication(String username) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
 
-
     private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+                userDetails.getAuthorities());
     }
 }
