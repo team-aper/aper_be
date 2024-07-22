@@ -1,0 +1,66 @@
+package org.aper.web.global.handler;
+
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
+@RestControllerAdvice
+public class CustomExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
+        Map<String, String> errorMap = new HashMap<>();
+        BindingResult result = e.getBindingResult();
+
+        for (FieldError error : result.getFieldErrors()) {
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        }
+
+        log.error("handleMethodArgumentNotValidException", e);
+        CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public void handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletResponse response) {
+        log.error("handleMethodArgumentTypeMismatchException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public void handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e, HttpServletResponse response) {
+        log.error("handleHttpRequestMethodNotSupportedException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public void handleAccessDeniedException(AccessDeniedException e, HttpServletResponse response) {
+        log.error("handleAccessDeniedException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public void handleMissingRequestCookieException(MissingRequestCookieException e, HttpServletResponse response) {
+        log.error("handleMissingRequestCookieException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+//
+//    @ExceptionHandler(Exception.class)
+//    public void handleException(Exception e, HttpServletResponse response) {
+//        log.error("handleException", e);
+//        CustomResponseUtil.fail(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+}

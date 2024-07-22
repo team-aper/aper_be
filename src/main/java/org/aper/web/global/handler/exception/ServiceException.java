@@ -1,6 +1,7 @@
-package org.aper.web.global.exception;
+package org.aper.web.global.handler.exception;
 
 import lombok.Getter;
+import org.aper.web.global.handler.ErrorCode;
 
 @Getter
 public class ServiceException extends RuntimeException {
