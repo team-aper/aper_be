@@ -1,6 +1,7 @@
 package org.aper.web.global.jwt.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.UserService;
+import org.aper.web.global.handler.CustomResponseUtil;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
@@ -37,7 +39,13 @@ public class AuthService {
     private final CookieService cookieService;
     private final TokenValidationService tokenValidationService;
 
-    public AuthService(TokenProvider tokenProvider, AuthenticationManager authenticationManager, UserService userService, TokenBlacklistService tokenBlacklistService, RefreshTokenService refreshTokenService, CookieService cookieService, TokenValidationService tokenValidationService) {
+    public AuthService(TokenProvider tokenProvider,
+                       AuthenticationManager authenticationManager,
+                       UserService userService,
+                       TokenBlacklistService tokenBlacklistService,
+                       RefreshTokenService refreshTokenService,
+                       CookieService cookieService,
+                       TokenValidationService tokenValidationService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
@@ -71,28 +79,29 @@ public class AuthService {
     @Transactional
     public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 
-        String tokenValue = tokenProvider.getJwtFromHeader(request);
+        String accessTokenValue = tokenProvider.getJwtFromHeader(request);
 
-        if (tokenValue.isEmpty()) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.ACCESS_TOKEN_IS_NULL);
+        if (accessTokenValue.isEmpty()) {
+            CustomResponseUtil.fail(response, ErrorCode.ACCESS_TOKEN_IS_NULL.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        if (tokenBlacklistService.isTokenBlacklisted(tokenValue)) {
+        if (tokenBlacklistService.isTokenBlacklisted(accessTokenValue)) {
             log.error("blacklisted Token");
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_ACCESS_TOKEN);
+            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.BLACK_LISTED_TOKEN);
         }
 
-        tokenBlacklistService.blackListToken(tokenValue);
+        tokenBlacklistService.saveBlackListToken(accessTokenValue);
 
-        Claims claims;
+        Claims claims = null;
+
         try {
-            claims = tokenProvider.getUserInfoFromAccessToken(tokenValue);
+            claims = tokenProvider.getUserInfoFromAccessToken(accessTokenValue);
         } catch (TokenException e) {
-            if (e.getStatus() == HttpStatus.UNAUTHORIZED) {
-                claims = tokenProvider.getUserInfoFromAccessToken(tokenValue);
-            } else {
-                throw e;
-            }
+            CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+
+        if (claims == null) {
+            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         String email = claims.getSubject();
@@ -100,7 +109,7 @@ public class AuthService {
         tokenValidationService.verifyRefreshToken(storedRefreshToken);
 
         refreshTokenService.deleteRefreshToken(email);
-        cookieService.deleteCookie(request, response, "refreshToken");
+        cookieService.deleteCookie(request, response, "Refresh-Token");
 
         User user = userService.findUser(email);
         return tokenProvider.generateToken(user.getEmail(), user.getRole().getAuthority(), user.getPenName());
