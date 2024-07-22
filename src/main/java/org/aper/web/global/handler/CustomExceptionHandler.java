@@ -1,7 +1,10 @@
 package org.aper.web.global.handler;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.handler.exception.TokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +25,7 @@ import java.util.Map;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
+    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) throws IOException {
         Map<String, String> errorMap = new HashMap<>();
         BindingResult result = e.getBindingResult();
 
@@ -32,7 +36,6 @@ public class CustomExceptionHandler {
         log.error("handleMethodArgumentNotValidException", e);
         CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
     }
-
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public void handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, HttpServletResponse response) {
@@ -52,15 +55,40 @@ public class CustomExceptionHandler {
         CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 
+    @ExceptionHandler(IOException.class)
+    public void handleIOException(IOException e, HttpServletResponse response) {
+        log.error("handleIOException", e);
+        CustomResponseUtil.fail(response, "IO error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IamportResponseException.class)
+    public void handleIamPortResponseException(IamportResponseException e, HttpServletResponse response) {
+        log.error("handleIamPortResponseException", e);
+        CustomResponseUtil.fail(response, "IamPort response error", HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MissingRequestCookieException.class)
     public void handleMissingRequestCookieException(MissingRequestCookieException e, HttpServletResponse response) {
         log.error("handleMissingRequestCookieException", e);
         CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-//
-//    @ExceptionHandler(Exception.class)
-//    public void handleException(Exception e, HttpServletResponse response) {
-//        log.error("handleException", e);
-//        CustomResponseUtil.fail(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+
+    @ExceptionHandler(ServiceException.class)
+    public void handleServiceException(ServiceException e, HttpServletResponse response) {
+        log.error("handleServiceException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TokenException.class)
+    public void handleTokenException(TokenException e, HttpServletResponse response) {
+        log.error("handleTokenException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public void handleException(Exception e, HttpServletResponse response) {
+        log.error("handleException", e);
+        CustomResponseUtil.fail(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
