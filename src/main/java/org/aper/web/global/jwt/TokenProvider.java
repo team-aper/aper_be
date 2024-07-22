@@ -22,8 +22,8 @@ public class TokenProvider {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_EXPIRATION = 10 * 1000L;  // 10 seconds
-    private static final long REFRESH_TOKEN_EXPIRATION = 60 * 60 * 1000L;  // 1 hour
+    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000L;  // 1 hour
+    private static final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000L;  // 24 hours
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private final RefreshTokenService tokenService;
     private final Key accessKey;

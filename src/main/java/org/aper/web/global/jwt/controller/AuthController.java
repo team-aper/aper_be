@@ -8,7 +8,6 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.jwt.dto.GeneratedToken;
 import org.aper.web.global.jwt.service.AuthService;
 import org.aper.web.global.jwt.service.CookieService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
