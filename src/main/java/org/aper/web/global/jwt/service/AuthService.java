@@ -14,6 +14,7 @@ import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.dto.GeneratedToken;
+import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -114,4 +115,9 @@ public class AuthService {
         return tokenProvider.generateToken(user.getEmail(), user.getRole().getAuthority(), user.getPenName());
     }
 
+    @Transactional
+    public UserInfo getUserInfo(LoginRequestDto loginRequestDto) {
+        User user = userService.findUser(loginRequestDto.email());
+        return new UserInfo(user.getEmail(), user.getPenName(), user.getFieldImage());
+    }
 }

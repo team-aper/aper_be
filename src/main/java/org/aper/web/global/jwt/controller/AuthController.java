@@ -4,8 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
+import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.jwt.dto.GeneratedToken;
+import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.jwt.service.AuthService;
 import org.aper.web.global.jwt.service.CookieService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +28,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseDto<Void> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) throws UnsupportedEncodingException {
+    public ResponseDto<UserInfo> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) throws UnsupportedEncodingException {
         GeneratedToken tokens = authService.authenticateAndLogin(loginRequestDto, response);
         setTokensInResponse(tokens, response);
-        return ResponseDto.success("로그인 성공");
+        UserInfo userInfo = authService.getUserInfo(loginRequestDto);
+        return ResponseDto.success("로그인 성공", userInfo);
     }
 
     @PostMapping("/reissue")
