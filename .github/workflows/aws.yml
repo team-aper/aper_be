@@ -41,8 +41,11 @@ jobs:
           CREATE_SECRET_DIR_FILE_NAME: application-secret.yml
         run: |
           mkdir -p $CREATE_SECRET_DIR
-          echo $CREATE_SECRET | base64 --decode > $CREATE_SECRET_DIR/$CREATE_SECRET_DIR_FILE_NAME
-
+          echo "$CREATE_SECRET" | base64 --decode > $CREATE_SECRET_DIR/$CREATE_SECRET_DIR_FILE_NAME
+          if [ $? -ne 0 ]; then
+            echo "Failed to decode secret. Please ensure it is base64 encoded."
+            exit 1
+          fi
           
       - name: Build with Gradle
         run: ./gradlew build
