@@ -5,17 +5,14 @@ on:
     branches: [ "dev" ]
 
 env:
-  AWS_REGION: ap-northeast-2                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: aper-repository                   # set this to your Amazon ECR repository name
-  ECS_SERVICE: aper-service                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: aper-cluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: TaskRevision.json # set this to the path to your Amazon ECS task definition
-  #  # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: aper-container           # set this to the name of the container in the
-  # containerDefinitions section of your task definition
+  AWS_REGION: ap-northeast-2
+  ECR_REPOSITORY: aper-repository
+  ECS_SERVICE: aper-service
+  ECS_CLUSTER: aper-cluster
+  ECS_TASK_DEFINITION: TaskRevision.json
+  CONTAINER_NAME: aper-container
 
 jobs:
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -36,7 +33,7 @@ jobs:
 
       - name: Copy Secret
         env:
-          CREATE_SECRET: ${{secrets.APPLICATION_YML}}
+          CREATE_SECRET: ${{ secrets.APPLICATION_YML }}
           CREATE_SECRET_DIR: src/main/resources/yml
           CREATE_SECRET_DIR_FILE_NAME: application-secret.yml
         run: |
@@ -46,11 +43,22 @@ jobs:
             echo "Failed to decode secret. Please ensure it is base64 encoded."
             exit 1
           fi
-          
+
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --warning-mode all
+
+      - name: Run tests
+        run: ./gradlew test --warning-mode all
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: build/reports/tests/test
 
       - name: Configure AWS credentials
+        if: success()
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -58,23 +66,23 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        if: success()
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
+        if: success()
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build a docker container and
-          # push it to ECR so that it can
-          # be deployed to ECS.
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID in the Amazon ECS task definition
+        if: success()
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
@@ -83,6 +91,7 @@ jobs:
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
+        if: success()
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
