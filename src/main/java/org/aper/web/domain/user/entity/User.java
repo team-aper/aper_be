@@ -29,7 +29,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum authority;
+    private UserRoleEnum role;
 
     @Column
     private Long point;
@@ -38,11 +38,11 @@ public class User {
     }
 
     @Builder
-    public User(String penName, String password, String email) {
+    public User(String penName, String password, String email, UserRoleEnum role) {
         this.penName = penName;
         this.password = password;
         this.email = email;
-        this.authority = UserRoleEnum.USER;
+        this.role = role;
         this.point = 0L;
     }
     public void updatePoint(Long point) {

@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseDto<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
-        return ResponseDto.success("회원가입 성공", userService.signup(requestDto));
+        return ResponseDto.success("회원가입 성공", userService.signupUser(requestDto));
     }
 
 }

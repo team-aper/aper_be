@@ -4,9 +4,10 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.exception.ErrorCode;
-import org.aper.web.global.exception.ServiceException;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public SignupResponseDto signup(@Valid SignupRequestDto requestDto) {
+    public SignupResponseDto signupUser(@Valid SignupRequestDto requestDto) {
         String penName = requestDto.penName();
         String email = requestDto.email();
         String password = passwordEncoder.encode(requestDto.password());
@@ -34,6 +35,7 @@ public class UserService {
                 .email(email)
                 .password(password)
                 .penName(penName)
+                .role(UserRoleEnum.USER)
                 .build();
 
         userRepository.save(user);
