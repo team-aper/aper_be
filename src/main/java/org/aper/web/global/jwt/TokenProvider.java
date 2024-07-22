@@ -66,8 +66,7 @@ public class TokenProvider {
     }
 
     public Claims getUserInfoFromAccessToken(String accessToken) {
-        tokenValidationService.verifyAccessToken(accessToken);
-        return parseClaims(accessToken, accessKey);
+        return tokenValidationService.verifyAccessToken(accessToken);
     }
 
     public String getJwtFromHeader(HttpServletRequest request) {
@@ -78,7 +77,4 @@ public class TokenProvider {
         return null;
     }
 
-    private Claims parseClaims(String token, Key key) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
 }
