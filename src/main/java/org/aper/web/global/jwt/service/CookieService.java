@@ -14,19 +14,15 @@ import java.nio.charset.StandardCharsets;
 public class CookieService {
 
     public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(cookieName)) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setSecure(true);
-                    cookie.setAttribute("SameSite", "None");
-                    cookie.setMaxAge(0);
-                    cookie.setHttpOnly(true);
-                    response.addCookie(cookie);
-                }
-            }
+        Cookie cookie = findCookie(request, cookieName);
+        if (cookie != null) {
+            cookie.setValue("");
+            cookie.setPath("/");
+            cookie.setSecure(true);
+            cookie.setAttribute("SameSite", "None");
+            cookie.setMaxAge(0);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
         }
     }
 
