@@ -3,7 +3,7 @@ name: Deploy to EC2 using Docker and ECR
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
