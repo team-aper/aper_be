@@ -3,7 +3,7 @@ name: Deploy to EC2 using Docker and ECR
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   deploy:
@@ -37,7 +37,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t hdev_server .
+        docker build -t hdev_server:latest .
 
     - name: Tag Docker image
       run: |
