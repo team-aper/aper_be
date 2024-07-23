@@ -22,6 +22,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
+    - name: Create application-secret.yml from secret
+      run: |
+        mkdir -p ./src/main/resources/yml
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
+
     - name: Build with Gradle
       run: ./gradlew build
 
@@ -107,10 +112,6 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.ECR_URI }}:latest
 
-    - name: Create application-secret.yml from secret
-      run: |
-        echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
-
     - name: Run Docker container on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -120,4 +121,4 @@ jobs:
         script: |
           sudo docker stop hdev_server || true
           sudo docker rm hdev_server || true
-          sudo docker run -d --env-file /root/.env -v $(pwd)/application-secret.yml:/app/config/application-secret.yml -p 5000:8080 ${{ secrets.ECR_URI }}:latest
+          sudo docker run -d --env-file /root/.env -p 5000:8080 ${{ secrets.ECR_URI }}:latest
