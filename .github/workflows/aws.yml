@@ -41,9 +41,6 @@ jobs:
     - name: Tag Docker image
       run: docker tag aper-repository:latest 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
 
-    - name: Push Docker image to ECR
-      run: docker push 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
-
     - name: Delete latest image from ECR
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -52,6 +49,9 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           aws ecr batch-delete-image --repository-name aper-repository --image-ids imageTag=latest
+
+    - name: Push Docker image to ECR
+      run: docker push 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
 
     - name: Login to ECR on EC2
       uses: appleboy/ssh-action@v0.1.6
