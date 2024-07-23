@@ -36,7 +36,8 @@ jobs:
       run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com
 
     - name: Build Docker image
-      run: docker build -t hdev_server:latest .
+      run: |
+        docker build -t hdev_server:latest .
 
     - name: Tag Docker image
       run: docker tag hdev_server:latest 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
