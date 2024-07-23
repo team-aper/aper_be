@@ -33,40 +33,40 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com
+      run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
     - name: Build Docker image
       run: docker build -t aper-repository .
 
     - name: Tag Docker image
-      run: docker tag aper-repository:latest 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
+      run: docker tag aper-repository:latest ${{ secrets.ECR_URI }}:latest
 
     - name: Delete latest image from ECR
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           aws ecr batch-delete-image --repository-name aper-repository --image-ids imageTag=latest
 
     - name: Push Docker image to ECR
-      run: docker push 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
+      run: docker push ${{ secrets.ECR_URI }}:latest
 
     - name: Login to ECR on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com
+          aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
     - name: Stop running containers on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker ps -q | xargs -r sudo docker stop
@@ -75,7 +75,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker ps -asq | xargs -r sudo docker rm
@@ -84,7 +84,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker images -q | xargs -r sudo docker rmi
@@ -93,7 +93,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker system prune -af
@@ -102,18 +102,22 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          sudo docker pull 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
+          sudo docker pull ${{ secrets.ECR_URI }}:latest
+
+    - name: Create application-secret.yml from secret
+      run: |
+        echo "${{ secrets.APPLICATION_SECRET_YML }}" > application-secret.yml
 
     - name: Run Docker container on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker stop hdev_server || true
           sudo docker rm hdev_server || true
-          sudo docker run -d --env-file /root/.env -p 5000:8080 992382393549.dkr.ecr.ap-northeast-2.amazonaws.com/aper-repository:latest
+          sudo docker run -d --env-file /root/.env -v $(pwd)/application-secret.yml:/app/config/application-secret.yml -p 5000:8080 ${{ secrets.ECR_URI }}:latest
