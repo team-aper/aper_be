@@ -108,7 +108,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ${{ secrets.USERNAME }}
+        username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker pull ${{ secrets.ECR_URI }}:latest
@@ -117,7 +117,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ${{ secrets.USERNAME }}
+        username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           sudo docker stop hdev_server || true
