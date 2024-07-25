@@ -27,7 +27,7 @@ public class PaymentController {
     public ResponseEntity<PreOrderResponseDto> prepareOrder(
             @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
-        PreOrderResponseDto responseDto = paymentService.prepareOrder(preOrderRequestDto, userDetails.getUser());
+        PreOrderResponseDto responseDto = paymentService.prepareOrder(preOrderRequestDto, userDetails.user());
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -35,14 +35,14 @@ public class PaymentController {
     public ResponseEntity<Void> postOrder(
             @PathVariable String impUid,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
-        paymentService.postOrder(impUid, userDetails.getUser());
+        paymentService.postOrder(impUid, userDetails.user());
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PutMapping("/refunds/{ordersId}")
     public ResponseEntity<Void> refundsOrder(
             @PathVariable Long ordersId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
-        refundsService.refundsOrder(ordersId, userDetails.getUser());
+        refundsService.refundsOrder(ordersId, userDetails.user());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
