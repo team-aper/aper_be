@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.jwt.dto.GeneratedToken;
 import org.aper.web.global.jwt.dto.UserInfo;
