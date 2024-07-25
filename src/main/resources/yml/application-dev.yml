@@ -21,23 +21,6 @@ spring:
         use_sql_comments: true
     show-sql: true
 
-  mail:
-    host: smtp.gmail.com # 서버 호스트
-    port: 587 # 서버 포트
-    username: ${email-auth.username} # 이메일 발신자 아이디
-    password: ${email-auth.password} # 앱 비밀번호
-    properties:
-      mail:
-        smtp:
-          auth: true # 사용자 인증 시도 여부
-          timeout: 50000 # Socket Read Timeout 시간(ms)
-          starttls:
-            enable: true # StartTLS 활성화 여부
-  data:
-    redis:
-      host: ${dev-redis.host}
-      port: ${dev-redis.port}
-      password: ${dev-redis.password}
 
 springdoc:
   swagger-ui:
@@ -55,7 +38,7 @@ springdoc:
 
   # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출한다.
   paths-to-match:
-    - /api/**
+    - ${dev.swagger.match}
 
   # 현재 시큐리티를 통해 로그인 처리를 하고 있기 때문에 로그인에 대한 엔드포인트 추가
   show-login-endpoint: true
@@ -65,18 +48,3 @@ secret:
   key:
     access: ${jwt.secret.key.access}
     refresh: ${jwt.secret.key.refresh}
-
-cloud:
-  aws:
-    region:
-      static: ${aws.region.static}
-    stack:
-      auto: ${aws.stack.auto}
-    credentials:
-      accessKey: ${aws.credentials.accessKey}
-      secretKey: ${aws.credentials.secretKey}
-    s3:
-      bucket: ${aws.s3.bucket}
-
-
-
