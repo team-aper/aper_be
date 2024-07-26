@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.config.AuthenticatedMatchers;
 import org.aper.web.global.handler.CustomResponseUtil;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.TokenException;
@@ -20,7 +21,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -36,7 +40,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/reissue") || path.equals("/signup") || path.equals("/login");
+        Set<String> swaggerPaths = new HashSet<>(Arrays.asList(AuthenticatedMatchers.swaggerArray));
+        Set<String> excludedPaths = new HashSet<>(Arrays.asList(AuthenticatedMatchers.excludedPathArray));
+        return swaggerPaths.contains(path) || excludedPaths.contains(path);
     }
 
     @Override
