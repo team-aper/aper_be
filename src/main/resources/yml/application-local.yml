@@ -25,6 +25,7 @@ spring:
     redis:
       host: ${local-redis.host}
       port: ${local-redis.port}
+      password: ${local-redis.password}
 
 
   mail:

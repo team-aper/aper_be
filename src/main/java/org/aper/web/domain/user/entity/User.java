@@ -1,6 +1,7 @@
 package org.aper.web.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -28,7 +29,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private UserRoleEnum authority;
+    private UserRoleEnum role;
 
     @Column
     private Long point;
@@ -36,11 +37,12 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email) {
-        this.penName = username;
+    @Builder
+    public User(String penName, String password, String email, UserRoleEnum role) {
+        this.penName = penName;
         this.password = password;
         this.email = email;
-        this.authority = UserRoleEnum.USER;
+        this.role = role;
         this.point = 0L;
     }
     public void updatePoint(Long point) {
