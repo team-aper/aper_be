@@ -8,6 +8,7 @@ import org.aper.web.domain.payment.dto.PreOrderRequestDto;
 import org.aper.web.domain.payment.dto.PreOrderResponseDto;
 import org.aper.web.domain.payment.service.PaymentService;
 import org.aper.web.domain.payment.service.RefundsService;
+import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +25,25 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final RefundsService refundsService;
     @PostMapping("/pre")
-    public ResponseEntity<PreOrderResponseDto> prepareOrder(
+    public ResponseDto<PreOrderResponseDto> prepareOrder(
             @RequestBody @Valid PreOrderRequestDto preOrderRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         PreOrderResponseDto responseDto = paymentService.prepareOrder(preOrderRequestDto, userDetails.user());
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        return ResponseDto.success("사전 결제 등록 성공", responseDto);
     }
 
     @PutMapping("/post/{impUid}")
-    public ResponseEntity<Void> postOrder(
+    public ResponseDto<Void> postOrder(
             @PathVariable String impUid,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         paymentService.postOrder(impUid, userDetails.user());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseDto.success("결제 완료", null);
     }
     @PutMapping("/refunds/{ordersId}")
-    public ResponseEntity<Void> refundsOrder(
+    public ResponseDto<Void> refundsOrder(
             @PathVariable Long ordersId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IamportResponseException, IOException {
         refundsService.refundsOrder(ordersId, userDetails.user());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseDto.success("결제 취소 완료", null);
     }
 }

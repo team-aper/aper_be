@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.config.AuthenticatedMatchers;
 import org.aper.web.global.handler.CustomResponseUtil;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.TokenException;
@@ -20,7 +21,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -31,12 +35,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     public JwtAuthorizationFilter(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return path.equals("/reissue") || path.equals("/signup") || path.equals("/login");
     }
 
     @Override
@@ -63,10 +61,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 log.error(e.getMessage());
                 SecurityContextHolder.clearContext();
                 CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+            }
         }
         filterChain.doFilter(request, response);
-
-        }
-
     }
 }
