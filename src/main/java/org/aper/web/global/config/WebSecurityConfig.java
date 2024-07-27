@@ -74,7 +74,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(AuthenticatedMatchers.swaggerArray).permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll()
         );
 
         http.formLogin(AbstractHttpConfigurer::disable);
