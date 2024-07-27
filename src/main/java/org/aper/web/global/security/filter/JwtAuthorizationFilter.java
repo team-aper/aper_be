@@ -38,14 +38,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        Set<String> swaggerPaths = new HashSet<>(Arrays.asList(AuthenticatedMatchers.swaggerArray));
-        Set<String> excludedPaths = new HashSet<>(Arrays.asList(AuthenticatedMatchers.excludedPathArray));
-        return swaggerPaths.contains(path) || excludedPaths.contains(path);
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenValue = tokenProvider.getJwtFromHeader(request);
 
@@ -69,10 +61,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 log.error(e.getMessage());
                 SecurityContextHolder.clearContext();
                 CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+            }
         }
         filterChain.doFilter(request, response);
-
-        }
-
     }
 }
