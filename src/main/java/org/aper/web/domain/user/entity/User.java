@@ -3,6 +3,10 @@ package org.aper.web.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.aper.web.domain.chat.entity.Chat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +37,9 @@ public class User {
 
     @Column
     private Long point;
+
+    @OneToMany(mappedBy = "user")
+    private List<Chat> chats = new ArrayList<>();
 
     public User() {
     }
