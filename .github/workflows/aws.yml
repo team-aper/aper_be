@@ -58,6 +58,18 @@ jobs:
     - name: Push Docker image to ECR
       run: docker push ${{ secrets.ECR_URI }}:latest
 
+    - name: Copy docker-compose.yml to EC2
+      uses: appleboy/scp-action@v0.1.1
+      with:
+        host: ${{ secrets.EC2_PUBLIC_IP }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "./docker-compose/docker-compose.yml"
+        target: "/home/ubuntu/docker-compose.yml"
+
+    - name: Set ECR URI as environment variable
+      run: echo "ECR_URI=${{ secrets.ECR_URI }}" >> $GITHUB_ENV
+
     - name: Login to ECR on EC2
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -103,22 +115,15 @@ jobs:
         script: |
           sudo docker system prune -af
 
-    - name: Pull Docker image from ECR on EC2
+    - name: Deploy using Docker Compose
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_PUBLIC_IP }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          sudo docker pull ${{ secrets.ECR_URI }}:latest
-
-    - name: Run Docker container on EC2
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.EC2_PUBLIC_IP }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          sudo docker stop hdev_server || true
-          sudo docker rm hdev_server || true
-          sudo docker run -d --env-file /root/.env -p 5000:8080 ${{ secrets.ECR_URI }}:latest
+          cd /home/ubuntu
+          export ECR_URI=${{ secrets.ECR_URI }}
+          sudo docker-compose down
+          sudo docker-compose pull
+          sudo docker-compose up -d
