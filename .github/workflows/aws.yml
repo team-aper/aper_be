@@ -58,6 +58,15 @@ jobs:
     - name: Push Docker image to ECR
       run: docker push ${{ secrets.ECR_URI }}:latest
 
+    - name: Check if docker-compose.yml exists
+      run: |
+        if [ -f "./docker-compose/docker-compose.yml" ]; then
+           echo "docker-compose.yml exists.";
+        else
+           echo "docker-compose.yml does not exist.";
+           exit 1;
+        fi
+
     - name: Copy docker-compose.yml to EC2
       uses: appleboy/scp-action@v0.1.1
       with:
