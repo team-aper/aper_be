@@ -21,6 +21,12 @@ spring:
         use_sql_comments: true
     show-sql: true
 
+  data:
+    redis:
+      host: ${dev-redis.host}
+      port: ${dev-redis.port}
+      password: ${dev-redis.password}
+
 
 springdoc:
   swagger-ui:
