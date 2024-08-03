@@ -2,6 +2,7 @@ package org.aper.web.global.config;
 
 
 import org.aper.web.global.jwt.TokenProvider;
+import org.aper.web.global.security.AuthenticatedMatchers;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
