@@ -3,6 +3,7 @@ package org.aper.web.domain.chat.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +15,15 @@ public class ChatRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long startTime;
+    private LocalDateTime startTime;
 
     private Boolean isAccepted;
 
     @OneToMany(mappedBy = "chatRoom")
-    private List<Chat> chats = new ArrayList<>();
+    private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
+    public ChatRoom(){
+        this.startTime = LocalDateTime.now();
+        this.isAccepted = false;
+    }
 }
