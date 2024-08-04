@@ -6,7 +6,7 @@ import org.aper.web.domain.user.entity.User;
 
 @Entity
 @Getter
-public class Chat {
+public class ChatParticipant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,13 @@ public class Chat {
     @JoinColumn(name="user_id")
     private User user;
 
-    public Chat(){}
+    private Boolean isTutor;
 
+    public ChatParticipant(){}
 
+    public ChatParticipant(ChatRoom chatRoom, User user, Boolean isTutor) {
+        this.chatRoom = chatRoom;
+        this.user = user;
+        this.isTutor = isTutor;
+    }
 }
