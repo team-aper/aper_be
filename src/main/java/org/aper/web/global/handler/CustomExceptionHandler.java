@@ -104,4 +104,10 @@ public class CustomExceptionHandler {
         CustomResponseUtil.fail(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) {
+        log.error("handleIllegalArgumentException", e);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
