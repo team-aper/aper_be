@@ -80,6 +80,13 @@ public class WebSecurityConfig {
 
         http.formLogin(AbstractHttpConfigurer::disable);
 
+        http.logout(logout -> logout
+                        .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
+                        .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트할 URL
+                        .deleteCookies("Refresh-Token") // 쿠키 삭제 (예: 세션 쿠키)
+                        .clearAuthentication(true) // 인증 정보 클리어
+                );
+
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
