@@ -2,6 +2,7 @@ package org.aper.web.global.config;
 
 
 import org.aper.web.global.jwt.TokenProvider;
+import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.security.AuthenticatedMatchers;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,10 +32,12 @@ public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
+    public final LogoutService logoutService;
 
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService) {
+    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
+        this.logoutService = logoutService;
     }
 
     public CorsConfigurationSource configurationSource() {
@@ -80,11 +84,10 @@ public class WebSecurityConfig {
 
         http.formLogin(AbstractHttpConfigurer::disable);
 
-        http.logout(logout -> logout
+        http.logout(logoutConfig -> logoutConfig
                         .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
-                        .logoutSuccessUrl("/") // 로그아웃 성공 시 리다이렉트할 URL
-                        .deleteCookies("Refresh-Token") // 쿠키 삭제 (예: 세션 쿠키)
-                        .clearAuthentication(true) // 인증 정보 클리어
+                        .addLogoutHandler(logoutService)
+                        .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
