@@ -8,6 +8,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "chat_room_participants_view")
 @Getter
+@org.hibernate.annotations.Immutable
 public class ChatRoomView {
 
     @Id
