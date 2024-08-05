@@ -33,6 +33,12 @@ spring:
           timeout: 50000 # Socket Read Timeout 시간(ms)
           starttls:
             enable: true # StartTLS 활성화 여부
+  data:
+    redis:
+      host: ${dev-redis.host}
+      port: ${dev-redis.port}
+      password: ${dev-redis.password}
+
 
 springdoc:
   swagger-ui:
