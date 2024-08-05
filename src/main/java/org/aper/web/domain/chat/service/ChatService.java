@@ -2,7 +2,9 @@ package org.aper.web.domain.chat.service;
 
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.entity.ChatRoomView;
 import org.aper.web.domain.chat.repository.ChatParticipantRepository;
+import org.aper.web.domain.chat.repository.ChatRoomViewRepository;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,11 +21,13 @@ public class ChatService {
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatParticipantRepository chatParticipantRepository;
+    private final ChatRoomViewRepository viewRepository;
 
-    public ChatService(UserRepository userRepository, ChatRoomRepository chatRoomRepository, ChatParticipantRepository chatParticipantRepository) {
+    public ChatService(UserRepository userRepository, ChatRoomRepository chatRoomRepository, ChatParticipantRepository chatParticipantRepository, ChatRoomViewRepository viewRepository) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.chatParticipantRepository = chatParticipantRepository;
+        this.viewRepository = viewRepository;
     }
 
     @Transactional
@@ -50,18 +53,11 @@ public class ChatService {
 
     @Transactional
     public boolean isCreatedChat(Long userId, Long tutorId) {
-        User user = findByIdAndCheckPresent(userId, false);
-        List<ChatParticipant> chatParticipants = user.getChatParticipants();
+        String tag = tutorId + "-" + userId;
+        viewRepository.updateChatRoomParticipantsView();
+        List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
 
-        for (ChatParticipant chatParticipant : chatParticipants) {
-            List<ChatParticipant> roomParticipants = chatParticipantRepository.findByChatRoomId(chatParticipant.getChatRoom().getId());
-            for (ChatParticipant roomParticipant : roomParticipants) {
-                if (roomParticipant.getIsTutor() && Objects.equals(roomParticipant.getUser().getUserId(), tutorId)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return !existingChatRoom.isEmpty();
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {
