@@ -4,5 +4,6 @@ public class UserResponseDto {
 
     public record SignupResponseDto(
             String penName
-    ){}
+    ) {}
+
 }

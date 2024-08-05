@@ -1,4 +1,4 @@
-package org.aper.web.global.config;
+package org.aper.web.global.security;
 
 import lombok.NoArgsConstructor;
 
@@ -13,6 +13,10 @@ public class AuthenticatedMatchers {
     public static final String[] excludedPathArray = {
             "/reissue",
             "/signup",
-            "/login"
+            "/login",
+            "/health",
+            "/email/*",
+            "/password/*",
+            "/logout"
     };
 }

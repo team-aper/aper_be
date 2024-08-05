@@ -55,4 +55,8 @@ public class User {
     public void updatePoint(Long point) {
         this.point += point;
     }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

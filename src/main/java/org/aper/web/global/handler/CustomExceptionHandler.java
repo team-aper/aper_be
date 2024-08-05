@@ -2,6 +2,8 @@ package org.aper.web.global.handler;
 
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
@@ -17,8 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -34,6 +35,18 @@ public class CustomExceptionHandler {
         }
 
         log.error("handleMethodArgumentNotValidException", e);
+        CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public void handleConstraintViolationException(ConstraintViolationException e, HttpServletResponse response) throws IOException {
+        Map<String, String> errorMap = new HashMap<>();
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        for (ConstraintViolation<?> violation : violations) {
+            String errorMessage = violation.getMessage();
+            errorMap.put("validation error", errorMessage);
+        }
+        log.error("handleConstraintViolationException", e);
         CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
     }
 
