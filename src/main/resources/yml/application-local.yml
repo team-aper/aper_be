@@ -37,9 +37,12 @@ spring:
       mail:
         smtp:
           auth: true # 사용자 인증 시도 여부
-          timeout: 50000 # Socket Read Timeout 시간(ms)
+          connection timeout : 5000
+          timeout: 5000 # Socket Read Timeout 시간(ms)
+          write timeout: 5000
           starttls:
             enable: true # StartTLS 활성화 여부
+            required: true
 
 #logging:
 #    level:
