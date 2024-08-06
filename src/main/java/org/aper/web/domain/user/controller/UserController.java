@@ -1,8 +1,8 @@
 package org.aper.web.domain.user.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailAuthDto;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @Validated(UserValidationSequence.class)
-public class UserController implements UserControllerDocs {
+@Tag(name = "User", description = "회원 API")
+public class UserController {
 
     private final UserService userService;
     private final EmailCertService emailCertService;
