@@ -18,6 +18,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -71,6 +73,12 @@ public class WebSecurityConfig {
         http.sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
+
+        http.oauth2Login(oauth2Login ->
+                oauth2Login
+                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/oauth2/success"))
+                        .failureHandler(new SimpleUrlAuthenticationFailureHandler("/oauth2/failure"))
+        );
 
         // 시큐리티 CORS 빈 설정
         http.cors((cors) -> cors.configurationSource(configurationSource()));

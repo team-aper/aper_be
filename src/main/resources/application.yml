@@ -3,5 +3,7 @@ spring:
     import:
       - classpath:/yml/application-local.yml
       - classpath:/yml/application-dev.yml
+      - classpath:/yml/oauth2-local.yml
+      - classpath:/yml/oauth2-dev.yml
   profiles:
     active: local
