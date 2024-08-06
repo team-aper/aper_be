@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 public class BaseSoftDeleteEntity extends BaseEntity {
-
   @Column
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   protected LocalDateTime deletedDt;

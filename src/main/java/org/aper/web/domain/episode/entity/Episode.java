@@ -28,11 +28,8 @@ public class Episode extends BaseSoftDeleteEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime publicDate;
 
-    @Column()
-    private Long description;
-
-    @Column(name = "recommendation_order")
-    private int recommendationOrder;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "story_id")
