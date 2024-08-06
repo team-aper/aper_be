@@ -39,7 +39,6 @@ spring:
       port: ${dev-redis.port}
       password: ${dev-redis.password}
 
-
 springdoc:
   swagger-ui:
     # swagger-ui 접근 경로. default 값은 /swagger-ui.html이다.
@@ -56,7 +55,7 @@ springdoc:
 
   # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출한다.
   paths-to-match:
-    - ${dev.swagger.match}
+    - /api/**
 
   # 현재 시큐리티를 통해 로그인 처리를 하고 있기 때문에 로그인에 대한 엔드포인트 추가
   show-login-endpoint: true
@@ -66,3 +65,15 @@ secret:
   key:
     access: ${jwt.secret.key.access}
     refresh: ${jwt.secret.key.refresh}
+
+cloud:
+  aws:
+    region:
+      static: ${aws.region.static}
+    stack:
+      auto: ${aws.stack.auto}
+    credentials:
+      accessKey: ${aws.credentials.accessKey}
+      secretKey: ${aws.credentials.secretKey}
+    s3:
+      bucket: ${aws.s3.bucket}
