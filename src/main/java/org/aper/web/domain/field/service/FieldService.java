@@ -3,10 +3,8 @@ package org.aper.web.domain.field.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.field.dto.DetailsResponseDto;
-import org.aper.web.domain.field.dto.HomeDetailsResponseDto;
-import org.aper.web.domain.field.dto.HomeResponseDto;
-import org.aper.web.domain.field.dto.StoriesResponseDto;
+import org.aper.web.domain.field.dto.*;
+import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -36,7 +34,16 @@ public class FieldService {
     }
 
     public StoriesResponseDto getStoriesData(UserDetailsImpl userDetails, Long authorId) {
-        return null;
+        StoriesResponseDto responseDto;
+        List<Story> storyList;
+        boolean isMyField = isOwnFiled(authorId, userDetails);
+        if(isMyField) {
+            storyList = storyRepository.findAllByStories(authorId);
+        } else {
+            storyList = storyRepository.findAllByStoriesOnlyPublished(authorId);
+        }
+        responseDto = new StoriesResponseDto(isMyField, storiesToDto(storyList));
+        return responseDto;
     }
 
     public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
@@ -44,7 +51,7 @@ public class FieldService {
     }
 
     private boolean isOwnFiled(Long authorId, UserDetailsImpl userDetails) {
-        if(userDetails.equals(null)) {
+        if(userDetails == null) {
             return false;
         }
         User user = userDetails.user();
@@ -55,6 +62,12 @@ public class FieldService {
     private List<HomeDetailsResponseDto> episodeToDto(List<Episode> episodeList) {
         return episodeList.stream()
                 .map(HomeDetailsResponseDto::new)
+                .toList();
+    }
+
+    private List<StoriesDetailsResponseDto> storiesToDto(List<Story> storyList) {
+        return storyList.stream()
+                .map(StoriesDetailsResponseDto::new)
                 .toList();
     }
 }

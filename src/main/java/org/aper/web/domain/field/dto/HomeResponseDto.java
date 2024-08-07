@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 public class HomeResponseDto {
-    private Boolean isMyField;
+    private boolean isMyField;
     private List<HomeDetailsResponseDto> detailsList;
 
     public HomeResponseDto(Boolean isMyField, List<HomeDetailsResponseDto> detailsList) {

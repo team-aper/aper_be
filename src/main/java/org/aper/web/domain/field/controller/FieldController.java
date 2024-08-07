@@ -1,10 +1,10 @@
 package org.aper.web.domain.field.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.field.dto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.HomeResponseDto;
-import org.aper.web.domain.field.dto.StoriesResponseDto;
+import org.aper.web.domain.field.dto.StoriesDetailsResponseDto;
 import org.aper.web.domain.field.dto.DetailsResponseDto;
+import org.aper.web.domain.field.dto.StoriesResponseDto;
 import org.aper.web.domain.field.service.FieldService;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/field")
