@@ -21,10 +21,10 @@ public abstract class BaseEntity {
   @CreatedDate
   @Column(nullable = false, updatable = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  protected LocalDateTime createdDt;
+  protected LocalDateTime createdAt;
 
   @LastModifiedDate
   @Column(nullable = false)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-  protected LocalDateTime updatedDt;
+  protected LocalDateTime updatedAt;
 }

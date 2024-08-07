@@ -13,6 +13,7 @@ public class AuthenticatedMatchers {
     public static final String[] excludedPathArray = {
             "/reissue",
             "/signup",
-            "/login"
+            "/login",
+            "/curation/main"
     };
 }

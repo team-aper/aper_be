@@ -1,4 +1,14 @@
 package org.aper.web.domain.curation.repository;
 
-public interface CurationRepository {
+import org.aper.web.domain.curation.entity.Curation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+public interface CurationRepository  extends JpaRepository<Curation, Long> {
+    Page<Curation> findAll(Pageable pageable);
+
+    @Query("SELECT c FROM Curation c INNER JOIN c.episode e INNER JOIN e.story s INNER JOIN s.user u WHERE e.onDisplay = true AND s.onDisplay = true")
+    Page<Curation> findAllForMain(Pageable pageable);
 }
