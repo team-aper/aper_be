@@ -18,6 +18,7 @@ public class AuthenticatedMatchers {
             "/email/*",
             "/password/*",
             "/logout",
-            "/curation/main"
+            "/curation/main",
+            "/user/main"
     };
 }

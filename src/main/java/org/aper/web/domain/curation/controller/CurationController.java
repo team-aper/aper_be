@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "curation-controller", description = "Curation API")
 @RestController
 @RequestMapping("/curation")
 @RequiredArgsConstructor
@@ -31,5 +30,4 @@ public class CurationController {
         );
         return ResponseDto.success("Get Curations in main page", responseDtoList);
     }
-
 }

@@ -21,7 +21,6 @@ public class GetCurationsResponseDto {
     private String storyTitle;
     private String penName;
 
-
     @Builder
     public GetCurationsResponseDto(Curation curation) {
         this.curationId = curation.getId();
@@ -38,5 +37,4 @@ public class GetCurationsResponseDto {
     public static GetCurationsResponseDto of(Curation curation) {
         return GetCurationsResponseDto.builder().curation(curation).build();
     }
-
 }
