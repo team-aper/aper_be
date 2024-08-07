@@ -3,6 +3,10 @@ package org.aper.web.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.aper.web.domain.chat.entity.ChatParticipant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,6 +38,9 @@ public class User {
     @Column
     private Long point;
 
+    @OneToMany(mappedBy = "user")
+    private List<ChatParticipant> chatParticipants = new ArrayList<>();
+
     public User() {
     }
 
@@ -47,5 +54,9 @@ public class User {
     }
     public void updatePoint(Long point) {
         this.point += point;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
     }
 }

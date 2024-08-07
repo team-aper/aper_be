@@ -29,4 +29,23 @@ public class UserRequestDto {
             @NotBlank(message = "비밀번호를 입력해 주세요.")
             String password
     ){}
+
+    public record EmailSendDto(
+            @NotBlank(message = "이메일을 입력해주세요.", groups = NotBlankGroup.class)
+            @Email(message = "잘못된 이메일 형식입니다.", groups = EmailGroup.class)
+            String email
+    ){}
+
+    public record EmailAuthDto(
+            @NotBlank(message = "이메일을 입력해주세요.", groups = NotBlankGroup.class)
+            @Email(message = "잘못된 이메일 형식입니다.", groups = EmailGroup.class)
+            String email,
+            @NotBlank(message = "인증 코드를 입력해주세요", groups = NotBlankGroup.class)
+            String authCode
+    ){}
+
+    public record PasswordChangeDto(
+            String originPassword,
+            String newPassword
+    ){}
 }

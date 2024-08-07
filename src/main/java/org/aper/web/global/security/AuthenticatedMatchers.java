@@ -14,6 +14,10 @@ public class AuthenticatedMatchers {
             "/reissue",
             "/signup",
             "/login",
+            "/health",
+            "/email/*",
+            "/password/*",
+            "/logout",
             "/curation/main"
     };
 }
