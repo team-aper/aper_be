@@ -1,4 +1,4 @@
-package org.aper.web.global.security;
+package org.aper.web.global.config;
 
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,9 @@ public class AuthenticatedMatchers {
             "/health",
             "/email/*",
             "/password/*",
-            "/logout"
+            "/logout",
+            "/curation/main",
+            "/user/main"
     };
     public static final String[] flexiblePathArray = {
             "/field/**",
