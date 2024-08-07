@@ -17,6 +17,6 @@ public class FieldService {
     }
 
     public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
-        return null;
+
     }
 }
