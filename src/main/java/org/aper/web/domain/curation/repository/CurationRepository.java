@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface CurationRepository  extends JpaRepository<Curation, Long> {
     Page<Curation> findAll(Pageable pageable);
 
-    @Query("SELECT c FROM Curation c INNER JOIN c.episode e INNER JOIN e.story s INNER JOIN s.user u WHERE e.onDisplay = true AND s.onDisplay = true")
+    @Query("SELECT c FROM Curation c JOIN FETCH c.episode e JOIN FETCH e.story s JOIN FETCH s.user u WHERE e.onDisplay = true AND s.onDisplay = true")
     Page<Curation> findAllForMain(Pageable pageable);
 }
