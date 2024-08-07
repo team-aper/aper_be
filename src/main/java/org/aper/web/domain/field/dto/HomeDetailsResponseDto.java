@@ -5,6 +5,7 @@ import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 public class HomeDetailsResponseDto {
@@ -13,8 +14,7 @@ public class HomeDetailsResponseDto {
     private Long episodeId;
     private String episodeTitle;
     private StoryGenreEnum storyGenreEnum;
-    private Timestamp date;
-    private boolean isMyField;
+    private LocalDateTime date;
     private boolean isPublished;
 
     public HomeDetailsResponseDto(Episode episode) {
@@ -24,6 +24,6 @@ public class HomeDetailsResponseDto {
         this.episodeTitle = episode.getTitle();
         this.storyGenreEnum = episode.getStory().getGenre();
         this.date = episode.getPublicDate();
-        this.isPublished = episode.getOnDisplay();
+        this.isPublished = episode.isOnDisplay();
     }
 }
