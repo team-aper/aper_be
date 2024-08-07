@@ -8,6 +8,8 @@ import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +49,10 @@ public class FieldService {
     }
 
     public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
-        return null;
+        User user = userRepository.findById(authorId).orElseThrow(() -> {
+            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
+        });
+        return new DetailsResponseDto(user);
     }
 
     private boolean isOwnFiled(Long authorId, UserDetailsImpl userDetails) {
