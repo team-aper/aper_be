@@ -8,6 +8,7 @@ import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
 import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
 import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
+import org.aper.web.domain.user.dto.response.GetUsersForMainResponseDto;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
 import org.aper.web.domain.user.service.UserService;
@@ -16,10 +17,9 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -60,4 +60,14 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
     }
 
+    @GetMapping("/user/main")
+    public ResponseDto<List<GetUsersForMainResponseDto>> getUsersForMain(
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "6", required = false) int size
+    ) {
+        final List<GetUsersForMainResponseDto> responseDtoList = userService.getUsersForMain(
+                page, size
+        );
+        return ResponseDto.success("Get users in main page", responseDtoList);
+    }
 }
