@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FieldService {
-    public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails) {
+    public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
 
     }
 }

@@ -7,6 +7,7 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,11 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FiledController {
     private final FieldService fieldService;
-    @GetMapping("/home")
+    @GetMapping("/home/{authorId}")
     public ResponseDto<HomeResponseDto> getFieldHomeData(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId
             ) {
-        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(userDetails);
+        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(userDetails, authorId);
         return ResponseDto.success("작가 필드 홈 데이터", fieldHomeData);
     }
+
+    @GetMapping
 }
