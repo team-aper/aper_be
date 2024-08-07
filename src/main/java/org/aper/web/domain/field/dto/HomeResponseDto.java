@@ -1,18 +1,17 @@
 package org.aper.web.domain.field.dto;
 
 import lombok.Getter;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
+import org.springframework.security.core.parameters.P;
 
-import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 public class HomeResponseDto {
-    private Long storyId;
-    private String storyTitle;
-    private Long episodeId;
-    private String episodeTitle;
-    private StoryGenreEnum storyGenreEnum;
-    private Timestamp date;
-    private boolean isMyField;
-    private boolean isPublished;
+    private Boolean isMyField;
+    private List<HomeDetailsResponseDto> detailsList;
+
+    public HomeResponseDto(Boolean isMyField, List<HomeDetailsResponseDto> detailsList) {
+        this.isMyField = isMyField;
+        this.detailsList = detailsList;
+    }
 }
