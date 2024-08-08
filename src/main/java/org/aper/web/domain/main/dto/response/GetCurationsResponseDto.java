@@ -1,4 +1,4 @@
-package org.aper.web.domain.curation.dto.response;
+package org.aper.web.domain.main.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import org.aper.web.domain.curation.entity.Curation;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @NoArgsConstructor
 @Getter
