@@ -27,6 +27,6 @@ public class EpisodeService {
             throw new ServiceException(ErrorCode.NOT_AUTHOR_OF_EPISODE);
         }
 
-
+        existEpisode.updateOnDisplay();
     }
 }
