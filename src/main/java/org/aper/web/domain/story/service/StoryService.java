@@ -9,11 +9,13 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
+    @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
         Story existStory = storyRepository.findByStoryAuthor(storyId).orElseThrow(() ->
                 new ServiceException(ErrorCode.STORY_NOT_FOUND)
@@ -27,5 +29,6 @@ public class StoryService {
         }
 
         existStory.updateOnDisplay();
+        storyRepository.save(existStory);
     }
 }
