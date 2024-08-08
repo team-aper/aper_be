@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EpisodeController {
     private final EpisodeService episodeService;
     @PutMapping("/{episodeId}/publish")
-    public ResponseDto<Void> changePublicStatus(
+    public ResponseDto<Void> changeEpisodePublicStatus(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long episodeId
             ) {

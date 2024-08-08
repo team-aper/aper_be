@@ -46,4 +46,8 @@ public class Story extends BaseSoftDeleteEntity {
 
     public Story() {
     }
+
+    public void updateOnDisplay() {
+        this.onDisplay = !this.onDisplay;
+    }
 }
