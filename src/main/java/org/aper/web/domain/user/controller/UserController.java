@@ -8,7 +8,6 @@ import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
 import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
 import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
-import org.aper.web.domain.user.dto.response.GetUsersForMainResponseDto;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
 import org.aper.web.domain.user.service.UserService;
@@ -58,16 +57,5 @@ public class UserController implements UserControllerDocs {
                                                          @RequestBody PasswordChangeDto passChangeDto) {
         passwordService.changePassword(userDetails.user(), passChangeDto);
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
-    }
-
-    @GetMapping("/user/main")
-    public ResponseDto<List<GetUsersForMainResponseDto>> getUsersForMain(
-            @RequestParam(defaultValue = "1", required = false) int page,
-            @RequestParam(defaultValue = "6", required = false) int size
-    ) {
-        final List<GetUsersForMainResponseDto> responseDtoList = userService.getUsersForMain(
-                page, size
-        );
-        return ResponseDto.success("Get users in main page", responseDtoList);
     }
 }
