@@ -19,5 +19,14 @@ public class EpisodeService {
         Episode existEpisode = episodeRepository.findByEpisodeAuthor(episodeId).orElseThrow(() ->
             new ServiceException(ErrorCode.EPISODE_NOT_FOUND)
         );
+
+        User episodeAuthor = existEpisode.getStory().getUser();
+        User accessUser = userDetails.user();
+
+        if(!episodeAuthor.getUserId().equals(accessUser.getUserId())) {
+            throw new ServiceException(ErrorCode.NOT_AUTHOR_OF_EPISODE);
+        }
+
+
     }
 }
