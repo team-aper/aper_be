@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class GetEpisodesResponseDto {
     private Long episodeId;
     private String description;
+    private LocalDateTime createdAt;
     private LocalDateTime publicDate;
     private Long storyId;
     private String storyTitle;
@@ -25,6 +26,7 @@ public class GetEpisodesResponseDto {
     public GetEpisodesResponseDto(Episode episode) {
         this.episodeId = episode.getId();
         this.description = episode.getDescription();
+        this.createdAt = episode.getCreatedAt();
         this.publicDate = episode.getPublicDate();
         this.storyId = episode.getStory().getId();
         this.storyTitle = episode.getStory().getTitle();
