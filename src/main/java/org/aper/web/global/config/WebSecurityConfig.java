@@ -76,6 +76,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                        .requestMatchers(AuthenticatedMatchers.flexiblePathArray).permitAll()
                         .requestMatchers(AuthenticatedMatchers.swaggerArray).permitAll()
                         .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll().anyRequest().authenticated()
         );
