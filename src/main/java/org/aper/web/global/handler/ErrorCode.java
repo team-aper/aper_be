@@ -24,7 +24,15 @@ public enum ErrorCode {
     USER_NOT_FOUND("U002", "등록되지 않은 회원입니다."),
     EMAIL_SEND_FAILURE("U003", "인증코드 전송에 실패하였습니다."),
     EMAIL_AUTH_FAILED("U004", "이메일 인증에 실패하였습니다."),
-    PASSWORD_CHANGE_ERROR("U005", "패스워드 변경에 실패하였습니다.");
+    PASSWORD_CHANGE_ERROR("U005", "패스워드 변경에 실패하였습니다."),
+
+    // Episode
+    EPISODE_NOT_FOUND("E001", "존재 하지 않는 에피소드입니다."),
+    NOT_AUTHOR_OF_EPISODE("E002", "해당 에피소드의 작성자가 아닙니다."),
+
+    // Story
+    STORY_NOT_FOUND("S001", "존재 하지 않는 이야기입니다."),
+    NOT_AUTHOR_OF_STORY("S002", "해당 이야기의 작성자가 아닙니다.");
 
     private final String code;
     private final String message;

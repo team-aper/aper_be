@@ -37,4 +37,8 @@ public class Episode extends BaseSoftDeleteEntity {
 
     public Episode() {
     }
+
+    public void updateOnDisplay() {
+        this.onDisplay = !this.onDisplay;
+    }
 }

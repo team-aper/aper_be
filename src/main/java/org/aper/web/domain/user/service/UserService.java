@@ -46,6 +46,4 @@ public class UserService {
 
         return new SignupResponseDto(penName);
     }
-
-
 }

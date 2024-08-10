@@ -38,6 +38,9 @@ public class User {
     @Column
     private Long point;
 
+    @Column(name = "is_exposed", columnDefinition = "boolean default false")
+    private boolean isExposed;
+
     @OneToMany(mappedBy = "user")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
