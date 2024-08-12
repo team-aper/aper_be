@@ -3,14 +3,14 @@ package org.aper.web.domain.chat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.aper.web.domain.chat.dto.ChatParticipatingResponseDto;
 import org.aper.web.domain.chat.service.ChatService;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -33,6 +33,13 @@ public class ChatController {
             return ResponseDto.fail("이미 생성된 채팅방 입니다.");
         }
         return chatService.createChat(userId, tutorId);
+    }
+
+    @GetMapping
+    @Operation(summary = "참여중인 채팅방", description = "참여 중인 채팅방 반환")
+    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatService.getParticipatingChats(userDetails.user().getUserId());
     }
 
 
