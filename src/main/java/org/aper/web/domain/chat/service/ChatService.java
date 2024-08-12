@@ -74,16 +74,40 @@ public class ChatService {
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
         for (ChatParticipant chatParticipant : participatingChats) {
             ChatRoom chatRoom = chatParticipant.getChatRoom();
-            ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
-                    chatRoom.getId(),
-                    chatParticipant.getIsTutor(),
-                    chatRoom.getIsAccepted(),
-                    chatRoom.getStartTime()
-            );
-            participatingResponseDtos.add(participatingResponseDto);
+            if (!chatRoom.getIsRejected()) {
+                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
+                        chatRoom.getId(),
+                        chatParticipant.getIsTutor(),
+                        chatRoom.getIsAccepted(),
+                        chatRoom.getStartTime()
+                );
+                participatingResponseDtos.add(participatingResponseDto);
+            }
         }
 
         return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+    }
+
+    public ResponseDto<Void> rejectChatRequest(Long roomId, Long tutorId) {
+        Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
+
+        if (chatParticipantOptional.isEmpty()) {
+            return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
+        }
+
+        ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
+
+        if (chatRoom.getIsAccepted()) {
+            return ResponseDto.fail("이미 요청을 수락하셨습니다.");
+        }
+        if (chatRoom.getIsRejected()) {
+            return ResponseDto.fail("이미 요청을 거절하셨습니다.");
+        }
+
+        chatRoom.reject();
+        chatRoomRepository.save(chatRoom);
+
+        return ResponseDto.success("요청을 거절하였습니다.");
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {
@@ -97,4 +121,6 @@ public class ChatService {
         }
         return user.get();
     }
+
+
 }
