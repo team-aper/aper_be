@@ -19,11 +19,14 @@ public class ChatRoom {
 
     private Boolean isAccepted;
 
+    private Boolean isRejected;
+
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     public ChatRoom(){
         this.startTime = LocalDateTime.now();
         this.isAccepted = false;
+        this.isRejected = false;
     }
 }
