@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.service;
 
+import org.aper.web.domain.chat.dto.ChatParticipatingResponseDto;
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.ChatRoomView;
@@ -9,9 +10,11 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.dto.ResponseDto;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +63,29 @@ public class ChatService {
         return !existingChatRoom.isEmpty();
     }
 
+    @Transactional
+    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+        List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
+
+        if (participatingChats.isEmpty()) {
+            return ResponseDto.fail("참여 중인 채팅방이 없습니다");
+        }
+
+        List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
+        for (ChatParticipant chatParticipant : participatingChats) {
+            ChatRoom chatRoom = chatParticipant.getChatRoom();
+            ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
+                    chatRoom.getId(),
+                    chatParticipant.getIsTutor(),
+                    chatRoom.getIsAccepted(),
+                    chatRoom.getStartTime()
+            );
+            participatingResponseDtos.add(participatingResponseDto);
+        }
+
+        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+    }
+
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {
         Optional<User> user = userRepository.findById(id);
 
@@ -71,6 +97,4 @@ public class ChatService {
         }
         return user.get();
     }
-
-
 }
