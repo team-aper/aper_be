@@ -44,10 +44,10 @@ public class ChatController {
     }
 
     @DeleteMapping("/{roomId}")
-    @Operation(summary = "채팅방 거절", description = "tutor에게 요청받은 채팅방 거절")
+    @Operation(summary = "튜터 요청 거절", description = "요청 유무를 확인하고 유무에 따라 튜터 요청을 거절")
     public ResponseDto<Void> rejectChatRequest(
             @PathVariable Long roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.rejectChatRequest(roomId, userDetails.user().getUserId());
+        return chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
     }
 }
