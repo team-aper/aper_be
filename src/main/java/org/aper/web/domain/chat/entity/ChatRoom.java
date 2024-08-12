@@ -29,4 +29,8 @@ public class ChatRoom {
         this.isAccepted = false;
         this.isRejected = false;
     }
+
+    public void reject() {
+        this.isRejected = true;
+    }
 }
