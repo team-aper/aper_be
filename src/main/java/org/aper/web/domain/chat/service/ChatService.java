@@ -88,13 +88,13 @@ public class ChatService {
         return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
     }
 
-    public ResponseDto<Void> rejectChatRequest(Long roomId, Long tutorId) {
+    @Transactional
+    public ResponseDto<Void> rejectChatRoomRequest(Long roomId, Long tutorId) {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
             return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
         }
-
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (chatRoom.getIsAccepted()) {
