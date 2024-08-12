@@ -26,8 +26,9 @@ public class ChatController {
 
     @PostMapping("/{tutorId}")
     @Operation(summary = "튜터와 채팅방 만들기", description = "이미 생성된 채팅방인지 확인하고, 생성되어 있지 않다면 채팅방 생성")
-    public ResponseDto<Void> createChat(@PathVariable Long tutorId,
-                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<Void> createChat(
+            @PathVariable Long tutorId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
         if (chatService.isCreatedChat(userId, tutorId)) {
             return ResponseDto.fail("이미 생성된 채팅방 입니다.");
@@ -36,11 +37,17 @@ public class ChatController {
     }
 
     @GetMapping
-    @Operation(summary = "참여중인 채팅방", description = "참여 중인 채팅방 반환")
+    @Operation(summary = "참여 중인 채팅방", description = "참여 중이고 거절되지 않은 채팅방 반환")
     public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatService.getParticipatingChats(userDetails.user().getUserId());
     }
 
-
+    @DeleteMapping("/{roomId}")
+    @Operation(summary = "채팅방 거절", description = "tutor에게 요청받은 채팅방 거절")
+    public ResponseDto<Void> rejectChatRequest(
+            @PathVariable Long roomId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatService.rejectChatRequest(roomId, userDetails.user().getUserId());
+    }
 }
