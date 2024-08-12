@@ -1,7 +1,6 @@
 package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
