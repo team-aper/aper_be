@@ -14,7 +14,6 @@ public class ChatRoomView {
     @Id
     private Long chatRoomId;
     private String participants;
-
     public ChatRoomView() {
 
     }
