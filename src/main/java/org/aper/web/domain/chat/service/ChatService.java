@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.service;
 
+import org.aper.web.domain.chat.dto.ChatParticipatingResponseDto;
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.ChatRoomView;
@@ -9,9 +10,11 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.dto.ResponseDto;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +61,53 @@ public class ChatService {
         List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
 
         return !existingChatRoom.isEmpty();
+    }
+
+    @Transactional
+    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+        List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
+
+        if (participatingChats.isEmpty()) {
+            return ResponseDto.fail("참여 중인 채팅방이 없습니다");
+        }
+
+        List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
+        for (ChatParticipant chatParticipant : participatingChats) {
+            ChatRoom chatRoom = chatParticipant.getChatRoom();
+            if (!chatRoom.getIsRejected()) {
+                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
+                        chatRoom.getId(),
+                        chatParticipant.getIsTutor(),
+                        chatRoom.getIsAccepted(),
+                        chatRoom.getStartTime()
+                );
+                participatingResponseDtos.add(participatingResponseDto);
+            }
+        }
+
+        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+    }
+
+    @Transactional
+    public ResponseDto<Void> rejectChatRoomRequest(Long roomId, Long tutorId) {
+        Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
+
+        if (chatParticipantOptional.isEmpty()) {
+            return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
+        }
+        ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
+
+        if (chatRoom.getIsAccepted()) {
+            return ResponseDto.fail("이미 요청을 수락하셨습니다.");
+        }
+        if (chatRoom.getIsRejected()) {
+            return ResponseDto.fail("이미 요청을 거절하셨습니다.");
+        }
+
+        chatRoom.reject();
+        chatRoomRepository.save(chatRoom);
+
+        return ResponseDto.success("요청을 거절하였습니다.");
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {
