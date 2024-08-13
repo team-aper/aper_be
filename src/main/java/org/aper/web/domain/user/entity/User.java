@@ -70,4 +70,8 @@ public class User {
     public void updateEmail(String email) {
         this.email = email;
     }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }

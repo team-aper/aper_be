@@ -3,8 +3,9 @@ package org.aper.web.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.docs.UserControllerDocs;
+import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
 import org.aper.web.domain.user.service.UserService;
@@ -57,21 +58,33 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
     }
 
+    @Override
     @PutMapping("/penname/change")
-    public ResponseDto<Void> updatePenName(
+    public ResponseDto<Void> changePenName(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid UpdatePenNameDto updatePenNameDto
-            ) {
-        userService.updatePenName(userDetails.user(), updatePenNameDto);
+            @RequestBody @Valid ChangePenNameDto changePenNameDto
+    ) {
+        userService.ChangePenName(userDetails.user(), changePenNameDto);
         return ResponseDto.success("필명 변경에 성공하였습니다.");
     }
 
+    @Override
     @PutMapping("/email/change")
-    public ResponseDto<Void> updateEmail(
+    public ResponseDto<Void> changeEmail(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid UpdateEmailDto updateEmailDto
-            ) {
-        userService.updateEmail(userDetails.user(), updateEmailDto);
+            @RequestBody @Valid UserRequestDto.ChangeEmailDto changeEmailDto
+    ) {
+        userService.changeEmail(userDetails.user(), changeEmailDto);
         return ResponseDto.success("이메일 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/description/change")
+    public ResponseDto<Void> changeDescription(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody ChangeDescriptionDto descriptionDto
+    ) {
+        userService.changeDescription(userDetails.user(), descriptionDto);
+        return ResponseDto.success("작가의 말 변경에 성공하였습니다.");
     }
 }
