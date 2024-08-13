@@ -77,3 +77,8 @@ cloud:
       secretKey: ${aws.credentials.secretKey}
     s3:
       bucket: ${aws.s3.bucket}
+
+
+server:
+  tomcat:
+    keep-alive-timeout: 190000
