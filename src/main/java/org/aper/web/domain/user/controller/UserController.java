@@ -8,6 +8,8 @@ import org.aper.web.domain.user.dto.UserRequestDto.EmailAuthDto;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
 import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
+import org.aper.web.domain.user.dto.UserRequestDto.UpdateEmailDto;
+import org.aper.web.domain.user.dto.UserRequestDto.UpdatePenNameDto;
 import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
@@ -61,7 +63,7 @@ public class UserController implements UserControllerDocs {
     @PutMapping("/penname/update")
     public ResponseDto<Void> updatePenName(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid UserRequestDto.UpdatePenNameDto updatePenNameDto
+            @RequestBody @Valid UpdatePenNameDto updatePenNameDto
             ) {
         userService.updatePenName(userDetails.user(), updatePenNameDto);
         return ResponseDto.success("필명 변경에 성공하였습니다.");
@@ -70,7 +72,7 @@ public class UserController implements UserControllerDocs {
     @PutMapping("/email/update")
     public ResponseDto<Void> updateEmail(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid UserRequestDto.UpdateEmailDto updateEmailDto
+            @RequestBody @Valid UpdateEmailDto updateEmailDto
             ) {
         userService.updateEmail(userDetails.user(), updateEmailDto);
         return ResponseDto.success("이메일 변경에 성공하였습니다.");

@@ -1,12 +1,10 @@
 package org.aper.web.domain.field.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.field.dto.HomeResponseDto;
-import org.aper.web.domain.field.dto.StoriesDetailsResponseDto;
-import org.aper.web.domain.field.dto.DetailsResponseDto;
-import org.aper.web.domain.field.dto.StoriesResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.HomeResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.StoriesResponseDto;
 import org.aper.web.domain.field.service.FieldService;
-import org.aper.web.domain.user.service.UserService;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
