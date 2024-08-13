@@ -3,6 +3,7 @@ package org.aper.web.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.docs.UserControllerDocs;
+import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailAuthDto;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
@@ -17,8 +18,6 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -57,5 +56,23 @@ public class UserController implements UserControllerDocs {
                                                          @RequestBody PasswordChangeDto passChangeDto) {
         passwordService.changePassword(userDetails.user(), passChangeDto);
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
+    }
+
+    @PutMapping("/penname/update")
+    public ResponseDto<Void> updatePenName(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid UserRequestDto.UpdatePenNameDto updatePenNameDto
+            ) {
+        userService.updatePenName(userDetails.user(), updatePenNameDto);
+        return ResponseDto.success("필명 변경에 성공하였습니다.");
+    }
+
+    @PutMapping("/email/update")
+    public ResponseDto<Void> updateEmail(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid UserRequestDto.UpdateEmailDto updateEmailDto
+            ) {
+        userService.updateEmail(userDetails.user(), updateEmailDto);
+        return ResponseDto.success("이메일 변경에 성공하였습니다.");
     }
 }

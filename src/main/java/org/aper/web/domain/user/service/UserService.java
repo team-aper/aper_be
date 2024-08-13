@@ -46,4 +46,11 @@ public class UserService {
 
         return new SignupResponseDto(penName);
     }
+
+    public void updatePenName(User user, UpdatePenNameDto updatePenNameDto) {
+        
+    }
+
+    public void updateEmail(User user, UpdateEmailDto updateEmailDto) {
+    }
 }
