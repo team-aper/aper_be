@@ -5,3 +5,7 @@ spring:
       - classpath:/yml/application-dev.yml
   profiles:
     active: local
+
+server:
+  tomcat:
+    keep-alive-timeout: 190000
