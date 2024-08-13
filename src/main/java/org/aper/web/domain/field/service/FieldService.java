@@ -3,7 +3,6 @@ package org.aper.web.domain.field.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.field.dto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
@@ -12,6 +11,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
+import org.aper.web.domain.field.dto.FieldResponseDto.*;
 
 import java.util.List;
 
