@@ -3,13 +3,7 @@ package org.aper.web.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.docs.UserControllerDocs;
-import org.aper.web.domain.user.dto.UserRequestDto;
-import org.aper.web.domain.user.dto.UserRequestDto.EmailAuthDto;
-import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
-import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
-import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
-import org.aper.web.domain.user.dto.UserRequestDto.UpdateEmailDto;
-import org.aper.web.domain.user.dto.UserRequestDto.UpdatePenNameDto;
+import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
@@ -19,7 +13,10 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -60,7 +57,7 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
     }
 
-    @PutMapping("/penname/update")
+    @PutMapping("/penname/change")
     public ResponseDto<Void> updatePenName(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody @Valid UpdatePenNameDto updatePenNameDto
@@ -69,7 +66,7 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("필명 변경에 성공하였습니다.");
     }
 
-    @PutMapping("/email/update")
+    @PutMapping("/email/change")
     public ResponseDto<Void> updateEmail(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody @Valid UpdateEmailDto updateEmailDto
