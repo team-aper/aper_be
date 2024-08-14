@@ -8,4 +8,4 @@ spring:
 
 server:
   tomcat:
-    keep-alive-timeout: 190000
+    keep-alive-timeout: 65000ms
