@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3ImageConfig {
-    @Value("${AWS_IMAGE_BUCKET}")
-    private String bucket;
-
     @Value("${AWS_IMAGE_ACCESS_KEY}")
     private String accessKey;
 
