@@ -2,6 +2,7 @@ package org.aper.web.domain.user.service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
@@ -11,16 +12,19 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final S3ImageService s3ImageService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, S3ImageService s3ImageService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.s3ImageService = s3ImageService;
     }
 
     public User findUser(String email){
@@ -67,5 +71,25 @@ public class UserService {
         String newDescription = descriptionDto.description();
         user.updateDescription(newDescription);
         userRepository.save(user);
+    }
+
+    @Transactional
+    public String changeImage(User user, MultipartFile fieldImageFile) {
+        String fileKey = s3ImageService.uploadFile(fieldImageFile);
+        removeExistImage(user);
+
+        String imageUrl = s3ImageService.getImageUrl(fileKey);
+        user.updateFieldImage(imageUrl);
+        userRepository.save(user);
+
+        return imageUrl;
+    }
+
+    private void removeExistImage(User user) {
+        String existFieldImage = user.getFieldImage();
+        if(existFieldImage != null) {
+            String fileKey = existFieldImage.split(".amazonaws.com/")[1];
+            s3ImageService.deleteFile(fileKey);
+        }
     }
 }
