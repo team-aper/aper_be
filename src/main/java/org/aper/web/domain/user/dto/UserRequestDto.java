@@ -48,4 +48,21 @@ public class UserRequestDto {
             String originPassword,
             String newPassword
     ){}
+
+    public record ChangePenNameDto(
+            @NotBlank(message = "필명을 입력해주세요.", groups = NicknameBlankGroup.class)
+            @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$", message = "필명은 특수문자를 제외한 2~10자리를 입력 해주세요.", groups = NicknamePatternGroup.class)
+            String penName
+    ){}
+
+    public record ChangeEmailDto(
+            @NotBlank(message = "이메일을 입력해주세요.", groups = EmailBlankGroup.class)
+            @Email(message = "이메일 형식이 아닙니다.", groups = EmailGroup.class)
+            String email
+    ){}
+
+    public record ChangeDescriptionDto(
+            @NotBlank(message = "", groups = NotBlankGroup.class)
+            String description
+    ){}
 }

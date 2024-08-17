@@ -62,4 +62,16 @@ public class User {
     public void updatePassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
+    public void updatePenName(String penName) {
+        this.penName = penName;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updateDescription(String description) {
+        this.description = description;
+    }
 }

@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.service;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
@@ -45,5 +46,26 @@ public class UserService {
         userRepository.save(user);
 
         return new SignupResponseDto(penName);
+    }
+
+    @Transactional
+    public void ChangePenName(User user, ChangePenNameDto changePenNameDto) {
+        String newPenName = changePenNameDto.penName();
+        user.updatePenName(newPenName);
+        userRepository.save((user));
+    }
+
+    @Transactional
+    public void changeEmail(User user, ChangeEmailDto changeEmailDto) {
+        String newEmail = changeEmailDto.email();
+        user.updateEmail(newEmail);
+        userRepository.save((user));
+    }
+
+    @Transactional
+    public void changeDescription(User user, ChangeDescriptionDto descriptionDto) {
+        String newDescription = descriptionDto.description();
+        user.updateDescription(newDescription);
+        userRepository.save(user);
     }
 }

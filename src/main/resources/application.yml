@@ -7,3 +7,7 @@ spring:
       - classpath:/yml/oauth2-dev.yml
   profiles:
     active: local
+
+server:
+  tomcat:
+    keep-alive-timeout: 65000ms

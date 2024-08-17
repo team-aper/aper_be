@@ -1,8 +1,8 @@
 package org.aper.web.domain.user.controller;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.user.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailAuthDto;
 import org.aper.web.domain.user.dto.UserRequestDto.EmailSendDto;
 import org.aper.web.domain.user.dto.UserRequestDto.PasswordChangeDto;
@@ -16,15 +16,15 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @Validated(UserValidationSequence.class)
-@Tag(name = "User", description = "회원 API")
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
     private final EmailCertService emailCertService;
@@ -58,5 +58,35 @@ public class UserController {
                                                          @RequestBody PasswordChangeDto passChangeDto) {
         passwordService.changePassword(userDetails.user(), passChangeDto);
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/penname/change")
+    public ResponseDto<Void> changePenName(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid ChangePenNameDto changePenNameDto
+    ) {
+        userService.ChangePenName(userDetails.user(), changePenNameDto);
+        return ResponseDto.success("필명 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/email/change")
+    public ResponseDto<Void> changeEmail(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid UserRequestDto.ChangeEmailDto changeEmailDto
+    ) {
+        userService.changeEmail(userDetails.user(), changeEmailDto);
+        return ResponseDto.success("이메일 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/description/change")
+    public ResponseDto<Void> changeDescription(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody ChangeDescriptionDto descriptionDto
+    ) {
+        userService.changeDescription(userDetails.user(), descriptionDto);
+        return ResponseDto.success("작가의 말 변경에 성공하였습니다.");
     }
 }
