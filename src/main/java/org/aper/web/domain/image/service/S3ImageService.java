@@ -25,7 +25,6 @@ public class S3ImageService {
 
     public String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
-        String[] filNameSplit = fileName.split("\\.");
         String currentTime = String.valueOf(System.currentTimeMillis());
 
         try {
