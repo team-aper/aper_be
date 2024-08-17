@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.handler.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,6 @@ public class S3ImageService {
 
     private final AmazonS3 s3Client;
 
-    // S3에 이미지 업로드
     public String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         String[] filNameSplit = fileName.split("\\.");
@@ -35,16 +35,14 @@ public class S3ImageService {
             s3Client.putObject(bucket, fileKey, file.getInputStream(), objectMetadata);
             return fileKey;
         } catch (IOException e) {
-            throw new RuntimeException("S3 업로드 중 에러 발생: " + fileName);
+            throw new RuntimeException(String.valueOf(ErrorCode.S3_UPLOAD_ERROR_OCCURRED));
         }
     }
 
-    // S3에서 이미지 가져오기
     public String getImageUrl(String fileKey) {
         return s3Client.getUrl(bucket, fileKey).toString();
     }
 
-    // S3에서 이미지 삭제
     public void deleteFile(String fileKey) {
         s3Client.deleteObject(bucket, fileKey);
     }
