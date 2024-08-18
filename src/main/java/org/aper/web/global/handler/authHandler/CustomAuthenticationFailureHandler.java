@@ -23,8 +23,8 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         log.error("인증 실패: {}", exception.getMessage());
 
         Map<String, String> errors = new HashMap<>();
-        errors.put("errorCode", ErrorCode.AUTHENTICATION_FAILED.name());
-        errors.put("cause", exception.getMessage());
+        errors.put("errorCode", ErrorCode.AUTHENTICATION_FAILED.getCode());
+        errors.put("message", exception.getMessage());
 
         CustomResponseUtil.fail(response, ErrorCode.AUTHENTICATION_FAILED.getMessage(), errors, HttpStatus.BAD_REQUEST);
     }

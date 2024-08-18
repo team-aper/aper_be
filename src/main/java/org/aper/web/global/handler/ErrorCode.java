@@ -10,7 +10,7 @@ public enum ErrorCode {
     INVALID_INPUT_VALUE("C002", "유효성 검사 실패."),
 
     // Auth
-    AUTHENTICATION_FAILED("A001", "인증되지 않은 사용자입니다."),
+    AUTHENTICATION_FAILED("A001", "인증에 실패하였습니다."),
     REFRESH_TOKEN_NOT_EXISTS("A002", "리프레시 토큰을 찾을 수 없습니다."),
     INVALID_REFRESH_TOKEN("A003", "유효하지 않은 리프레시 토큰입니다."),
     INVALID_ACCESS_TOKEN("A004", "유효하지 않은 엑세스 토큰입니다."),
