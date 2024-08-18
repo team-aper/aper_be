@@ -18,7 +18,6 @@ public enum ErrorCode {
     EXPIRED_ACCESS_TOKEN("A007", "만료된 엑세스 토큰입니다."),
     ACCESS_TOKEN_IS_NULL("A008", "엑세스 토큰이 존재하지 않습니다."),
     BLACK_LISTED_TOKEN("A009", "블랙리스트에 등록된 토큰입니다."),
-    OAUTH2_AUTHENTICATION_FAIL("A010", "OAuth2 인증에 실패하였습니다."),
     AUTH_NOT_FOUND("A011", "사용자의 권한을 찾을 수 없습니다."),
 
     // User

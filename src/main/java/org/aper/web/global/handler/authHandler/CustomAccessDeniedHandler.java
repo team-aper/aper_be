@@ -1,4 +1,4 @@
-package org.aper.web.global.handler;
+package org.aper.web.global.handler.authHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

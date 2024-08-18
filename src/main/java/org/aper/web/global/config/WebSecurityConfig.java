@@ -1,13 +1,13 @@
 package org.aper.web.global.config;
 
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.handler.CustomAccessDeniedHandler;
-import org.aper.web.global.handler.CustomAuthenticationEntryPoint;
-import org.aper.web.global.handler.CustomAuthenticationFailureHandler;
+import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
+import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
+import org.aper.web.global.handler.authHandler.CustomAuthenticationFailureHandler;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
-import org.aper.web.global.oauth2.OAuth2AuthenticationSuccessHandler;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
