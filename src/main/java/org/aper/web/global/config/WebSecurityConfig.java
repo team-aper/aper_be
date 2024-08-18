@@ -1,7 +1,9 @@
 package org.aper.web.global.config;
 
+import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
+import org.aper.web.global.oauth2.CustomOAuth2UserService;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -33,11 +35,13 @@ public class WebSecurityConfig {
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
     public final LogoutService logoutService;
+    public final UserRepository userRepository;
 
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService) {
+    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
         this.logoutService = logoutService;
+        this.userRepository = userRepository;
     }
 
     public CorsConfigurationSource configurationSource() {
@@ -60,6 +64,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public CustomOAuth2UserService customOAuth2UserService() {
+        return new CustomOAuth2UserService(userRepository);
+    }
+
+    @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(tokenProvider, userDetailsService);
     }
@@ -76,6 +85,9 @@ public class WebSecurityConfig {
                 oauth2Login
                         .successHandler(new SimpleUrlAuthenticationSuccessHandler("/oauth2/success"))
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler("/oauth2/failure"))
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint.userService(customOAuth2UserService())
+                        )
         );
 
         // 시큐리티 CORS 빈 설정
