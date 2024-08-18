@@ -1,9 +1,13 @@
 package org.aper.web.global.config;
 
 import org.aper.web.domain.user.repository.UserRepository;
+import org.aper.web.global.handler.CustomAccessDeniedHandler;
+import org.aper.web.global.handler.CustomAuthenticationEntryPoint;
+import org.aper.web.global.handler.CustomAuthenticationFailureHandler;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
+import org.aper.web.global.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -18,8 +22,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -36,12 +38,20 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     public final LogoutService logoutService;
     public final UserRepository userRepository;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    public final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository) {
+    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository, CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
         this.logoutService = logoutService;
         this.userRepository = userRepository;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
     }
 
     public CorsConfigurationSource configurationSource() {
@@ -83,8 +93,8 @@ public class WebSecurityConfig {
 
         http.oauth2Login(oauth2Login ->
                 oauth2Login
-                        .successHandler(new SimpleUrlAuthenticationSuccessHandler("/oauth2/success"))
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler("/oauth2/failure"))
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .userInfoEndpoint(userInfoEndpoint ->
                                 userInfoEndpoint.userService(customOAuth2UserService())
                         )
@@ -101,7 +111,10 @@ public class WebSecurityConfig {
                         .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll().anyRequest().authenticated()
         );
 
-        http.formLogin(AbstractHttpConfigurer::disable);
+        http.formLogin(formLogin ->
+                formLogin
+                        .failureHandler(customAuthenticationFailureHandler)
+        );
 
         http.logout(logoutConfig -> logoutConfig
                         .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
@@ -110,6 +123,14 @@ public class WebSecurityConfig {
                 );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // 예외 처리 설정
+        http.exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint) // 인증 실패 처리
+                        .accessDeniedHandler(accessDeniedHandler) // 인가 실패 처리
+        );
+
         return http.build();
     }
 }
