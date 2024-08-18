@@ -11,6 +11,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.TokenException;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.security.UserDetailsServiceImpl;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         String tokenValue = tokenProvider.getJwtFromHeader(request);
 
         if (StringUtils.hasText(tokenValue)) {

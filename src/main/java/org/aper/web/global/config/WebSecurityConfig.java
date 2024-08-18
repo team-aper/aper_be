@@ -4,10 +4,10 @@ import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
 import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
 import org.aper.web.global.handler.authHandler.CustomAuthenticationFailureHandler;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
-import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -111,18 +111,15 @@ public class WebSecurityConfig {
                         .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll().anyRequest().authenticated()
         );
 
-        http.formLogin(formLogin ->
-                formLogin
-                        .failureHandler(customAuthenticationFailureHandler)
-        );
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.formLogin(AbstractHttpConfigurer::disable);
 
         http.logout(logoutConfig -> logoutConfig
                         .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
                         .addLogoutHandler(logoutService)
                         .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 );
-
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // 예외 처리 설정
         http.exceptionHandling(exceptionHandling ->
