@@ -11,13 +11,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3ImageConfig {
-    @Value("${AWS_IMAGE_ACCESS_KEY}")
+    @Value("${aws.s3.image.accesskey}")
     private String accessKey;
 
-    @Value("${AWS_IMAGE_SECRET_KEY}")
+    @Value("${aws.s3.image.secretkey}")
     private String secretKey;
 
-    @Value("${AWS_REGION}")
+    @Value("${aws.s3.region}")
     private String region;
 
     @Bean
