@@ -15,7 +15,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class S3ImageService {
-    @Value("${AWS_IMAGE_BUCKET}")
+    @Value("${aws.s3.image.bucket}")
     private String bucket;
 
     @Value("${aws.s3.field.dir}")
