@@ -77,3 +77,12 @@ cloud:
       secretKey: ${aws.credentials.secretKey}
     s3:
       bucket: ${aws.s3.bucket}
+
+aws:
+  s3:
+    region: ${AWS_REGION}
+    image:
+      bucket: ${AWS_IMAGE_BUCKET}
+      accesskey: ${AWS_IMAGE_ACCESS_KEY}
+      secretkey: ${AWS_IMAGE_SECRET_KEY}
+    field:
