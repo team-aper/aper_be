@@ -9,6 +9,8 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "User", description = "회원 API")
 public interface UserControllerDocs {
@@ -28,5 +30,11 @@ public interface UserControllerDocs {
     ResponseDto<Void> changeDescription(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UserRequestDto.ChangeDescriptionDto descriptionDto
+    );
+
+    @Operation(summary = "작가 필드 이미지 수정 API", description = "form-data 형식으로 넘겨주세요.")
+    ResponseDto<String> changeImage(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam("fieldImageFile") MultipartFile fieldImageFile
     );
 }

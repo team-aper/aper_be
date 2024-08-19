@@ -24,6 +24,8 @@ repositories {
 }
 
 dependencies {
+    //aws
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     //iamport
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 

@@ -74,4 +74,8 @@ public class User {
     public void updateDescription(String description) {
         this.description = description;
     }
+
+    public void updateFieldImage(String fieldImage) {
+        this.fieldImage = fieldImage;
+    }
 }

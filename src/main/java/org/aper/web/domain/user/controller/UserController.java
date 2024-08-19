@@ -14,10 +14,8 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -86,5 +84,15 @@ public class UserController implements UserControllerDocs {
     ) {
         userService.changeDescription(userDetails.user(), descriptionDto);
         return ResponseDto.success("작가의 말 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/image")
+    public ResponseDto<String> changeImage(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam("fieldImageFile") MultipartFile fieldImageFile
+    ) {
+        String imageUrl = userService.changeImage(userDetails.user(), fieldImageFile);
+        return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
     }
 }
