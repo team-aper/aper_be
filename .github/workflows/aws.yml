@@ -35,6 +35,18 @@ jobs:
         mkdir -p ./src/main/resources/yml
         echo "${{ secrets.OAUTH2_YAML }}" > ./src/main/resources/yml/oauth2-dev.yml
 
+    # Gradle 빌드 할 때, 이미 저장한 데이터를 캐싱하여 빌드시 이를 사용하도록함.
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+
     - name: Build with Gradle
       run: ./gradlew build
 
