@@ -8,6 +8,7 @@ public enum ErrorCode {
     // Common
     INTERNAL_SERVER_ERROR("C001", "내부 서버 오류가 발생했습니다."),
     INVALID_INPUT_VALUE("C002", "유효성 검사 실패."),
+    IO_EXCEPTION("C003", "IO Error"),
 
     // Auth
     AUTHENTICATION_FAILED("A001", "인증에 실패하였습니다."),
