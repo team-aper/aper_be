@@ -19,10 +19,10 @@ public class FieldController implements FieldControllerDocs {
     private final FieldService fieldService;
 
     @Override
-    @GetMapping("/authorInfo/{authorId}")
+    @GetMapping("/header/{authorId}")
     public ResponseDto<AuthorInfoResponseDto> getAuthorInfo(@PathVariable Long authorId) {
         AuthorInfoResponseDto authorInfo = fieldService.getAuthorInfo(authorId);
-        return ResponseDto.success("필드 작가 정보 데이터", authorInfo);
+        return ResponseDto.success("작가 필드 헤더 데이터", authorInfo);
     }
 
     @Override

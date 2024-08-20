@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Tag(name = "작가의 필드에서 필요한 API")
 public interface FieldControllerDocs {
 
-    @Operation(summary = "필드 메인 작가 정보 get API", description = "필드 페이지 상단에 필명, 작가 소개, 필드 이미지를 보여줌")
+    @Operation(summary = "필드 헤더 작가 정보 get API", description = "필드 페이지 상단에 필명, 작가 소개, 필드 이미지를 보여줌")
     ResponseDto<AuthorInfoResponseDto> getAuthorInfo(
             @PathVariable Long authorId
     );
