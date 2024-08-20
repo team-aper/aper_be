@@ -1,7 +1,13 @@
 package org.aper.web.global.config;
 
+import org.aper.web.domain.user.repository.UserRepository;
+import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
+import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
+import org.aper.web.global.handler.authHandler.CustomAuthenticationFailureHandler;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
+import org.aper.web.global.oauth2.CustomOAuth2UserService;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,11 +37,21 @@ public class WebSecurityConfig {
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
     public final LogoutService logoutService;
+    public final UserRepository userRepository;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    public final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService) {
+    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository, CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = userDetailsService;
         this.logoutService = logoutService;
+        this.userRepository = userRepository;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
     }
 
     public CorsConfigurationSource configurationSource() {
@@ -58,6 +74,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public CustomOAuth2UserService customOAuth2UserService() {
+        return new CustomOAuth2UserService(userRepository);
+    }
+
+    @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
         return new JwtAuthorizationFilter(tokenProvider, userDetailsService);
     }
@@ -70,6 +91,15 @@ public class WebSecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
+        http.oauth2Login(oauth2Login ->
+                oauth2Login
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
+                        .userInfoEndpoint(userInfoEndpoint ->
+                                userInfoEndpoint.userService(customOAuth2UserService())
+                        )
+        );
+
         // 시큐리티 CORS 빈 설정
         http.cors((cors) -> cors.configurationSource(configurationSource()));
 
@@ -81,6 +111,8 @@ public class WebSecurityConfig {
                         .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll().anyRequest().authenticated()
         );
 
+        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+
         http.formLogin(AbstractHttpConfigurer::disable);
 
         http.logout(logoutConfig -> logoutConfig
@@ -89,7 +121,13 @@ public class WebSecurityConfig {
                         .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
                 );
 
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        // 예외 처리 설정
+        http.exceptionHandling(exceptionHandling ->
+                exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint) // 인증 실패 처리
+                        .accessDeniedHandler(accessDeniedHandler) // 인가 실패 처리
+        );
+
         return http.build();
     }
 }
