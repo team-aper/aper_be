@@ -2,9 +2,7 @@ package org.aper.web.domain.field.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.field.docs.FieldControllerDocs;
-import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
-import org.aper.web.domain.field.dto.FieldResponseDto.HomeResponseDto;
-import org.aper.web.domain.field.dto.FieldResponseDto.StoriesResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.*;
 import org.aper.web.domain.field.service.FieldService;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -19,6 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FieldController implements FieldControllerDocs {
     private final FieldService fieldService;
+
+    @Override
+    @GetMapping("/authorInfo/{authorId}")
+    public ResponseDto<AuthorInfoResponseDto> getAuthorInfo(@PathVariable Long authorId) {
+        AuthorInfoResponseDto authorInfo = fieldService.getAuthorInfo(authorId);
+        return ResponseDto.success("필드 작가 정보 데이터", authorInfo);
+    }
 
     @Override
     @GetMapping("/home/{authorId}") //작가가 작성한 에피소드를 최신순으로 보내줌
