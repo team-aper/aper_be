@@ -27,6 +27,11 @@ jobs:
         mkdir -p ./src/main/resources/yml
         echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
 
+    - name: Create application-secret.yml from secret
+      run: |
+        mkdir -p ./src/main/resources/yml
+        echo "${{ secrets.OAUTH2_YAML }}" > ./src/main/resources/yml/oauth2-dev.yml
+
     - name: Build with Gradle
       run: ./gradlew build
 
