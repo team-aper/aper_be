@@ -34,6 +34,9 @@ public enum ErrorCode {
     // Story
     STORY_NOT_FOUND("S001", "존재 하지 않는 이야기입니다."),
     NOT_AUTHOR_OF_STORY("S002", "해당 이야기의 작성자가 아닙니다."),
+    INVALID_ROUTINE("S003", "유효하지 않은 루틴입니다."),
+    INVALID_STORY_LINE("S004", "유효하지 않은 줄글 스타일입니다."),
+    INVALID_GENRE("S005", "유효하지 않은 장르입니다."),
 
     // AWS S3
     S3_UPLOAD_ERROR_OCCURRED("AWS001", "S3 업로드 중 에러가 발생했습니다.");
