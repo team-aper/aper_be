@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class DeleteAccountService {
+public class DeleteService {
     private final DeleteAccountRepository deleteAccountRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -22,5 +22,9 @@ public class DeleteAccountService {
         }
         DeleteAccount account = new DeleteAccount(user);
         deleteAccountRepository.save(account);
+    }
+
+    public void deleteAccountScheduler() {
+
     }
 }

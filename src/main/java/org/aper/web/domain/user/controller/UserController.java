@@ -6,7 +6,7 @@ import org.aper.web.domain.user.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
-import org.aper.web.domain.user.service.DeleteAccountService;
+import org.aper.web.domain.user.service.DeleteService;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
 import org.aper.web.domain.user.service.UserService;
@@ -26,16 +26,16 @@ public class UserController implements UserControllerDocs {
     private final UserService userService;
     private final EmailCertService emailCertService;
     private final PasswordService passwordService;
-    private final DeleteAccountService deleteAccountService;
+    private final DeleteService deleteService;
 
     public UserController(UserService userService,
                           EmailCertService emailCertService,
                           PasswordService passwordService,
-                          DeleteAccountService deleteAccountService) {
+                          DeleteService deleteService) {
         this.userService = userService;
         this.emailCertService = emailCertService;
         this.passwordService = passwordService;
-        this.deleteAccountService = deleteAccountService;
+        this.deleteService = deleteService;
     }
 
     @PostMapping("/signup")
@@ -108,7 +108,7 @@ public class UserController implements UserControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody DeletePasswordDto deletePasswordDto
     ) {
-        deleteAccountService.deleteAccount(userDetails.user(), deletePasswordDto);
+        deleteService.deleteAccount(userDetails.user(), deletePasswordDto);
         return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
     }
 }
