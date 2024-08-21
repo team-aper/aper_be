@@ -96,6 +96,8 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
     }
 
+    @Override
+    @DeleteMapping("/account/delete")
     public ResponseDto<Void> deleteAccount(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody DeletePasswordDto deletePasswordDto

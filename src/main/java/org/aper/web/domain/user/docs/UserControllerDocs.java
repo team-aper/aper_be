@@ -7,6 +7,7 @@ import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,5 +37,11 @@ public interface UserControllerDocs {
     ResponseDto<String> changeImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("fieldImageFile") MultipartFile fieldImageFile
+    );
+
+    @Operation(summary = "계정 탈퇴 API", description = "비밀번호를 비교해서 일치하면 일주일 뒤 계정이 삭제됩니다.")
+    ResponseDto<Void> deleteAccount(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody UserRequestDto.DeletePasswordDto deletePasswordDto
     );
 }
