@@ -44,6 +44,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn
+    private DeleteAccount deleteAccount;
+
     public User() {
     }
 
