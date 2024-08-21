@@ -10,9 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class DeleteAccountScheduler {
     private final DeleteService deleteService;
 
-    @Scheduled()
+    @Scheduled(fixedRate = 60000)
     public void deleteAccountPerDay() {
         log.info("계정 삭제 실시");
-
+        deleteService.deleteAccountScheduler();
     }
 }

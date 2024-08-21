@@ -32,8 +32,9 @@ public class DeleteService {
 
     @Transactional
     public void deleteAccountScheduler() {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
-        List<DeleteAccount> deleteAccounts = deleteAccountRepository.findAllToDelete(oneWeekAgo);
+//        LocalDateTime period = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime period = LocalDateTime.now();
+        List<DeleteAccount> deleteAccounts = deleteAccountRepository.findAllToDelete(period);
 
         List<User> usersToDelete = deleteAccounts.stream()
                 .map(DeleteAccount::getUser)
