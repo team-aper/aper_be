@@ -10,4 +10,7 @@ import java.util.List;
 public interface DeleteAccountRepository extends JpaRepository<DeleteAccount, Long> {
     @Query("SELECT da FROM DeleteAccount da WHERE da.createdAt <= :period")
     List<DeleteAccount> findAllToDelete(LocalDateTime period);
+
+    @Query("DELETE FROM DeleteAccount da WHERE da.createdAt <= :period")
+    void deleteAllByCreatedAtBefore(LocalDateTime period);
 }

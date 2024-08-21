@@ -1,9 +1,11 @@
 package org.aper.web.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
 @Entity
+@Getter
 public class DeleteAccount extends BaseSoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
