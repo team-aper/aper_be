@@ -13,4 +13,8 @@ public class DeleteAccount extends BaseSoftDeleteEntity {
     @OneToOne
     @JoinColumn
     private User user;
+
+    public DeleteAccount(User user) {
+        this.user = user;
+    }
 }

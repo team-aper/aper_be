@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.entity.DeleteAccount;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -95,7 +96,9 @@ public class UserService {
 
     public void deleteAccount(User user, DeletePasswordDto deletePasswordDto) {
         if(!passwordEncoder.matches(deletePasswordDto.password(), user.getPassword())) {
-            throw new ServiceException(ErrorCode.PASSWORD_CHANGE_ERROR);
+            throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
         }
+        DeleteAccount account = new DeleteAccount(user);
+
     }
 }
