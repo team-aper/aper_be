@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "episodes")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Episode extends BaseSoftDeleteEntity {
     @Column
     private Long chapter;
@@ -35,7 +39,12 @@ public class Episode extends BaseSoftDeleteEntity {
     @JoinColumn(name = "story_id")
     private Story story;
 
-    public Episode() {
+    @Builder
+    public Episode(Long chapter, String title, String description, Story story) {
+        this.chapter = chapter;
+        this.title = title;
+        this.description = description;
+        this.story = story;
     }
 
     public void updateOnDisplay() {
