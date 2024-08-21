@@ -19,4 +19,7 @@ public class DeleteAccount extends BaseSoftDeleteEntity {
     public DeleteAccount(User user) {
         this.user = user;
     }
+
+    public DeleteAccount() {
+    }
 }
