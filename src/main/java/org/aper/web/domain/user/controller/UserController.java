@@ -95,4 +95,12 @@ public class UserController implements UserControllerDocs {
         String imageUrl = userService.changeImage(userDetails.user(), fieldImageFile);
         return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
     }
+
+    public ResponseDto<Void> deleteAccount(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody DeletePasswordDto deletePasswordDto
+    ) {
+        userService.deleteAccount(userDetails.user(), deletePasswordDto);
+        return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
+    }
 }
