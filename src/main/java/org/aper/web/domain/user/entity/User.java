@@ -82,4 +82,8 @@ public class User {
     public void updateFieldImage(String fieldImage) {
         this.fieldImage = fieldImage;
     }
+
+    public void updateDeleteAccount(DeleteAccount deleteAccount) {
+        this.deleteAccount = deleteAccount;
+    }
 }

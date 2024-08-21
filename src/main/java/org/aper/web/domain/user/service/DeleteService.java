@@ -24,12 +24,16 @@ public class DeleteService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    @Transactional
     public void deleteAccount(User user, DeletePasswordDto deletePasswordDto) {
         if(!passwordEncoder.matches(deletePasswordDto.password(), user.getPassword())) {
             throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
         }
         DeleteAccount account = new DeleteAccount(user);
+        user.updateDeleteAccount(account);
+
         deleteAccountRepository.save(account);
+        userRepository.save(user);
     }
 
     @Transactional
@@ -51,3 +55,4 @@ public class DeleteService {
         userRepository.deleteAll(usersToDelete);
     }
 }
+
