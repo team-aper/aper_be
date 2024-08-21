@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
 import org.aper.web.domain.story.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.constant.StoryLineStyleEnum;
@@ -12,6 +13,7 @@ import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +45,9 @@ public class Story extends BaseSoftDeleteEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "story", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Episode> episodeList;
 
     public Story() {
     }

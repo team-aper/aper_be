@@ -38,21 +38,20 @@ public class DeleteService {
 
     @Transactional
     public void deleteAccountScheduler() {
-        LocalDateTime period = LocalDateTime.now().minusWeeks(1);
+//        LocalDateTime period = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime period = LocalDateTime.now();
         List<DeleteAccount> deleteAccounts = deleteAccountRepository.findAllToDelete(period);
 
         if(deleteAccounts.isEmpty()) {
             log.info("there is nothing account to delete");
             return;
         }
-
-        List<User> usersToDelete = deleteAccounts.stream()
-                .map(DeleteAccount::getUser)
-                .toList();
+//        List<User> usersToDelete = deleteAccounts.stream()
+//                .map(DeleteAccount::getUser)
+//                .toList();
 
         deleteAccountRepository.deleteAll(deleteAccounts);
-
-        userRepository.deleteAll(usersToDelete);
     }
 }
+
 

@@ -12,7 +12,7 @@ public class DeleteAccount extends BaseSoftDeleteEntity {
     @Column
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
     @JoinColumn
     private User user;
 

@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 public class DeleteAccountScheduler {
     private final DeleteService deleteService;
 
-    @Scheduled(cron = "0 0 6 * * *")
+//    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(fixedDelay = 10000)
     public void deleteAccountPerDay() {
         log.info("start delete account in DeleteAccountScheduler");
         deleteService.deleteAccountScheduler();
