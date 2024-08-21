@@ -92,4 +92,10 @@ public class UserService {
             s3ImageService.deleteFile(fileKey);
         }
     }
+
+    public void deleteAccount(User user, DeletePasswordDto deletePasswordDto) {
+        if(!passwordEncoder.matches(deletePasswordDto.password(), user.getPassword())) {
+            throw new ServiceException(ErrorCode.PASSWORD_CHANGE_ERROR);
+        }
+    }
 }
