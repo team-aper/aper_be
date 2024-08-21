@@ -34,8 +34,7 @@ public class DeleteService {
 
     @Transactional
     public void deleteAccountScheduler() {
-//        LocalDateTime period = LocalDateTime.now().minusWeeks(1);
-        LocalDateTime period = LocalDateTime.now();
+        LocalDateTime period = LocalDateTime.now().minusWeeks(1);
         List<DeleteAccount> deleteAccounts = deleteAccountRepository.findAllToDelete(period);
 
         if(deleteAccounts.isEmpty()) {
