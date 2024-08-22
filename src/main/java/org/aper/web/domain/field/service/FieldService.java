@@ -23,9 +23,9 @@ public class FieldService {
     private final UserRepository userRepository;
 
 
-    public AuthorInfoResponseDto getAuthorInfo(Long authorId) {
+    public FieldHeaderResponseDto getAuthorInfo(Long authorId) {
         User user = userRepository.findById(authorId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        return new AuthorInfoResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription());
+        return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription());
     }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
