@@ -3,6 +3,7 @@ package org.aper.web.domain.field.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.field.dto.FieldResponseDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
@@ -11,7 +12,6 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
-import org.aper.web.domain.field.dto.FieldResponseDto.*;
 
 import java.util.List;
 
@@ -21,6 +21,12 @@ public class FieldService {
     private final EpisodeRepository episodeRepository;
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
+
+
+    public AuthorInfoResponseDto getAuthorInfo(Long authorId) {
+        User user = userRepository.findById(authorId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        return new AuthorInfoResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription());
+    }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
         HomeResponseDto responseDto;
@@ -49,9 +55,7 @@ public class FieldService {
     }
 
     public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
-        User user = userRepository.findById(authorId).orElseThrow(() -> {
-            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
-        });
+        User user = userRepository.findById(authorId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         return new DetailsResponseDto(user);
     }
 
@@ -75,4 +79,5 @@ public class FieldService {
                 .map(StoriesDetailsResponseDto::new)
                 .toList();
     }
+
 }

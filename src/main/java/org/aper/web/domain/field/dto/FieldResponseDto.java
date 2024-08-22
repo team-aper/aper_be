@@ -11,6 +11,12 @@ import java.util.List;
 
 public class FieldResponseDto {
 
+    public record AuthorInfoResponseDto(
+            String penName,
+            String fieldImageUrl,
+            String description
+    ) {}
+
     public record HomeResponseDto(
             boolean isMyField,
             List<HomeDetailsResponseDto> detailsList
@@ -74,4 +80,5 @@ public class FieldResponseDto {
             );
         }
     }
+
 }
