@@ -53,8 +53,11 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
+        this.description = "안녕하세요, " + penName + "입니다.";
+        this.fieldImage = "https://aper-image-bucket.s3.ap-northeast-2.amazonaws.com/fieldimage/craig-manners-BNgxioIWM0Y-unsplash.png";
         this.point = 0L;
     }
+
     public void updatePoint(Long point) {
         this.point += point;
     }

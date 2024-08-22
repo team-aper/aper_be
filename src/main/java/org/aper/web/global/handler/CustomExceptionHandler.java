@@ -26,7 +26,7 @@ import java.util.*;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) throws IOException {
+    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
         Map<String, String> errorMap = new HashMap<>();
         BindingResult result = e.getBindingResult();
 
@@ -35,11 +35,11 @@ public class CustomExceptionHandler {
         }
 
         log.error("handleMethodArgumentNotValidException", e);
-        CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
+        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE.getMessage(), errorMap, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public void handleConstraintViolationException(ConstraintViolationException e, HttpServletResponse response) throws IOException {
+    public void handleConstraintViolationException(ConstraintViolationException e, HttpServletResponse response) {
         Map<String, String> errorMap = new HashMap<>();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
@@ -47,7 +47,7 @@ public class CustomExceptionHandler {
             errorMap.put("validation error", errorMessage);
         }
         log.error("handleConstraintViolationException", e);
-        CustomResponseUtil.fail(response, "Invalid input value", errorMap, HttpStatus.BAD_REQUEST);
+        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE.getMessage(), errorMap, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -71,7 +71,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(IOException.class)
     public void handleIOException(IOException e, HttpServletResponse response) {
         log.error("handleIOException", e);
-        CustomResponseUtil.fail(response, "IO error", HttpStatus.INTERNAL_SERVER_ERROR);
+        CustomResponseUtil.fail(response, ErrorCode.IO_EXCEPTION.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IamportResponseException.class)
@@ -101,7 +101,7 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public void handleException(Exception e, HttpServletResponse response) {
         log.error("handleException", e);
-        CustomResponseUtil.fail(response, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        CustomResponseUtil.fail(response, ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

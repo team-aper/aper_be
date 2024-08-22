@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,7 @@ public class S3ImageService {
             s3Client.putObject(bucket, fileKey, file.getInputStream(), objectMetadata);
             return fileKey;
         } catch (IOException e) {
-            throw new RuntimeException(String.valueOf(ErrorCode.S3_UPLOAD_ERROR_OCCURRED));
+            throw new ServiceException(ErrorCode.S3_UPLOAD_ERROR_OCCURRED);
         }
     }
 
