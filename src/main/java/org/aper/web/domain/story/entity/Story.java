@@ -24,10 +24,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Story extends BaseSoftDeleteEntity {
 
-    @Id
-    @GeneratedValue
-    private Long storyId;
-
     @NotBlank(message = "field title is blank")
     @Schema(description = "Post Title", nullable = false)
     private String title;
