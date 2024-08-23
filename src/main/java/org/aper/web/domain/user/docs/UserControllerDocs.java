@@ -39,7 +39,7 @@ public interface UserControllerDocs {
             @RequestParam("fieldImageFile") MultipartFile fieldImageFile
     );
 
-    @Operation(summary = "계정 탈퇴 API", description = "비밀번호를 비교해서 일치하면 일주일 뒤 계정이 삭제됩니다.")
+    @Operation(summary = "계정 탈퇴 API", description = "계정 삭제 요청에 성공할 경우 바로 계정 삭제가 되는게 아니라 삭제 상태, 로그인 불가능 상태로 변경됩니다. 이후 일주일 경과 후 해당 계정이 작성한 스토리, 에피소드가 일괄 삭제됩니다.")
     ResponseDto<Void> deleteAccount(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UserRequestDto.DeletePasswordDto deletePasswordDto
