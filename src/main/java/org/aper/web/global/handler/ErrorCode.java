@@ -27,6 +27,7 @@ public enum ErrorCode {
     EMAIL_SEND_FAILURE("U003", "인증코드 전송에 실패하였습니다."),
     EMAIL_AUTH_FAILED("U004", "이메일 인증에 실패하였습니다."),
     PASSWORD_CHANGE_ERROR("U005", "패스워드 변경에 실패하였습니다."),
+    INCORRECT_PASSWORD("U006", "비밀번호가 일치하지 않습니다."),
 
     // Episode
     EPISODE_NOT_FOUND("E001", "존재 하지 않는 에피소드입니다."),

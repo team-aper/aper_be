@@ -15,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.isExposed = true")
     Page<User> findAllForMain(Pageable pageable);
+
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.deleteAccount IS NULL")
+    Optional<User> findByEmailWithOutDeleteAccount(String email);
 }

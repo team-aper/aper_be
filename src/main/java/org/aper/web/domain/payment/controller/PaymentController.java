@@ -23,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/payment")
 @Slf4j(topic = "결제 컨트롤러")
-@Tag(name = "결제 관련 API 모음")
+@Tag(name = "결제 관련 API 모음 (미사용 API)")
 public class PaymentController {
     private final PaymentService paymentService;
     private final RefundsService refundsService;

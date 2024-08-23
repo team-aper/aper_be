@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatParticipant;
+import org.aper.web.domain.story.entity.Story;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn
+    private DeleteAccount deleteAccount;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Story> storyList;
+
+
     public User() {
     }
 
@@ -80,5 +89,9 @@ public class User {
 
     public void updateFieldImage(String fieldImage) {
         this.fieldImage = fieldImage;
+    }
+
+    public void updateDeleteAccount(DeleteAccount deleteAccount) {
+        this.deleteAccount = deleteAccount;
     }
 }

@@ -6,6 +6,7 @@ import org.aper.web.domain.user.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.service.DeleteService;
 import org.aper.web.domain.user.service.EmailCertService;
 import org.aper.web.domain.user.service.PasswordService;
 import org.aper.web.domain.user.service.UserService;
@@ -25,11 +26,16 @@ public class UserController implements UserControllerDocs {
     private final UserService userService;
     private final EmailCertService emailCertService;
     private final PasswordService passwordService;
+    private final DeleteService deleteService;
 
-    public UserController(UserService userService, EmailCertService emailCertService, PasswordService passwordService) {
+    public UserController(UserService userService,
+                          EmailCertService emailCertService,
+                          PasswordService passwordService,
+                          DeleteService deleteService) {
         this.userService = userService;
         this.emailCertService = emailCertService;
         this.passwordService = passwordService;
+        this.deleteService = deleteService;
     }
 
     @PostMapping("/signup")
@@ -94,5 +100,15 @@ public class UserController implements UserControllerDocs {
     ) {
         String imageUrl = userService.changeImage(userDetails.user(), fieldImageFile);
         return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
+    }
+
+    @Override
+    @DeleteMapping("/account/delete")
+    public ResponseDto<Void> deleteAccount(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody DeletePasswordDto deletePasswordDto
+    ) {
+        deleteService.deleteAccount(userDetails.user(), deletePasswordDto);
+        return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
     }
 }

@@ -7,6 +7,7 @@ import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,5 +37,11 @@ public interface UserControllerDocs {
     ResponseDto<String> changeImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("fieldImageFile") MultipartFile fieldImageFile
+    );
+
+    @Operation(summary = "계정 탈퇴 API", description = "계정 삭제 요청에 성공할 경우 바로 계정 삭제가 되는게 아니라 삭제 상태, 로그인 불가능 상태로 변경됩니다. 이후 일주일 경과 후 해당 계정이 작성한 스토리, 에피소드가 일괄 삭제됩니다.")
+    ResponseDto<Void> deleteAccount(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody UserRequestDto.DeletePasswordDto deletePasswordDto
     );
 }
