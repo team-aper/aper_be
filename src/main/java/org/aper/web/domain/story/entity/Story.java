@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class Story extends BaseSoftDeleteEntity {
 
     @NotBlank(message = "field title is blank")
-    @Schema(description = "Post Title", nullable = false)
+    @Schema(description = "Post Title")
     private String title;
 
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class Story extends BaseSoftDeleteEntity {
     @Column(name = "on_display", columnDefinition = "boolean default false")
     private boolean onDisplay;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime publicDate;
 

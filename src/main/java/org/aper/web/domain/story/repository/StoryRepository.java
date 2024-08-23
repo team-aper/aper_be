@@ -27,4 +27,7 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
             "WHERE s.id = :storyId"
     )
     Optional<Story> findByStoryAuthor(Long storyId);
+
+    boolean existsByIdAndUser_UserId(Long storyId, Long userId);
+
 }
