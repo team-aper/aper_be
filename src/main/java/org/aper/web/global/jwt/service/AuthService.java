@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.UserService;
-import org.aper.web.global.handler.CustomResponseUtil;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
@@ -24,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -78,36 +78,33 @@ public class AuthService {
 
     @Transactional
     public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-
         String accessTokenValue = tokenProvider.getJwtFromHeader(request);
+        validateTokenPresence(accessTokenValue);
 
-        if (accessTokenValue.isEmpty()) {
-            CustomResponseUtil.fail(response, ErrorCode.ACCESS_TOKEN_IS_NULL.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-
-        if (tokenBlacklistService.isTokenBlacklisted(accessTokenValue)) {
-            log.error("blacklisted Token");
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.BLACK_LISTED_TOKEN);
-        }
-
-        tokenBlacklistService.saveBlackListToken(accessTokenValue);
-
-        Claims claims = null;
-
-        try {
-            claims = tokenProvider.getUserInfoFromAccessToken(accessTokenValue);
-        } catch (TokenException e) {
-            CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.FORBIDDEN);
-        }
-
-        if (claims == null) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_ACCESS_TOKEN);
-        }
-
+        Claims claims = tokenValidationService.verifyAccessToken(accessTokenValue);
         String email = claims.getSubject();
+
         String storedRefreshToken = refreshTokenService.getRefreshToken(email);
         tokenValidationService.verifyRefreshToken(storedRefreshToken);
 
+        // 블랙리스트 추가
+        blacklistTokens(accessTokenValue, storedRefreshToken);
+
+        return generateNewTokens(email, request, response);
+    }
+
+    private void validateTokenPresence(String token) {
+        if (!StringUtils.hasText(token)) {
+            throw new TokenException(HttpStatus.BAD_REQUEST, ErrorCode.ACCESS_TOKEN_IS_NULL);
+        }
+    }
+
+    private void blacklistTokens(String accessToken, String refreshToken) {
+        tokenBlacklistService.saveBlackListToken(accessToken);
+        tokenBlacklistService.saveBlackListToken(refreshToken);
+    }
+
+    private GeneratedToken generateNewTokens(String email, HttpServletRequest request, HttpServletResponse response) {
         refreshTokenService.deleteRefreshToken(email);
         cookieService.deleteCookie(request, response, "Refresh-Token");
 
@@ -115,7 +112,7 @@ public class AuthService {
         return tokenProvider.generateToken(user.getEmail(), user.getRole().getAuthority(), user.getPenName());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserInfo getUserInfo(LoginRequestDto loginRequestDto) {
         User user = userService.findUser(loginRequestDto.email());
         return new UserInfo(user.getEmail(), user.getPenName(), user.getFieldImage());
