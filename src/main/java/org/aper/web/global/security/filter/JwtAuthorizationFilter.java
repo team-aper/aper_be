@@ -40,11 +40,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(tokenValue)) {
             try{
-            String accessToken = tokenProvider.getJwtFromHeader(request);
-            if (accessToken != null) {
-                Claims claims = tokenProvider.getUserInfoFromAccessToken(accessToken);
+                Claims claims = tokenProvider.getUserInfoFromAccessToken(tokenValue);
                 if (claims.getExpiration().before(new Date())){
                     CustomResponseUtil.fail(response, ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage(), HttpStatus.UNAUTHORIZED);
+                    return;
                 }
                 String username = claims.getSubject();
                 if (username != null) {
@@ -53,11 +52,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
-                }
             } catch (TokenException e) {
                 log.error(e.getMessage());
                 SecurityContextHolder.clearContext();
                 CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+                return;
             }
         }
         filterChain.doFilter(request, response);
