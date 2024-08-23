@@ -17,48 +17,61 @@ public class TokenValidationService {
 
     private final Key accessKey;
     private final Key refreshKey;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public TokenValidationService(Key accessKey, Key refreshKey) {
+    public TokenValidationService(Key accessKey, Key refreshKey, TokenBlacklistService tokenBlacklistService) {
         this.accessKey = accessKey;
         this.refreshKey = refreshKey;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     public Claims verifyAccessToken(String accessToken) {
-        VerifiedToken verificationResult = verifyToken(accessToken, accessKey);
+        // 블랙리스트 검증
+        checkIfBlacklisted(accessToken);
 
-        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)){
-            return verificationResult.getClaims();
+        // 토큰 유효성 검증
+        VerifiedToken verificationResult = verifyToken(accessToken, accessKey);
+        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)) {
+            return verificationResult.getClaims();  // 만료된 경우에도 클레임을 반환
         }
 
-        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)){
+        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)) {
             throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.ACCESS_TOKEN_IS_NULL);
+            throw new TokenException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCESS_TOKEN_IS_NULL);
         }
 
         return verificationResult.getClaims();
     }
 
     public void verifyRefreshToken(String refreshToken) {
-        VerifiedToken verificationResult = verifyToken(refreshToken, refreshKey);
+        // 블랙리스트 검증
+        checkIfBlacklisted(refreshToken);
 
-        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)){
+        // 리프레시 토큰 유효성 검증
+        VerifiedToken verificationResult = verifyToken(refreshToken, refreshKey);
+        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)) {
             throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
-        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)){
+        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)) {
             throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)){
+        if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
             throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.REFRESH_TOKEN_NOT_EXISTS);
         }
     }
 
-    public VerifiedToken verifyToken(String token, Key key) {
+    private void checkIfBlacklisted(String token) {
+        if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.BLACK_LISTED_TOKEN);
+        }
+    }
 
+    private VerifiedToken verifyToken(String token, Key key) {
         Claims claims = null;
 
         try {
@@ -78,5 +91,4 @@ public class TokenValidationService {
         }
         return VerifiedToken.builder().tokenVerificationResult(TokenVerificationResult.VALID).claims(claims).build();
     }
-
 }
