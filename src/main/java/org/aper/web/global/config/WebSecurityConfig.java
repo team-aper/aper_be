@@ -87,9 +87,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
-        http.sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+        http.sessionManagement(sessionManagement ->
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
         http.oauth2Login(oauth2Login ->
                 oauth2Login
@@ -100,15 +100,17 @@ public class WebSecurityConfig {
                         )
         );
 
-        // 시큐리티 CORS 빈 설정
-        http.cors((cors) -> cors.configurationSource(configurationSource()));
+        // 시큐리티 CORS 설정
+        http.cors(cors -> cors.configurationSource(configurationSource()));
 
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
+        // 권한에 따른 접근 설정
+        http.authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(AuthenticatedMatchers.flexiblePathArray).permitAll()
                         .requestMatchers(AuthenticatedMatchers.swaggerArray).permitAll()
-                        .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll().anyRequest().authenticated()
+                        .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll()
+                        .anyRequest().authenticated()
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -116,10 +118,10 @@ public class WebSecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
 
         http.logout(logoutConfig -> logoutConfig
-                        .logoutUrl("/logout") // 로그아웃 처리할 URL 지정
-                        .addLogoutHandler(logoutService)
-                        .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
-                );
+                .logoutUrl("/logout")
+                .addLogoutHandler(logoutService)
+                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
+        );
 
         // 예외 처리 설정
         http.exceptionHandling(exceptionHandling ->
@@ -130,4 +132,5 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
 }

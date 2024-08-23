@@ -36,6 +36,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+
+        // 재발급 요청일 경우 필터를 통과시킴
+        if ("/reissue".equals(requestURI)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String tokenValue = tokenProvider.getJwtFromHeader(request);
 
         if (StringUtils.hasText(tokenValue)) {
