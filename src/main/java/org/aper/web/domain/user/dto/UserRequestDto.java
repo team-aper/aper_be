@@ -66,4 +66,9 @@ public class UserRequestDto {
             @NotBlank(message = "작가 소개를 입력해주세요.", groups = NotBlankGroup.class)
             String description
     ){}
+
+    public record DeletePasswordDto(
+            @NotBlank(message = "비밀번호를 입력해 주세요.", groups = NotBlankGroup.class)
+            String password
+    ){}
 }

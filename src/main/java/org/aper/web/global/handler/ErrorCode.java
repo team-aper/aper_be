@@ -27,6 +27,7 @@ public enum ErrorCode {
     EMAIL_SEND_FAILURE("U003", "인증코드 전송에 실패하였습니다."),
     EMAIL_AUTH_FAILED("U004", "이메일 인증에 실패하였습니다."),
     PASSWORD_CHANGE_ERROR("U005", "패스워드 변경에 실패하였습니다."),
+    INCORRECT_PASSWORD("U006", "비밀번호가 일치하지 않습니다."),
 
     // Episode
     EPISODE_NOT_FOUND("E001", "존재 하지 않는 에피소드입니다."),
@@ -38,6 +39,7 @@ public enum ErrorCode {
     INVALID_ROUTINE("S003", "유효하지 않은 루틴입니다."),
     INVALID_STORY_LINE("S004", "유효하지 않은 줄글 스타일입니다."),
     INVALID_GENRE("S005", "유효하지 않은 장르입니다."),
+    STORY_NOT_PUBLISHED("S006", "공개되지 않은 스토리입니다."),
 
     // AWS S3
     S3_UPLOAD_ERROR_OCCURRED("AWS001", "S3 업로드 중 에러가 발생했습니다.");

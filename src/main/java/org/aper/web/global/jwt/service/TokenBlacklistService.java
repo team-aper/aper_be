@@ -15,7 +15,7 @@ public class TokenBlacklistService {
     }
 
     public void saveBlackListToken(String token) {
-        redisTemplate.opsForValue().set("blacklist:"+token,"true", Duration.ofHours(24));
+        redisTemplate.opsForValue().set("blacklist:"+token,"true", Duration.ofDays(3));
     }
 
     public boolean isTokenBlacklisted(String token) {
