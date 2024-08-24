@@ -1,6 +1,7 @@
 package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
@@ -56,36 +58,46 @@ public class StoryService {
         storyRepository.save(story);
     }
 
+    @Transactional
     public GetStoryDto getStory(UserDetailsImpl userDetails, Long storyId) {
 
         boolean isOwned = isOwnStory(storyId, userDetails);
 
+        log.info("isOwned : " + isOwned);
+
         if (isOwned) {
             Story story = storyRepository.findByStoryAuthor(storyId).orElseThrow(() -> new ServiceException(ErrorCode.STORY_NOT_FOUND));
-            List<Episode> episodes = episodeRepository.findAllByEpisode(userDetails.user().getUserId());
             return new GetStoryDto(
                     story.getTitle(),
                     story.getRoutine().name(),
                     story.getUser().getPenName(),
                     story.getGenre().name(),
                     story.getLineStyle().name(),
+                    story.getCreatedAt(),
                     story.getPublicDate(),
                     story.isOnDisplay(),
-                    episodes
+                    story.getEpisodeList()
             );
         }
 
         Story story = storyRepository.findByStoryAuthor(storyId).orElseThrow(() -> new ServiceException(ErrorCode.STORY_NOT_FOUND));
-        List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(story.getUser().getUserId());
+
+        if (!story.isOnDisplay()) {
+            throw new ServiceException(ErrorCode.STORY_NOT_PUBLISHED);
+        }
+
+        List<Episode> publishedEpisodes = episodeRepository.findAllByEpisodeOnlyPublished(story.getUser().getUserId());
+
         return new GetStoryDto(
                 story.getTitle(),
                 story.getRoutine().name(),
                 story.getUser().getPenName(),
                 story.getGenre().name(),
                 story.getLineStyle().name(),
+                story.getCreatedAt(),
                 story.getPublicDate(),
                 story.isOnDisplay(),
-                episodes
+                publishedEpisodes
         );
     }
 
