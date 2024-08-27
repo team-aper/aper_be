@@ -1,10 +1,10 @@
 package org.aper.web.domain.episode.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.story.dto.StoryResponseDto.*;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.constant.StoryRoutineEnum;
+import org.aper.web.domain.story.dto.StoryResponseDto.EpisodeResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
@@ -13,6 +13,7 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,10 @@ public class EpisodeService {
     public List<EpisodeResponseDto> getEpisodesWithDDay(Long storyId) {
         List<Episode> episodes = episodeRepository.findAllByStoryId(storyId);
 
+        if (episodes.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         return episodes.stream()
                 .map(this::toEpisodeResponseDto)
                 .collect(Collectors.toList());
@@ -33,6 +38,10 @@ public class EpisodeService {
     @Transactional(readOnly = true)
     public List<EpisodeResponseDto> getPublishedEpisodesWithDDay(Long userId) {
         List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(userId);
+
+        if (episodes.isEmpty()){
+            return Collections.emptyList();
+        }
 
         return episodes.stream()
                 .map(this::toEpisodeResponseDto)

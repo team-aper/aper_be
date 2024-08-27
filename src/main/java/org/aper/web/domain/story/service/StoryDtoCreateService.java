@@ -3,6 +3,8 @@ package org.aper.web.domain.story.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.domain.story.dto.StoryResponseDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.EpisodeResponseDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoryDtoCreateService {
 
-    EpisodeService episodeService;
+    private final EpisodeService episodeService;
 
-    public StoryResponseDto.GetStoryDto createGetStoryDtoWithEpisodes(Story story) {
+    public GetStoryDto createGetStoryDtoWithEpisodes(Story story) {
 
-        List<StoryResponseDto.EpisodeResponseDto> myEpisodes = episodeService.getEpisodesWithDDay(story.getId());
+        List<EpisodeResponseDto> myEpisodes = episodeService.getEpisodesWithDDay(story.getId());
 
         return new StoryResponseDto.GetStoryDto(
                 story.getTitle(),
@@ -31,9 +33,9 @@ public class StoryDtoCreateService {
         );
     }
 
-    public StoryResponseDto.GetStoryDto createGetStoryDtoWithPublishedEpisodes(Story story) {
+    public GetStoryDto createGetStoryDtoWithPublishedEpisodes(Story story) {
 
-        List<StoryResponseDto.EpisodeResponseDto> publishedEpisodes = episodeService.getPublishedEpisodesWithDDay(story.getUser().getUserId());
+        List<EpisodeResponseDto> publishedEpisodes = episodeService.getPublishedEpisodesWithDDay(story.getUser().getUserId());
 
         return new StoryResponseDto.GetStoryDto(
                 story.getTitle(),
