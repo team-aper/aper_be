@@ -1,11 +1,12 @@
 package org.aper.web.domain.episode.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.story.constant.StoryRoutineEnum;
-import org.aper.web.domain.story.dto.StoryResponseDto.EpisodeResponseDto;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.service.StoryValidationService;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -21,9 +22,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EpisodeService {
     private final EpisodeRepository episodeRepository;
+    private final StoryValidationService storyValidationService;
 
     @Transactional(readOnly = true)
-    public List<EpisodeResponseDto> getEpisodesWithDDay(Long storyId) {
+    public List<CreatedEpisodeDto> getEpisodesWithDDay(Long storyId) {
         List<Episode> episodes = episodeRepository.findAllByStoryId(storyId);
 
         if (episodes.isEmpty()) {
@@ -36,7 +38,7 @@ public class EpisodeService {
     }
 
     @Transactional(readOnly = true)
-    public List<EpisodeResponseDto> getPublishedEpisodesWithDDay(Long userId) {
+    public List<CreatedEpisodeDto> getPublishedEpisodesWithDDay(Long userId) {
         List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(userId);
 
         if (episodes.isEmpty()){
@@ -48,20 +50,32 @@ public class EpisodeService {
                 .collect(Collectors.toList());
     }
 
-    private EpisodeResponseDto toEpisodeResponseDto(Episode episode) {
+    private CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
         String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
 
-        return new EpisodeResponseDto(
+        // 설명 텍스트를 최대 250자로 자름
+        String truncatedDescription = truncateDescription(episode.getDescription());
+
+        return new CreatedEpisodeDto(
                 episode.getTitle(),
                 episode.getChapter(),
-                episode.getDescription(),
+                truncatedDescription,  // 자른 설명 텍스트 사용
                 episode.getCreatedAt(),
                 episode.getPublicDate(),
                 episode.isOnDisplay(),
                 dDayString
         );
+    }
+
+    private String truncateDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+
+        // 최대 250자로 자르기
+        return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 
     public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
@@ -83,5 +97,13 @@ public class EpisodeService {
 
         existEpisode.updateOnDisplay();
         episodeRepository.save(existEpisode);
+    }
+
+    public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId) {
+        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        long chapter = story.getEpisodeList().size() + 1;
+        Episode episode = Episode.builder().chapter(chapter).story(story).build();
+        episodeRepository.save(episode);
+        return toEpisodeResponseDto(episode);
     }
 }

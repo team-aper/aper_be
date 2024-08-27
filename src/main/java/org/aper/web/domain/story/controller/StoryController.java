@@ -2,7 +2,9 @@ package org.aper.web.domain.story.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.story.docs.StoryControllerDocs;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto;
+import org.aper.web.domain.episode.service.EpisodeService;
+import org.aper.web.global.docs.StoryControllerDocs;
 import org.aper.web.domain.story.dto.StoryRequestDto.*;
 import org.aper.web.domain.story.dto.StoryResponseDto.*;
 import org.aper.web.domain.story.service.StoryService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StoryController implements StoryControllerDocs {
     private final StoryService storyService;
+    private final EpisodeService episodeService;
 
     @Override
     @PostMapping
@@ -62,5 +65,14 @@ public class StoryController implements StoryControllerDocs {
             @PathVariable Long storyId) {
         storyService.deleteStory(userDetails, storyId);
         return ResponseDto.success("스토리가 삭제되었습니다.");
+    }
+
+    @PostMapping("/{storyId}/episode/create")
+    public ResponseDto<EpisodeResponseDto.CreatedEpisodeDto> createEpisode(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long storyId
+    ){
+        EpisodeResponseDto.CreatedEpisodeDto createdEpisodeData = episodeService.createEpisode(userDetails, storyId);
+        return ResponseDto.success("에피소드를 생성하였습니다.", createdEpisodeData);
     }
 }
