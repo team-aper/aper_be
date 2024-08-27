@@ -15,6 +15,7 @@ import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,8 +50,9 @@ public class Story extends BaseSoftDeleteEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "story", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<Episode> episodeList;
+    // 에피소드 리스트 초기화
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Episode> episodeList = new ArrayList<>();
 
     @Builder
     public Story(String title, StoryRoutineEnum routine, StoryGenreEnum genre, StoryLineStyleEnum lineStyle, User user) {
@@ -59,9 +61,16 @@ public class Story extends BaseSoftDeleteEntity {
         this.genre = genre;
         this.lineStyle = lineStyle;
         this.user = user;
+        this.episodeList = new ArrayList<>();
     }
 
     public void updateOnDisplay() {
         this.onDisplay = !this.onDisplay;
+    }
+
+    // 에피소드 추가 메서드
+    public void addEpisodes(List<Episode> episodes) {
+        this.episodeList.clear();
+        this.episodeList.addAll(episodes);
     }
 }

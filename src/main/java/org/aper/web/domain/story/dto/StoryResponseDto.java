@@ -1,7 +1,5 @@
 package org.aper.web.domain.story.dto;
 
-import org.aper.web.domain.episode.entity.Episode;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +14,18 @@ public class StoryResponseDto {
             LocalDateTime createdDate,
             LocalDateTime publicDate,
             boolean isPublished,
-            List<Episode> episodes
+            List<EpisodeResponseDto> episodes
     ){}
+
+    public record EpisodeResponseDto(
+            String title,
+            Long chapter,
+            String description,
+            LocalDateTime createDate,
+            LocalDateTime publicDate,
+            boolean isPublished,
+            int dDay
+
+    ) {
+    }
 }

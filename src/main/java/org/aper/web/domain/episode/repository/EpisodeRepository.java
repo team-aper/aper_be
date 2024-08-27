@@ -30,4 +30,7 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "WHERE e.id = :episodeId"
     )
     Optional<Episode> findByEpisodeAuthor(Long episodeId);
+
+    List<Episode> findAllByStoryId(Long storyId);
+
 }

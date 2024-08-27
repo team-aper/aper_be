@@ -13,6 +13,5 @@ public class StoryRequestDto {
             String genre,
             @NotBlank(message = "줄글 스타일을 입력해주세요.")
             String lineStyle
-    )
-    {}
+    ) {}
 }

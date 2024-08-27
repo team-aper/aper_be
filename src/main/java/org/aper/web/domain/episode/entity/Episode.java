@@ -3,7 +3,6 @@ package org.aper.web.domain.episode.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,18 +20,18 @@ public class Episode extends BaseSoftDeleteEntity {
     @Column
     private Long chapter;
 
-    @NotBlank(message = "field title is blank")
-    @Schema(description = "Post Title", nullable = false)
+    @Schema(description = "Post Title", nullable = true)
+    @Column(nullable = true)
     private String title;
 
     @Column(name = "on_display", columnDefinition = "boolean default false")
     private boolean onDisplay;
 
-    @Column(nullable = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime publicDate;
 
-    @Column(columnDefinition = "TEXT")
+    @Schema(description = "Episode Description", nullable = true)
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String description;
 
     @ManyToOne
