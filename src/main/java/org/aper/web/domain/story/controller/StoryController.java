@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.story.docs.StoryControllerDocs;
 import org.aper.web.domain.story.dto.StoryRequestDto.*;
-import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.*;
 import org.aper.web.domain.story.service.StoryService;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -19,11 +19,11 @@ public class StoryController implements StoryControllerDocs {
 
     @Override
     @PostMapping
-    public ResponseDto<Void> createStory(
+    public ResponseDto<CreatedStoryDto> createStory(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Valid @RequestBody StoryCreateDto storyCreateDto){
-        storyService.createStory(userDetails, storyCreateDto);
-        return ResponseDto.success(userDetails.user().getPenName() + "님의 스토리가 생성되었습니다.");
+        CreatedStoryDto createdStoryData = storyService.createStory(userDetails, storyCreateDto);
+        return ResponseDto.success(userDetails.user().getPenName() + "님의 스토리가 생성되었습니다.", createdStoryData);
     }
 
     @Override

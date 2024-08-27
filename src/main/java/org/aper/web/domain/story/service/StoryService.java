@@ -9,6 +9,7 @@ import org.aper.web.domain.story.constant.StoryLineStyleEnum;
 import org.aper.web.domain.story.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
@@ -37,7 +38,7 @@ public class StoryService {
     }
 
     @Transactional
-    public void createStory(UserDetailsImpl userDetails, StoryCreateDto storyCreateDto) {
+    public CreatedStoryDto createStory(UserDetailsImpl userDetails, StoryCreateDto storyCreateDto) {
         StoryRoutineEnum routineEnum = StoryRoutineEnum.fromString(storyCreateDto.routine());
 
         Story story = Story.builder()
@@ -52,6 +53,8 @@ public class StoryService {
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
+
+        return new CreatedStoryDto(story.getId());
     }
 
     @Transactional(readOnly = true)

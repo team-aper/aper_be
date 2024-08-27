@@ -5,6 +5,10 @@ import java.util.List;
 
 public class StoryResponseDto {
 
+    public record CreatedStoryDto(
+            Long storyId
+    ){}
+
     public record GetStoryDto(
             String coverTitle,
             String routineType,
