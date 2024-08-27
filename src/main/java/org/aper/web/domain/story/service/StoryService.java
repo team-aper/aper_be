@@ -7,6 +7,7 @@ import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
 import org.aper.web.domain.story.constant.StoryLineStyleEnum;
 import org.aper.web.domain.story.constant.StoryRoutineEnum;
+import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
@@ -26,6 +27,7 @@ public class StoryService {
     private final StoryRepository storyRepository;
     private final EpisodeService episodeService;
     private final StoryValidationService storyValidationService;
+    private final StoryDtoCreateService storyDtoCreateService;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
@@ -54,16 +56,33 @@ public class StoryService {
 
     @Transactional(readOnly = true)
     public GetStoryDto getStory(UserDetailsImpl userDetails, Long storyId) {
-        Story story = storyValidationService.validateStoryAccessibility(storyId, userDetails);
+        Story story = storyValidationService.validateStoryAccessibility(storyId);
 
         if (storyValidationService.isOwnStory(storyId, userDetails)) {
-            return storyValidationService.createGetStoryDtoWithEpisodes(story);
+            return storyDtoCreateService.createGetStoryDtoWithEpisodes(story);
         }
 
         if (!story.isOnDisplay()) {
             throw new ServiceException(ErrorCode.STORY_NOT_PUBLISHED);
         }
 
-        return storyValidationService.createGetStoryDtoWithPublishedEpisodes(story);
+        return storyDtoCreateService.createGetStoryDtoWithPublishedEpisodes(story);
+    }
+
+    @Transactional
+    public void changeCover(UserDetailsImpl userDetails, Long storyId, StoryRequestDto.CoverChangeDto coverChangeDto) {
+        Story story =  storyValidationService.validateStoryOwnership(storyId, userDetails);
+        story.updateCover(
+                coverChangeDto.title(),
+                StoryGenreEnum.fromString(coverChangeDto.genre()),
+                StoryLineStyleEnum.fromString(coverChangeDto.lineStyle())
+        );
+    }
+
+    @Transactional
+    public void deleteStory(UserDetailsImpl userDetails, Long storyId) {
+        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        storyRepository.deleteEpisodesByStoryId(story.getId());
+        storyRepository.deleteById(story.getId());;
     }
 }

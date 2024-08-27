@@ -24,8 +24,7 @@ public class StoryResponseDto {
             LocalDateTime createDate,
             LocalDateTime publicDate,
             boolean isPublished,
-            int dDay
-
+            String dDay
     ) {
     }
 }

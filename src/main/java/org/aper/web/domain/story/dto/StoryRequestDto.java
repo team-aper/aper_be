@@ -14,4 +14,10 @@ public class StoryRequestDto {
             @NotBlank(message = "줄글 스타일을 입력해주세요.")
             String lineStyle
     ) {}
+
+    public record CoverChangeDto(
+            String title,
+            String genre,
+            String lineStyle
+    ){}
 }

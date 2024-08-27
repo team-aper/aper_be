@@ -42,6 +42,7 @@ public class EpisodeService {
     private EpisodeResponseDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
+        String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
 
         return new EpisodeResponseDto(
                 episode.getTitle(),
@@ -50,7 +51,7 @@ public class EpisodeService {
                 episode.getCreatedAt(),
                 episode.getPublicDate(),
                 episode.isOnDisplay(),
-                dDay
+                dDayString
         );
     }
 

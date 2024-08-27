@@ -3,7 +3,7 @@ package org.aper.web.domain.story.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.story.docs.StoryControllerDocs;
-import org.aper.web.domain.story.dto.StoryRequestDto;
+import org.aper.web.domain.story.dto.StoryRequestDto.*;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.service.StoryService;
 import org.aper.web.global.dto.ResponseDto;
@@ -21,7 +21,7 @@ public class StoryController implements StoryControllerDocs {
     @PostMapping
     public ResponseDto<Void> createStory(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody StoryRequestDto.StoryCreateDto storyCreateDto){
+            @Valid @RequestBody StoryCreateDto storyCreateDto){
         storyService.createStory(userDetails, storyCreateDto);
         return ResponseDto.success(userDetails.user().getPenName() + "님의 스토리가 생성되었습니다.");
     }
@@ -34,6 +34,13 @@ public class StoryController implements StoryControllerDocs {
     }
 
     @Override
+    @PutMapping("/{storyId}/cover")
+    public ResponseDto<Void> changeCover(UserDetailsImpl userDetails, @PathVariable Long storyId, @RequestBody CoverChangeDto coverChangeDto) {
+        storyService.changeCover(userDetails, storyId, coverChangeDto);
+        return ResponseDto.success("스토리 커버 변경에 성공했습니다.");
+    }
+
+    @Override
     @PutMapping("/{storyId}/publish")
     public ResponseDto<Void> changeStoryPublicStatus(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -41,5 +48,11 @@ public class StoryController implements StoryControllerDocs {
     ) {
         storyService.changePublicStatus(storyId, userDetails);
         return ResponseDto.success("스토리의 공개 상태 변경에 성공했습니다.");
+    }
+
+    @Override
+    public ResponseDto<Void> deleteStory(UserDetailsImpl userDetails, Long storyId) {
+        storyService.deleteStory(userDetails, storyId);
+        return ResponseDto.success("스토리가 삭제되었습니다.");
     }
 }

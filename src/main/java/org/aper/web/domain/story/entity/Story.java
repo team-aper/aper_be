@@ -73,4 +73,11 @@ public class Story extends BaseSoftDeleteEntity {
         this.episodeList.clear();
         this.episodeList.addAll(episodes);
     }
+
+    public void updateCover(String title, StoryGenreEnum genre, StoryLineStyleEnum lineStyle) {
+        this.title = title;
+        this.genre = genre;
+        this.lineStyle = lineStyle;
+    }
+
 }
