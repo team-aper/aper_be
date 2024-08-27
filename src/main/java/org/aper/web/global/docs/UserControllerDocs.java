@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.docs;
+package org.aper.web.global.docs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

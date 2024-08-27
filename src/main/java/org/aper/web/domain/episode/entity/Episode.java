@@ -48,5 +48,6 @@ public class Episode extends BaseSoftDeleteEntity {
 
     public void updateOnDisplay() {
         this.onDisplay = !this.onDisplay;
+        this.publicDate = LocalDateTime.now();
     }
 }
