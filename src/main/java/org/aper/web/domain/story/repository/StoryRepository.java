@@ -1,7 +1,9 @@
 package org.aper.web.domain.story.repository;
 
+import io.lettuce.core.dynamic.annotation.Param;
 import org.aper.web.domain.story.entity.Story;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +29,11 @@ public interface StoryRepository extends JpaRepository<Story, Long> {
             "WHERE s.id = :storyId"
     )
     Optional<Story> findByStoryAuthor(Long storyId);
+
+    boolean existsByIdAndUser_UserId(Long storyId, Long userId);
+
+    @Modifying
+    @Query("DELETE FROM Episode e WHERE e.story.id = :storyId")
+    void deleteEpisodesByStoryId(@Param("storyId") Long storyId);
+
 }

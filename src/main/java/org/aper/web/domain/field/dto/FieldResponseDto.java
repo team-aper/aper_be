@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FieldResponseDto {
 
-    public record AuthorInfoResponseDto(
+    public record FieldHeaderResponseDto(
             String penName,
             String fieldImageUrl,
             String description

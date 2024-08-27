@@ -23,7 +23,6 @@ public class UserRequestDto {
     }
 
     public record LoginRequestDto(
-
             @NotBlank(message = "이메일을 입력해 주세요.")
             String email,
             @NotBlank(message = "비밀번호를 입력해 주세요.")
@@ -45,7 +44,9 @@ public class UserRequestDto {
     ){}
 
     public record PasswordChangeDto(
+            @NotBlank(message = "현재 비밀번호를 입력해주세요.")
             String originPassword,
+            @NotBlank(message = "새로운 비밀번호를 입력해주세요.")
             String newPassword
     ){}
 
@@ -62,7 +63,7 @@ public class UserRequestDto {
     ){}
 
     public record ChangeDescriptionDto(
-            @NotBlank(message = "", groups = NotBlankGroup.class)
+            @NotBlank(message = "작가 소개를 입력해주세요.", groups = NotBlankGroup.class)
             String description
     ){}
 
