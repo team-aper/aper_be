@@ -28,14 +28,19 @@ public class StoryController implements StoryControllerDocs {
 
     @Override
     @GetMapping("/{storyId}")
-    public ResponseDto<GetStoryDto> getStory(UserDetailsImpl userDetails, @PathVariable Long storyId) {
+    public ResponseDto<GetStoryDto> getStory(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long storyId) {
         GetStoryDto storyData = storyService.getStory(userDetails, storyId);
         return ResponseDto.success("스토리 " + storyId + " 데이터", storyData);
     }
 
     @Override
     @PutMapping("/{storyId}/cover")
-    public ResponseDto<Void> changeCover(UserDetailsImpl userDetails, @PathVariable Long storyId, @RequestBody CoverChangeDto coverChangeDto) {
+    public ResponseDto<Void> changeCover(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long storyId,
+            @RequestBody CoverChangeDto coverChangeDto) {
         storyService.changeCover(userDetails, storyId, coverChangeDto);
         return ResponseDto.success("스토리 커버 변경에 성공했습니다.");
     }
@@ -51,7 +56,10 @@ public class StoryController implements StoryControllerDocs {
     }
 
     @Override
-    public ResponseDto<Void> deleteStory(UserDetailsImpl userDetails, Long storyId) {
+    @DeleteMapping("{storyId}")
+    public ResponseDto<Void> deleteStory(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long storyId) {
         storyService.deleteStory(userDetails, storyId);
         return ResponseDto.success("스토리가 삭제되었습니다.");
     }
