@@ -1,7 +1,10 @@
 package org.aper.web.domain.episode.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.dto.EpisodeRequestDto.*;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
 import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.global.docs.EpisodeControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
@@ -14,6 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EpisodeController implements EpisodeControllerDocs {
     private final EpisodeService episodeService;
+
+    @GetMapping("/{episodeId}/header")
+    public ResponseDto<EpisodeHeaderDto> getEpisodeHeader(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long episodeId){
+        EpisodeHeaderDto episodeData = episodeService.getEpisodeHeader(userDetails, episodeId);
+        return ResponseDto.success("episode " + episodeId + " header data", episodeData);
+    }
 
     @PutMapping("/{episodeId}/title")
     public ResponseDto<Void> changeTitle(

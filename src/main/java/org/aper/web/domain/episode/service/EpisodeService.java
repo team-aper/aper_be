@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.service.StoryValidationService;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class EpisodeService {
     private final EpisodeRepository episodeRepository;
     private final EpisodeValidationService episodeValidationService;
+    private final EpisodeDtoCreateService episodeDtoCreateService;
     private final StoryValidationService storyValidationService;
 
     @Transactional
@@ -53,4 +57,18 @@ public class EpisodeService {
         episodeRepository.flush();
         episodeRepository.decrementChaptersAfterDeletion(episodeDto.storyId(), episodeDto.chapter());
     }
+
+    public EpisodeHeaderDto getEpisodeHeader(UserDetailsImpl userDetails, Long episodeId) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        if (storyValidationService.isOwnStory(episode.getStory().getId(), userDetails)){
+            return episodeDtoCreateService.toEpisodeHeaderDto(episode);
+        }
+
+        if (!episode.isOnDisplay()){
+            throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
+        }
+
+        return episodeDtoCreateService.toEpisodeHeaderDto(episode);
+    }
+
 }

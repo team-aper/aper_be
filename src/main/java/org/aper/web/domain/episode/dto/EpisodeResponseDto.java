@@ -15,4 +15,19 @@ public class EpisodeResponseDto {
             String dDay
     ) {
     }
+
+    public record EpisodeHeaderDto(
+            Long episodeId,
+            Long authorId,
+            Long storyId,
+            String title,
+            Long chapter,
+            String genre,
+            LocalDateTime createdDate,
+            LocalDateTime publicDate
+    ){}
+
+    public record EpisodeTextDto(
+            String text
+    ){}
 }

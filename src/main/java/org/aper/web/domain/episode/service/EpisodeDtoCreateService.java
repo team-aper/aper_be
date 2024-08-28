@@ -3,6 +3,7 @@ package org.aper.web.domain.episode.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.entity.Story;
@@ -63,6 +64,18 @@ public class EpisodeDtoCreateService {
                 episode.isOnDisplay(),
                 dDayString
         );
+    }
+
+    public EpisodeHeaderDto toEpisodeHeaderDto(Episode episode){
+        return new EpisodeHeaderDto(
+                episode.getId(),
+                episode.getStory().getUser().getUserId(),
+                episode.getStory().getId(),
+                episode.getTitle(),
+                episode.getChapter(),
+                episode.getStory().getGenre().name(),
+                episode.getCreatedAt(),
+                episode.getPublicDate());
     }
 
     private String truncateDescription(String description) {
