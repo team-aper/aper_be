@@ -2,7 +2,7 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.docs.UserControllerDocs;
+import org.aper.web.global.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;

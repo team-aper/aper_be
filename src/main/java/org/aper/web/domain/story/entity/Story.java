@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
-import org.aper.web.domain.story.constant.StoryLineStyleEnum;
-import org.aper.web.domain.story.constant.StoryRoutineEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
@@ -65,8 +65,10 @@ public class Story extends BaseSoftDeleteEntity {
     }
 
     public void updateOnDisplay() {
+        if (!this.isOnDisplay()){
+            this.publicDate = LocalDateTime.now();
+        }
         this.onDisplay = !this.onDisplay;
-        this.publicDate = LocalDateTime.now();
     }
 
     // 에피소드 추가 메서드
@@ -80,5 +82,4 @@ public class Story extends BaseSoftDeleteEntity {
         this.genre = genre;
         this.lineStyle = lineStyle;
     }
-
 }

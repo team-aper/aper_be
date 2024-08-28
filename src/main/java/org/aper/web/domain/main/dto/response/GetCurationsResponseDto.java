@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.aper.web.domain.curation.entity.Curation;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 
 import java.time.LocalDateTime;
 

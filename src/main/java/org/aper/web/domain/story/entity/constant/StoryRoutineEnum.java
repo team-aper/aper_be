@@ -1,4 +1,4 @@
-package org.aper.web.domain.story.constant;
+package org.aper.web.domain.story.entity.constant;
 
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.story.entity.Story;

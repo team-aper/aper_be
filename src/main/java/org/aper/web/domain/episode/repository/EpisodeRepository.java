@@ -3,7 +3,9 @@ package org.aper.web.domain.episode.repository;
 import org.aper.web.domain.episode.entity.Episode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,6 +32,10 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "WHERE e.id = :episodeId"
     )
     Optional<Episode> findByEpisodeAuthor(Long episodeId);
+
+     @Modifying(clearAutomatically = true, flushAutomatically = true)
+     @Query("UPDATE Episode e SET e.chapter = e.chapter - 1 WHERE e.story.id = :storyId AND e.chapter > :chapter")
+     void decrementChaptersAfterDeletion(@Param("storyId") Long storyId, @Param("chapter") Long chapter);
 
     List<Episode> findAllByStoryId(Long storyId);
 
