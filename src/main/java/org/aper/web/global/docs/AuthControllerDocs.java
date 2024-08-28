@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.UnsupportedEncodingException;
 
-@Tag(name = "인증 관련 API", description = "사용자 인증 및 토큰 관리 API 목록")
+@Tag(name = "Auth", description = "사용자 인증 및 토큰 관리 API 목록")
 public interface AuthControllerDocs {
 
     @Operation(summary = "사용자 로그인", description = "사용자의 로그인 요청을 처리하고 액세스 및 리프레시 토큰을 반환합니다.")

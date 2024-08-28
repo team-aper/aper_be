@@ -17,7 +17,7 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "스토리 관련 API", description = "스토리 CRUD 관련 API 목록")
+@Tag(name = "Story", description = "스토리 관련 API")
 public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 생성", description = "새로운 스토리를 생성합니다.")
