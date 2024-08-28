@@ -6,6 +6,8 @@ import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SearchService {
@@ -16,6 +18,7 @@ public class SearchService {
     }
 
     public SearchDto.SearchAuthorResponseDto getSearchAuthor(String penName) {
-        User targetAuthor = userRepository.findBy
+        List<User> targetAuthors = userRepository.findAllByPenName(penName);
+
     }
 }

@@ -37,12 +37,16 @@ public class SearchDto {
     }
 
     public record SearchAuthorResponseDto(
+            List<AuthorListResponseDto> authorListResponseDtoList
+    ) {}
+
+    public record AuthorListResponseDto(
             String penName,
             String fieldImageUrl,
             String description,
             Long authorId
     ) {
-        public SearchAuthorResponseDto(User user) {
+        public AuthorListResponseDto(User user) {
             this(
                     user.getPenName(),
                     user.getFieldImage(),
