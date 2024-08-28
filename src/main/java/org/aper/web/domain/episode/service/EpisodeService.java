@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
@@ -71,4 +72,16 @@ public class EpisodeService {
         return episodeDtoCreateService.toEpisodeHeaderDto(episode);
     }
 
+    public EpisodeTextDto getEpisodeText(UserDetailsImpl userDetails, Long episodeId) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        if (storyValidationService.isOwnStory(episode.getStory().getId(), userDetails)){
+            return new EpisodeTextDto(episode.getDescription());
+        }
+
+        if (!episode.isOnDisplay()){
+            throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
+        }
+
+        return new EpisodeTextDto(episode.getDescription());
+    }
 }

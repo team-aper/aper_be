@@ -9,6 +9,7 @@ import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.global.docs.EpisodeControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,15 @@ public class EpisodeController implements EpisodeControllerDocs {
             @PathVariable Long episodeId){
         EpisodeHeaderDto episodeData = episodeService.getEpisodeHeader(userDetails, episodeId);
         return ResponseDto.success("episode " + episodeId + " header data", episodeData);
+    }
+
+
+    @GetMapping("/{episodeId}/text")
+    public ResponseDto<EpisodeTextDto> getEpisodeText(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long episodeId){
+        EpisodeTextDto episodeData = episodeService.getEpisodeText(userDetails, episodeId);
+        return ResponseDto.success("episode " + episodeId + " text data", episodeData);
     }
 
     @PutMapping("/{episodeId}/title")
