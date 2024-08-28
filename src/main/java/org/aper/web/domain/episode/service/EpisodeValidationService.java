@@ -15,7 +15,7 @@ public class EpisodeValidationService {
     private final EpisodeRepository episodeRepository;
 
     public Episode validateEpisodeExists(Long episodeId) {
-        return episodeRepository.findById(episodeId)
+        return episodeRepository.findByEpisodeAuthor(episodeId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.EPISODE_NOT_FOUND));
     }
 
@@ -28,5 +28,4 @@ public class EpisodeValidationService {
         }
     }
 
-    // validateTitle 메서드 삭제 (불필요한 경우)
 }

@@ -12,4 +12,11 @@ public class EpisodeRequestDto {
     public record TextChangeDto(
             String text
     ){}
+
+    public record DeleteEpisodeDto(
+            @NotBlank(message = "chapter is null")
+            Long chapter,
+            @NotBlank(message = "storyId is null")
+            Long storyId
+    ){}
 }

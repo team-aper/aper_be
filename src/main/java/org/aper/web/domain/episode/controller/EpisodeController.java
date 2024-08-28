@@ -1,8 +1,7 @@
 package org.aper.web.domain.episode.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
-import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.*;
 import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.global.docs.EpisodeControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
@@ -32,6 +31,15 @@ public class EpisodeController implements EpisodeControllerDocs {
             @RequestBody TextChangeDto textChangeDto){
         episodeService.changeText(userDetails, episodeId, textChangeDto);
         return ResponseDto.success("텍스트 저장에 성공하였습니다.");
+    }
+
+    @DeleteMapping("/{episodeId}")
+    public ResponseDto<Void> deleteEpisode(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long episodeId,
+            @RequestBody DeleteEpisodeDto deleteEpisodeDto){
+        episodeService.deleteEpisode(userDetails, episodeId, deleteEpisodeDto);
+        return ResponseDto.success("에피소드를 삭제하였습니다.");
     }
 
     @PutMapping("/{episodeId}/publish")

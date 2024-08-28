@@ -54,6 +54,7 @@ public class EpisodeDtoCreateService {
         String truncatedDescription = truncateDescription(episode.getDescription());
 
         return new EpisodeResponseDto.CreatedEpisodeDto(
+                episode.getId(),
                 episode.getTitle(),
                 episode.getChapter(),
                 truncatedDescription,

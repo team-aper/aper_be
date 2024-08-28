@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class EpisodeResponseDto {
 
     public record CreatedEpisodeDto(
+            Long episodeId,
             String title,
             Long chapter,
             String description,
