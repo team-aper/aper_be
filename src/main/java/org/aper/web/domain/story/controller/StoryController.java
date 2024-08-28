@@ -3,11 +3,12 @@ package org.aper.web.domain.story.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto;
-import org.aper.web.domain.episode.service.EpisodeService;
-import org.aper.web.global.docs.StoryControllerDocs;
-import org.aper.web.domain.story.dto.StoryRequestDto.*;
-import org.aper.web.domain.story.dto.StoryResponseDto.*;
+import org.aper.web.domain.story.dto.StoryRequestDto.CoverChangeDto;
+import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
+import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.service.StoryService;
+import org.aper.web.global.docs.StoryControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StoryController implements StoryControllerDocs {
     private final StoryService storyService;
-    private final EpisodeService episodeService;
 
     @Override
     @PostMapping
@@ -67,12 +67,13 @@ public class StoryController implements StoryControllerDocs {
         return ResponseDto.success("스토리가 삭제되었습니다.");
     }
 
-    @PostMapping("/{storyId}/episode/create")
+    @PostMapping("/{storyId}/episode/{chapter}")
     public ResponseDto<EpisodeResponseDto.CreatedEpisodeDto> createEpisode(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long storyId
+            @PathVariable Long storyId,
+            @PathVariable Long chapter
     ){
-        EpisodeResponseDto.CreatedEpisodeDto createdEpisodeData = episodeService.createEpisode(userDetails, storyId);
+        EpisodeResponseDto.CreatedEpisodeDto createdEpisodeData = storyService.createEpisode(userDetails, storyId, chapter);
         return ResponseDto.success("에피소드를 생성하였습니다.", createdEpisodeData);
     }
 }

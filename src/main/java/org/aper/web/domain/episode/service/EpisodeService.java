@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.entity.Story;
-import org.aper.web.domain.story.service.StoryValidationService;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EpisodeService {
     private final EpisodeRepository episodeRepository;
-    private final StoryValidationService storyValidationService;
 
     @Transactional(readOnly = true)
     public List<CreatedEpisodeDto> getEpisodesWithDDay(Long storyId) {
@@ -50,7 +48,7 @@ public class EpisodeService {
                 .collect(Collectors.toList());
     }
 
-    private CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
+    public CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
         String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
@@ -99,11 +97,4 @@ public class EpisodeService {
         episodeRepository.save(existEpisode);
     }
 
-    public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId) {
-        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
-        long chapter = story.getEpisodeList().size() + 1;
-        Episode episode = Episode.builder().chapter(chapter).story(story).build();
-        episodeRepository.save(episode);
-        return toEpisodeResponseDto(episode);
-    }
 }

@@ -72,10 +72,11 @@ public interface StoryControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "에피소드 생성 성공", content = @Content(schema = @Schema(implementation = EpisodeResponseDto.CreatedEpisodeDto.class)))
     })
-    @PostMapping("/{storyId}/episode/create")
+    @PostMapping("/{storyId}/episode/{chapter}")
     ResponseDto<EpisodeResponseDto.CreatedEpisodeDto> createEpisode(
             @Parameter(description = "인증된 사용자 정보", required = true) @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Parameter(description = "에피소드를 생성할 스토리의 ID", required = true) @PathVariable Long storyId
+            @Parameter(description = "에피소드를 생성할 스토리의 ID", required = true) @PathVariable Long storyId,
+            @Parameter(description = "생성할 에피소드의 chapter", required = true) @PathVariable Long chapter
     );
 
 
