@@ -29,29 +29,29 @@ public class FieldService {
     }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
-        HomeResponseDto responseDto;
         List<Episode> episodeList;
         boolean isMyField = isOwnFiled(authorId, userDetails);
+
         if(isMyField) {
             episodeList = episodeRepository.findAllByEpisode(authorId);
-        } else {
-            episodeList = episodeRepository.findAllByEpisodeOnlyPublished(authorId);
+            return new HomeResponseDto(isMyField, episodeToDto(episodeList));
         }
-        responseDto = new HomeResponseDto(isMyField, episodeToDto(episodeList));
-        return responseDto;
+
+        episodeList = episodeRepository.findAllByEpisodeOnlyPublished(authorId);
+        return new HomeResponseDto(isMyField, episodeToDto(episodeList));
     }
 
     public StoriesResponseDto getStoriesData(UserDetailsImpl userDetails, Long authorId) {
-        StoriesResponseDto responseDto;
         List<Story> storyList;
         boolean isMyField = isOwnFiled(authorId, userDetails);
+
         if(isMyField) {
             storyList = storyRepository.findAllByStories(authorId);
-        } else {
-            storyList = storyRepository.findAllByStoriesOnlyPublished(authorId);
+            return new StoriesResponseDto(isMyField, storiesToDto(storyList));
         }
-        responseDto = new StoriesResponseDto(isMyField, storiesToDto(storyList));
-        return responseDto;
+
+        storyList = storyRepository.findAllByStoriesOnlyPublished(authorId);
+        return new StoriesResponseDto(isMyField, storiesToDto(storyList));
     }
 
     public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
