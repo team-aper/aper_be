@@ -65,8 +65,10 @@ public class Story extends BaseSoftDeleteEntity {
     }
 
     public void updateOnDisplay() {
+        if (!this.isOnDisplay()){
+            this.publicDate = LocalDateTime.now();
+        }
         this.onDisplay = !this.onDisplay;
-        this.publicDate = LocalDateTime.now();
     }
 
     // 에피소드 추가 메서드

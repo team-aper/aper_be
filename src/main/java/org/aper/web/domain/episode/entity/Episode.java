@@ -47,8 +47,10 @@ public class Episode extends BaseSoftDeleteEntity {
     }
 
     public void updateOnDisplay() {
+        if (!this.isOnDisplay()){
+            this.publicDate = LocalDateTime.now();
+        }
         this.onDisplay = !this.onDisplay;
-        this.publicDate = LocalDateTime.now();
     }
 
     public void updateTitle(String title) {
@@ -57,5 +59,9 @@ public class Episode extends BaseSoftDeleteEntity {
 
     public void updateText(String text) {
         this.description = text;
+    }
+
+    public void updatePublicDate() {
+        this.publicDate = LocalDateTime.now();
     }
 }
