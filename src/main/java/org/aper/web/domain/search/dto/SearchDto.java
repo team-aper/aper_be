@@ -11,7 +11,7 @@ import java.util.List;
 public class SearchDto {
 
     public record SearchStoryResponseDto(
-            List<StoryListResponseDto> storyListResponseDtoList
+            List<StoryListResponseDto> storyList
     ) {}
 
     public record StoryListResponseDto(
@@ -37,7 +37,7 @@ public class SearchDto {
     }
 
     public record SearchAuthorResponseDto(
-            List<AuthorListResponseDto> authorListResponseDtoList
+            List<AuthorListResponseDto> authorList
     ) {}
 
     public record AuthorListResponseDto(
