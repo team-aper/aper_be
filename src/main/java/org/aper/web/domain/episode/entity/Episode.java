@@ -50,4 +50,12 @@ public class Episode extends BaseSoftDeleteEntity {
         this.onDisplay = !this.onDisplay;
         this.publicDate = LocalDateTime.now();
     }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateText(String text) {
+        this.description = text;
+    }
 }

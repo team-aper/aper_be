@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.episode.service.EpisodeService;
+import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
-    private final EpisodeService episodeService;
+    private final EpisodeDtoCreateService episodeDtoCreateService;
     private final StoryValidationService storyValidationService;
     private final StoryDtoCreateService storyDtoCreateService;
     private final EpisodeRepository episodeRepository;
@@ -52,7 +52,7 @@ public class StoryService {
                 .user(userDetails.user())
                 .build();
 
-        List<Episode> episodes = episodeService.createEpisodeList(routineEnum, story);
+        List<Episode> episodes = episodeDtoCreateService.createEpisodeList(routineEnum, story);
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
@@ -83,6 +83,7 @@ public class StoryService {
                 StoryGenreEnum.fromString(coverChangeDto.genre()),
                 StoryLineStyleEnum.fromString(coverChangeDto.lineStyle())
         );
+        storyRepository.save(story);
     }
 
     @Transactional
@@ -96,6 +97,6 @@ public class StoryService {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
-        return episodeService.toEpisodeResponseDto(episode);
+        return episodeDtoCreateService.toEpisodeResponseDto(episode);
     }
 }
