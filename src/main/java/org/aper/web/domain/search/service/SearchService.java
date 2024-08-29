@@ -37,7 +37,7 @@ public class SearchService {
     {
         Pageable pageAble = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Page<Episode> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter);
+        List<Episode> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter).getContent();
 
 
         return new SearchStoryResponseDto(responseDtoList);
@@ -50,7 +50,12 @@ public class SearchService {
 
     private List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<User> userList) {
         return userList.stream()
-                .map(AuthorListResponseDto::new)
+                .map(user ->
+                        new AuthorListResponseDto(
+                                user.getPenName(),
+                                user.getFieldImage(),
+                                user.getDescription(),
+                                user.getUserId()))
                 .toList();
     }
 }

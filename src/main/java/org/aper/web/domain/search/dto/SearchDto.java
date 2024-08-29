@@ -47,13 +47,11 @@ public class SearchDto {
             String description,
             Long authorId
     ) {
-        public AuthorListResponseDto(User user) {
-            this(
-                    user.getPenName(),
-                    user.getFieldImage(),
-                    user.getDescription(),
-                    user.getUserId()
-            );
+        public AuthorListResponseDto(String penName, String fieldImageUrl, String description, Long authorId) {
+            this.penName = penName;
+            this.fieldImageUrl = fieldImageUrl;
+            this.description = description;
+            this.authorId = authorId;
         }
     }
 }
