@@ -18,6 +18,7 @@ public class SearchDto {
        StoryGenreEnum storyGenre,
        LocalDateTime publicDate,
        Long episodeId,
+       String episodeTitle,
        String episodeFirstParagraph
     ) {
         public StoryListResponseDto(
@@ -27,6 +28,7 @@ public class SearchDto {
                 StoryGenreEnum storyGenre,
                 LocalDateTime publicDate,
                 Long episodeId,
+                String episodeTitle,
                 String episodeFirstParagraph) {
             this.storyId = storyId;
             this.storyTitle = storyTitle;
@@ -34,6 +36,7 @@ public class SearchDto {
             this.storyGenre = storyGenre;
             this.publicDate = publicDate;
             this.episodeId = episodeId;
+            this.episodeTitle = episodeTitle;
             this.episodeFirstParagraph = episodeFirstParagraph;
         }
     }

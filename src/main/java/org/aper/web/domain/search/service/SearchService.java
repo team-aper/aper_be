@@ -58,9 +58,10 @@ public class SearchService {
         return episodeList.stream()
                 .map(object -> {
                     Long episodeId = (Long) object[0];
-                    String description = (String) object[1];
-                    Story story = (Story) object[2];
-                    User user = (User) object[3];
+                    String episodeTitle = (String) object[1];
+                    String description = (String) object[2];
+                    Story story = (Story) object[3];
+                    User user = (User) object[4];
 
                     return new StoryListResponseDto(
                             story.getId(),
@@ -69,6 +70,7 @@ public class SearchService {
                             story.getGenre(),
                             story.getPublicDate(),
                             episodeId,
+                            episodeTitle,
                             description
                     );
                 })
