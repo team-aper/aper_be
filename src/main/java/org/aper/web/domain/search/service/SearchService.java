@@ -1,12 +1,12 @@
 package org.aper.web.domain.search.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.StoryListResponseDto;
+import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -32,7 +32,7 @@ public class SearchService {
     {
         Pageable pageAble = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        List<Episode> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter).getContent();
+        List<Object[]> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter).getContent();
 
 
         return new SearchStoryResponseDto(EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
@@ -54,18 +54,24 @@ public class SearchService {
                 .toList();
     }
 
-    private List<StoryListResponseDto> EpisodeListToStoryListResponseDto(List<Episode> episodeList) {
+    private List<StoryListResponseDto> EpisodeListToStoryListResponseDto(List<Object[]> episodeList) {
         return episodeList.stream()
-                .map(episode ->
-                        new StoryListResponseDto(
-                                episode.getStory().getId(),
-                                episode.getStory().getTitle(),
-                                episode.getStory().getUser().getUserId(),
-                                episode.getStory().getGenre(),
-                                episode.getStory().getPublicDate(),
-                                episode.getId(),
-                                episode.getDescription()
-                        ))
+                .map(object -> {
+                    Long episodeId = (Long) object[0];
+                    String description = (String) object[1];
+                    Story story = (Story) object[2];
+
+                    return new StoryListResponseDto(
+                            story.getId(),
+                            story.getTitle(),
+                            story.getUser().getUserId(),
+                            story.getGenre(),
+                            story.getPublicDate(),
+                            episodeId,
+                            description
+                    );
+                })
                 .toList();
     }
+
 }

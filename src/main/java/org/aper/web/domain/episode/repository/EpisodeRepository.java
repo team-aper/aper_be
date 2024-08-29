@@ -42,7 +42,7 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
 
     List<Episode> findAllByStoryId(Long storyId);
 
-    @Query("SELECT e.id, e.title, " +
+    @Query("SELECT e.id, " +
             "CASE " +
             "WHEN LOCATE(:filter, e.description) > 0 THEN " +
             "SUBSTRING(e.description, " +
@@ -50,14 +50,16 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "LEAST(80, LENGTH(e.description) - LOCATE(:filter, e.description) + LENGTH(:filter) + 40)) " +
             "ELSE " +
             "SUBSTRING(e.description, 1, 80) " +
-            "END AS snippet " +
+            "END AS snippet, " +
+            "s " +
             "FROM Episode e " +
-            "JOIN FETCH e.story s " +
+            "JOIN e.story s " +
             "WHERE (s.title LIKE %:filter% " +
             "OR e.title LIKE %:filter% " +
             "OR e.description LIKE %:filter%) " +
             "AND (:genre IS NULL OR s.genre = :genre)")
-    Page<Episode> findAllByTitleAndDescription(Pageable pageable,
-                                               @Param("genre") StoryGenreEnum genre,
-                                               @Param("filter") String storyTitle);
+    Page<Object[]> findAllByTitleAndDescription(Pageable pageable,
+                                                @Param("genre") StoryGenreEnum genre,
+                                                @Param("filter") String filter);
+
 }
