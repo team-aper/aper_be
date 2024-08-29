@@ -19,7 +19,8 @@ public class AuthenticatedMatchers {
             "/password/*",
             "/logout",
             "/curation/main",
-            "/main/*"
+            "/main/*",
+            "/search/*"
     };
     public static final String[] flexiblePathArray = {
             "/field/**",
