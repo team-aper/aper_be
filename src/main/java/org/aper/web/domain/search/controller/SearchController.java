@@ -5,7 +5,7 @@ import org.aper.web.domain.search.docs.SearchControllerDocs;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.search.service.SearchService;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +23,9 @@ public class SearchController implements SearchControllerDocs {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false) StoryGenreEnum genre,
-            @RequestParam(required = false) String storyTitle,
-            @RequestParam(required = false) String episodeTitle,
-            @RequestParam(required = false) String episodeParagraph
+            @RequestParam(required = false) String filter
     ) {
-        SearchStoryResponseDto storyResponseDto = searchService.getSearchStory(page, size, genre, storyTitle, episodeTitle, episodeParagraph);
+        SearchStoryResponseDto storyResponseDto = searchService.getSearchStory(page, size, genre, filter);
         return ResponseDto.success("이야기 검색 결과", storyResponseDto);
     }
 

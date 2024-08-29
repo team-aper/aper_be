@@ -3,8 +3,8 @@ package org.aper.web.domain.search.specification;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface StorySpecification {
@@ -26,21 +26,22 @@ public interface StorySpecification {
             }
 
             if (storyTitle != null && !storyTitle.isEmpty()) {
-                predicate = cb.and(predicate, cb.like(root.get("title"), "%" + storyTitle + "%"));
+                predicate = cb.or(predicate, cb.like(root.get("title"), "%" + storyTitle + "%"));
             }
 
             if (episodeTitle != null && !episodeTitle.isEmpty()) {
-                predicate = cb.and(predicate, cb.like(episodeJoin.get("title"), "%" + episodeTitle + "%"));
+                predicate = cb.or(predicate, cb.like(episodeJoin.get("title"), "%" + episodeTitle + "%"));
             }
 
             if (episodeParagraph != null && !episodeParagraph.isEmpty()) {
-                predicate = cb.and(predicate, cb.like(episodeJoin.get("description"), "%" + episodeParagraph + "%"));
+                predicate = cb.or(predicate, cb.like(episodeJoin.get("description"), "%" + episodeParagraph + "%"));
             }
 
             if (Boolean.TRUE.equals(isEpisodeOnDisplay)) {
-                predicate = cb.and(predicate, cb.isTrue(episodeJoin.get("onDisplay")));
+                predicate = cb.or(predicate, cb.isTrue(episodeJoin.get("onDisplay")));
             }
 
+            query.distinct(true);
             return predicate;
         };
     }
