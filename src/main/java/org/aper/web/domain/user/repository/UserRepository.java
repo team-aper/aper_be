@@ -21,5 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.deleteAccount IS NULL")
     Optional<User> findByEmailWithOutDeleteAccount(String email);
 
-    List<User> findAllByPenName(String penName);
+    @Query("SELECT u FROM User u WHERE u.penName LIKE %:penName%")
+    List<User> findAllByPenNameContaining(String penName);
 }

@@ -12,7 +12,9 @@ import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -33,35 +35,16 @@ public class SearchService {
             String filter      //검색 필터
     )
     {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        Pageable pageAble = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        Specification<Episode> spec = EpisodeSpecification.joinWithEpisodeAndApplyFilters(
-                genre,
-                filter,
-                filter,
-                filter);
+        Page<Episode> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter);
 
-        List<Episode> targetStoriesAndEpisodes = episodeRepository.findAll(spec, pageRequest).getContent();
-
-        List<StoryListResponseDto> responseDtoList = targetStoriesPage.stream()
-                .flatMap(story -> story.getEpisodeList().stream()
-                        .filter(episode ->
-                                (filter == null || episode.getTitle().contains(filter)) &&
-                                        (episode.getDescription().contains(filter))
-                        )
-                        .map(episode -> new StoryListResponseDto(
-                                story,
-                                episode,
-                                episode.getDescription().length() > 80 ? episode.getDescription().substring(0, 80) : episode.getDescription()
-                        ))
-                )
-                .toList();
 
         return new SearchStoryResponseDto(responseDtoList);
     }
 
     public SearchAuthorResponseDto getSearchAuthor(String penName) {
-        List<User> targetAuthors = userRepository.findAllByPenName(penName);
+        List<User> targetAuthors = userRepository.findAllByPenNameContaining(penName);
         return new SearchAuthorResponseDto(UserListToAuthorListResponseDto(targetAuthors));
     }
 
