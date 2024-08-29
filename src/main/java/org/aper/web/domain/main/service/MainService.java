@@ -9,7 +9,7 @@ import org.aper.web.domain.curation.entity.Curation;
 import org.aper.web.domain.curation.repository.CurationRepository;
 import org.aper.web.domain.main.dto.response.GetEpisodesResponseDto;
 import org.aper.web.domain.main.dto.response.GetUsersResponseDto;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;

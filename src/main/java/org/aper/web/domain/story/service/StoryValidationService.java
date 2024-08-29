@@ -1,7 +1,6 @@
 package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.service.EpisodeService;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StoryValidationService {
     private final StoryRepository storyRepository;
-    public final EpisodeService episodeService;
 
     public Story validateStoryOwnership(Long storyId, UserDetailsImpl userDetails) {
         Story story = storyRepository.findByStoryAuthor(storyId).orElseThrow(() ->

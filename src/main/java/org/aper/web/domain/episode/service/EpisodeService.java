@@ -1,87 +1,87 @@
 package org.aper.web.domain.episode.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.story.constant.StoryRoutineEnum;
-import org.aper.web.domain.story.dto.StoryResponseDto.EpisodeResponseDto;
-import org.aper.web.domain.story.entity.Story;
-import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.story.service.StoryValidationService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class EpisodeService {
     private final EpisodeRepository episodeRepository;
-
-    @Transactional(readOnly = true)
-    public List<EpisodeResponseDto> getEpisodesWithDDay(Long storyId) {
-        List<Episode> episodes = episodeRepository.findAllByStoryId(storyId);
-
-        if (episodes.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return episodes.stream()
-                .map(this::toEpisodeResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<EpisodeResponseDto> getPublishedEpisodesWithDDay(Long userId) {
-        List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(userId);
-
-        if (episodes.isEmpty()){
-            return Collections.emptyList();
-        }
-
-        return episodes.stream()
-                .map(this::toEpisodeResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    private EpisodeResponseDto toEpisodeResponseDto(Episode episode) {
-        StoryRoutineEnum routine = episode.getStory().getRoutine();
-        int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
-        String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
-
-        return new EpisodeResponseDto(
-                episode.getTitle(),
-                episode.getChapter(),
-                episode.getDescription(),
-                episode.getCreatedAt(),
-                episode.getPublicDate(),
-                episode.isOnDisplay(),
-                dDayString
-        );
-    }
-
-    public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
-        return routineEnum.createEpisodes(story);
-    }
+    private final EpisodeValidationService episodeValidationService;
+    private final EpisodeDtoCreateService episodeDtoCreateService;
+    private final StoryValidationService storyValidationService;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {
-        Episode existEpisode = episodeRepository.findByEpisodeAuthor(episodeId).orElseThrow(() ->
-                new ServiceException(ErrorCode.EPISODE_NOT_FOUND)
-        );
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        episodeValidationService.validateUserIsAuthor(episode, userDetails);
 
-        User episodeAuthor = existEpisode.getStory().getUser();
-        User accessUser = userDetails.user();
+        episode.updateOnDisplay();
+        episodeRepository.save(episode);
+    }
 
-        if (!episodeAuthor.getUserId().equals(accessUser.getUserId())) {
-            throw new ServiceException(ErrorCode.NOT_AUTHOR_OF_EPISODE);
+    @Transactional
+    public void changeTitle(UserDetailsImpl userDetails, Long episodeId, TitleChangeDto titleChangeDto) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        episodeValidationService.validateUserIsAuthor(episode, userDetails);
+
+        episode.updateTitle(titleChangeDto.title());
+        episodeRepository.save(episode);
+    }
+
+    @Transactional
+    public void changeText(UserDetailsImpl userDetails, Long episodeId, TextChangeDto textChangeDto) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        episodeValidationService.validateUserIsAuthor(episode, userDetails);
+
+        episode.updateText(textChangeDto.text());
+        episodeRepository.save(episode);
+    }
+
+    @Transactional
+    public void deleteEpisode(UserDetailsImpl userDetails, Long episodeId, DeleteEpisodeDto episodeDto) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        episodeValidationService.validateUserIsAuthor(episode, userDetails);
+        episodeRepository.delete(episode);
+        episodeRepository.flush();
+        episodeRepository.decrementChaptersAfterDeletion(episodeDto.storyId(), episodeDto.chapter());
+    }
+
+    public EpisodeHeaderDto getEpisodeHeader(UserDetailsImpl userDetails, Long episodeId) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        if (storyValidationService.isOwnStory(episode.getStory().getId(), userDetails)){
+            return episodeDtoCreateService.toEpisodeHeaderDto(episode);
         }
 
-        existEpisode.updateOnDisplay();
-        episodeRepository.save(existEpisode);
+        if (!episode.isOnDisplay()){
+            throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
+        }
+
+        return episodeDtoCreateService.toEpisodeHeaderDto(episode);
+    }
+
+    public EpisodeTextDto getEpisodeText(UserDetailsImpl userDetails, Long episodeId) {
+        Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
+        if (storyValidationService.isOwnStory(episode.getStory().getId(), userDetails)){
+            return new EpisodeTextDto(episode.getDescription());
+        }
+
+        if (!episode.isOnDisplay()){
+            throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
+        }
+
+        return new EpisodeTextDto(episode.getDescription());
     }
 }

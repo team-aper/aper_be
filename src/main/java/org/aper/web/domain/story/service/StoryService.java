@@ -2,16 +2,18 @@ package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.episode.service.EpisodeService;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
-import org.aper.web.domain.story.constant.StoryLineStyleEnum;
-import org.aper.web.domain.story.constant.StoryRoutineEnum;
+import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -26,9 +28,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
-    private final EpisodeService episodeService;
+    private final EpisodeDtoCreateService episodeDtoCreateService;
     private final StoryValidationService storyValidationService;
     private final StoryDtoCreateService storyDtoCreateService;
+    private final EpisodeRepository episodeRepository;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
@@ -49,7 +52,7 @@ public class StoryService {
                 .user(userDetails.user())
                 .build();
 
-        List<Episode> episodes = episodeService.createEpisodeList(routineEnum, story);
+        List<Episode> episodes = episodeDtoCreateService.createEpisodeList(routineEnum, story);
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
@@ -80,6 +83,7 @@ public class StoryService {
                 StoryGenreEnum.fromString(coverChangeDto.genre()),
                 StoryLineStyleEnum.fromString(coverChangeDto.lineStyle())
         );
+        storyRepository.save(story);
     }
 
     @Transactional
@@ -87,5 +91,12 @@ public class StoryService {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
         storyRepository.deleteEpisodesByStoryId(story.getId());
         storyRepository.deleteById(story.getId());;
+    }
+
+    public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
+        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        Episode episode = Episode.builder().chapter(chapter).story(story).build();
+        episodeRepository.save(episode);
+        return episodeDtoCreateService.toEpisodeResponseDto(episode);
     }
 }

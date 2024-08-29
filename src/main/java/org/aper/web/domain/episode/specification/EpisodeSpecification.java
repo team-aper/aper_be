@@ -1,7 +1,7 @@
 package org.aper.web.domain.episode.specification;
 
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface EpisodeSpecification {
