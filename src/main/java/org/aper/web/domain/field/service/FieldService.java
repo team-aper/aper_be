@@ -51,7 +51,7 @@ public class FieldService {
         return new StoriesResponseDto(isMyField, storiesList);
     }
 
-    public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
+    public DetailsResponseDto getDetailsData(Long authorId) {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         return fieldMapper.toDetailsResponseDto(user);

@@ -33,7 +33,6 @@ public interface FieldControllerDocs {
 
     @Operation(summary = "작가 정보 get API", description = "토큰 필수 x")
     ResponseDto<DetailsResponseDto> getDetailsData(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId
     );
 }

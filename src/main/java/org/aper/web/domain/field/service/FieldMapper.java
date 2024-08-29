@@ -1,11 +1,14 @@
 package org.aper.web.domain.field.service;
 
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.field.dto.FieldResponseDto.*;
+import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
+import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,13 +16,19 @@ import java.util.stream.Collectors;
 public class FieldMapper {
 
     public HomeDetailsResponseDto toHomeDetailsResponseDto(Episode episode) {
+
+        LocalDateTime date = episode.isOnDisplay() ? episode.getPublicDate() : episode.getCreatedAt();
+        String text = truncateDescription(episode.getDescription());
+
         return new HomeDetailsResponseDto(
                 episode.getStory().getId(),
                 episode.getStory().getTitle(),
                 episode.getId(),
                 episode.getTitle(),
-                episode.getStory().getGenre(),
-                episode.getPublicDate(),
+                episode.getChapter(),
+                episode.getStory().getGenre().name(),
+                date,
+                text,
                 episode.isOnDisplay()
         );
     }
@@ -28,8 +37,8 @@ public class FieldMapper {
         return new StoriesDetailsResponseDto(
                 story.getId(),
                 story.getTitle(),
-                story.getRoutine(),
-                story.getGenre(),
+                story.getRoutine().name(),
+                story.getGenre().name(),
                 story.getPublicDate(),
                 story.isOnDisplay()
         );
@@ -52,5 +61,13 @@ public class FieldMapper {
         return stories.stream()
                 .map(this::toStoriesDetailsResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    private String truncateDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+
+        return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 }

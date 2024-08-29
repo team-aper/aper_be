@@ -1,8 +1,5 @@
 package org.aper.web.domain.field.dto;
 
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,8 +21,10 @@ public class FieldResponseDto {
             String storyTitle,
             Long episodeId,
             String episodeTitle,
-            StoryGenreEnum storyGenreEnum,
+            Long chapter,
+            String genre,
             LocalDateTime date,
+            String text,
             boolean isPublished
     ) {}
 
@@ -37,8 +36,8 @@ public class FieldResponseDto {
     public record StoriesDetailsResponseDto(
             Long storyId,
             String storyTitle,
-            StoryRoutineEnum storyRoutineEnum,
-            StoryGenreEnum storyGenreEnum,
+            String routine,
+            String genre,
             LocalDateTime date,
             boolean isPublished
     ) {}
