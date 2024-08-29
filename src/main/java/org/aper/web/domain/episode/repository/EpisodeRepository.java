@@ -50,10 +50,12 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "LEAST(80, LENGTH(e.description) - LOCATE(:filter, e.description) + LENGTH(:filter) + 40)) " +
             "ELSE " +
             "SUBSTRING(e.description, 1, 80) " +
-            "END AS snippet, " +
-            "s " +
+            "END AS description, " +
+            "s, " +
+            "u " +
             "FROM Episode e " +
             "JOIN e.story s " +
+            "JOIN s.user u " +
             "WHERE (s.title LIKE %:filter% " +
             "OR e.title LIKE %:filter% " +
             "OR e.description LIKE %:filter%) " +

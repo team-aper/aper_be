@@ -60,11 +60,12 @@ public class SearchService {
                     Long episodeId = (Long) object[0];
                     String description = (String) object[1];
                     Story story = (Story) object[2];
+                    User user = (User) object[3];
 
                     return new StoryListResponseDto(
                             story.getId(),
                             story.getTitle(),
-                            story.getUser().getUserId(),
+                            user.getUserId(),
                             story.getGenre(),
                             story.getPublicDate(),
                             episodeId,
