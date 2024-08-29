@@ -1,7 +1,7 @@
 package org.aper.web.domain.search.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.search.docs.SearchControllerDocs;
+import org.aper.web.global.docs.SearchControllerDocs;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.search.service.SearchService;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchController implements SearchControllerDocs {
     private final SearchService searchService;
 
+    @Override
     @GetMapping("/story")
     public ResponseDto<SearchStoryResponseDto> getSearchStory(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -29,6 +30,7 @@ public class SearchController implements SearchControllerDocs {
         return ResponseDto.success("이야기 검색 결과", storyResponseDto);
     }
 
+    @Override
     @GetMapping("/author")
     public ResponseDto<SearchAuthorResponseDto> getSearchAuthor(
             @RequestParam String penName
