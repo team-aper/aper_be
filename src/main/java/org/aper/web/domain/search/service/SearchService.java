@@ -1,6 +1,9 @@
 package org.aper.web.domain.search.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.episode.specification.EpisodeSpecification;
 import org.aper.web.domain.search.dto.SearchDto.*;
 import org.aper.web.domain.search.specification.StorySpecification;
 import org.aper.web.domain.story.constant.StoryGenreEnum;
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SearchService {
     private final UserRepository userRepository;
-    private final StoryRepository storyRepository;
+    private final EpisodeRepository episodeRepository;
 
     public SearchStoryResponseDto getSearchStory(
             int page,   //페이지
@@ -32,15 +35,13 @@ public class SearchService {
     {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 
-        Specification<Story> spec = StorySpecification.joinWithEpisodeAndApplyFilters(
+        Specification<Episode> spec = EpisodeSpecification.joinWithEpisodeAndApplyFilters(
                 genre,
                 filter,
                 filter,
-                filter,
-                true);
+                filter);
 
-        //검색된 단어를 통해 스토리 제목, 에피소드 제목, 에피소드 내용
-        List<Story> targetStoriesPage = storyRepository.findAll(spec, pageRequest).getContent();
+        List<Episode> targetStoriesAndEpisodes = episodeRepository.findAll(spec, pageRequest).getContent();
 
         List<StoryListResponseDto> responseDtoList = targetStoriesPage.stream()
                 .flatMap(story -> story.getEpisodeList().stream()
@@ -57,13 +58,6 @@ public class SearchService {
                 .toList();
 
         return new SearchStoryResponseDto(responseDtoList);
-    }
-
-    private String subStringFirstParagraph(String text) {
-        if (text == null || text.length() <= 80) {
-            return text;  // 원래 문자열 반환
-        }
-        return text.substring(0, 80);  // 첫 80자만 반환
     }
 
     public SearchAuthorResponseDto getSearchAuthor(String penName) {
