@@ -19,21 +19,26 @@ public class SearchDto {
        Long storyId,
        String storyTitle,
        Long authorId,
-       StoryGenreEnum StoryGenre,
+       StoryGenreEnum storyGenre,
        LocalDateTime publicDate,
        Long episodeId,
        String episodeFirstParagraph
     ) {
-        public StoryListResponseDto(Story story, Episode episode, String paragraph) {
-            this(
-                    story.getId(),
-                    story.getTitle(),
-                    story.getUser().getUserId(),
-                    story.getGenre(),
-                    story.getPublicDate(),
-                    episode.getId(),
-                    paragraph
-            );
+        public StoryListResponseDto(
+                Long storyId,
+                String storyTitle,
+                Long authorId,
+                StoryGenreEnum storyGenre,
+                LocalDateTime publicDate,
+                Long episodeId,
+                String episodeFirstParagraph) {
+            this.storyId = storyId;
+            this.storyTitle = storyTitle;
+            this.authorId = authorId;
+            this.storyGenre = storyGenre;
+            this.publicDate = publicDate;
+            this.episodeId = episodeId;
+            this.episodeFirstParagraph = episodeFirstParagraph;
         }
     }
 
