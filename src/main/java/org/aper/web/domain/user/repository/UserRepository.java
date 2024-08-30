@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -18,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.deleteAccount IS NULL")
     Optional<User> findByEmailWithOutDeleteAccount(String email);
+
+    @Query("SELECT u FROM User u WHERE u.penName LIKE %:penName%")
+    Page<User> findAllByPenNameContaining(Pageable pageable, String penName);
 }

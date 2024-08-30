@@ -1,6 +1,9 @@
 package org.aper.web.domain.episode.repository;
 
 import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -38,5 +41,30 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
      void decrementChaptersAfterDeletion(@Param("storyId") Long storyId, @Param("chapter") Long chapter);
 
     List<Episode> findAllByStoryId(Long storyId);
+
+    @Query("SELECT e.id, " +
+            "CASE " +
+            "WHEN LOCATE(:filter, e.description) > 0 THEN " +
+            "SUBSTRING(e.description, " +
+            "GREATEST(1, LOCATE(:filter, e.description) - 40), " +
+            "LEAST(80, LENGTH(e.description) - LOCATE(:filter, e.description) + LENGTH(:filter) + 40)) " +
+            "ELSE " +
+            "SUBSTRING(e.description, 1, 80) " +
+            "END AS description, " +
+            "s, " +
+            "u " +
+            "FROM Episode e " +
+            "JOIN e.story s " +
+            "JOIN s.user u " +
+            "WHERE (s.title LIKE %:filter% " +
+            "OR e.title LIKE %:filter% " +
+            "OR e.description LIKE %:filter%) " +
+            "AND (:genre IS NULL OR s.genre = :genre) " +
+            "AND e.onDisplay = true AND s.onDisplay = true"
+    )
+    Page<Object[]> findAllByTitleAndDescription(Pageable pageable,
+                                                @Param("genre") StoryGenreEnum genre,
+                                                @Param("filter") String filter);
+
 
 }
