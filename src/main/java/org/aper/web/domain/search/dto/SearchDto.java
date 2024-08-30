@@ -15,10 +15,9 @@ public class SearchDto {
        Long storyId,
        String storyTitle,
        Long authorId,
-       StoryGenreEnum storyGenre,
+       String storyGenre,
        LocalDateTime publicDate,
        Long episodeId,
-       String episodeTitle,
        String episodeFirstParagraph
     ) {}
 
