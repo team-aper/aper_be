@@ -59,11 +59,12 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "WHERE (s.title LIKE %:filter% " +
             "OR e.title LIKE %:filter% " +
             "OR e.description LIKE %:filter%) " +
-            "AND (:genre IS NULL OR s.genre = :genre)" +
+            "AND (:genre IS NULL OR s.genre = :genre) " +
             "AND e.onDisplay = true AND s.onDisplay = true"
     )
     Page<Object[]> findAllByTitleAndDescription(Pageable pageable,
                                                 @Param("genre") StoryGenreEnum genre,
                                                 @Param("filter") String filter);
+
 
 }

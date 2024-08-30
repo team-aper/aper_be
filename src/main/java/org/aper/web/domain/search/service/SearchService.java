@@ -29,7 +29,11 @@ public class SearchService {
     )
     {
         Pageable pageAble = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<Object[]> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter).getContent();
+        List<Object[]> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(
+                pageAble,
+                genre,
+                filter)
+                .getContent();
         return new SearchStoryResponseDto(searchMapper.EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
     }
 
