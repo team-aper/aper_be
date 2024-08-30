@@ -78,15 +78,15 @@ public class EpisodeDtoCreateService {
                 episode.getPublicDate());
     }
 
+    public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
+        return routineEnum.createEpisodes(story);
+    }
+
     private String truncateDescription(String description) {
         if (description == null) {
             return null;
         }
 
         return description.length() > 250 ? description.substring(0, 250) + "..." : description;
-    }
-
-    public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
-        return routineEnum.createEpisodes(story);
     }
 }
