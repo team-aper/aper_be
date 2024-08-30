@@ -18,66 +18,42 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FieldService {
+
     private final EpisodeRepository episodeRepository;
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
-
+    private final FieldMapper fieldMapper;
+    private final FieldHelper fieldHelper;
 
     public FieldHeaderResponseDto getAuthorInfo(Long authorId) {
-        User user = userRepository.findById(authorId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(authorId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription());
     }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
-        List<Episode> episodeList;
-        boolean isMyField = isOwnFiled(authorId, userDetails);
+        boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
+        List<Episode> episodeList = isMyField
+                ? episodeRepository.findAllByEpisode(authorId)
+                : episodeRepository.findAllByEpisodeOnlyPublished(authorId);
 
-        if(isMyField) {
-            episodeList = episodeRepository.findAllByEpisode(authorId);
-            return new HomeResponseDto(isMyField, episodeToDto(episodeList));
-        }
-
-        episodeList = episodeRepository.findAllByEpisodeOnlyPublished(authorId);
-        return new HomeResponseDto(isMyField, episodeToDto(episodeList));
+        List<HomeDetailsResponseDto> detailsList = fieldMapper.toHomeDetailsResponseDtoList(episodeList);
+        return new HomeResponseDto(isMyField, detailsList);
     }
 
     public StoriesResponseDto getStoriesData(UserDetailsImpl userDetails, Long authorId) {
-        List<Story> storyList;
-        boolean isMyField = isOwnFiled(authorId, userDetails);
+        boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
+        List<Story> storyList = isMyField
+                ? storyRepository.findAllByStories(authorId)
+                : storyRepository.findAllByStoriesOnlyPublished(authorId);
 
-        if(isMyField) {
-            storyList = storyRepository.findAllByStories(authorId);
-            return new StoriesResponseDto(isMyField, storiesToDto(storyList));
-        }
-
-        storyList = storyRepository.findAllByStoriesOnlyPublished(authorId);
-        return new StoriesResponseDto(isMyField, storiesToDto(storyList));
+        List<StoriesDetailsResponseDto> storiesList = fieldMapper.toStoriesDetailsResponseDtoList(storyList);
+        return new StoriesResponseDto(isMyField, storiesList);
     }
 
-    public DetailsResponseDto getDetailsData(UserDetailsImpl userDetails, Long authorId) {
-        User user = userRepository.findById(authorId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        return new DetailsResponseDto(user);
+    public DetailsResponseDto getDetailsData(Long authorId) {
+        User user = userRepository.findById(authorId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        return fieldMapper.toDetailsResponseDto(user);
     }
-
-    private boolean isOwnFiled(Long authorId, UserDetailsImpl userDetails) {
-        if(userDetails == null) {
-            return false;
-        }
-        User user = userDetails.user();
-        Long userId = user.getUserId();
-        return userId.equals(authorId);
-    }
-
-    private List<HomeDetailsResponseDto> episodeToDto(List<Episode> episodeList) {
-        return episodeList.stream()
-                .map(HomeDetailsResponseDto::new)
-                .toList();
-    }
-
-    private List<StoriesDetailsResponseDto> storiesToDto(List<Story> storyList) {
-        return storyList.stream()
-                .map(StoriesDetailsResponseDto::new)
-                .toList();
-    }
-
 }
