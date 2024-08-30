@@ -22,10 +22,9 @@ public class SearchMapper {
         return episodeList.stream()
                 .map(object -> {
                     Long episodeId = (Long) object[0];
-                    //String episodeTitle = (String) object[1];
-                    String description = (String) object[2];
-                    Story story = (Story) object[3];
-                    User user = (User) object[4];
+                    String description = (String) object[1];
+                    Story story = (Story) object[2];
+                    User user = (User) object[3];
 
                     return new StoryListResponseDto(
                             story.getId(),

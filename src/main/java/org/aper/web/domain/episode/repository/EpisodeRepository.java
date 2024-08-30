@@ -42,7 +42,7 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
 
     List<Episode> findAllByStoryId(Long storyId);
 
-    @Query("SELECT e.id, e.title, " +
+    @Query("SELECT e.id, " +
             "CASE " +
             "WHEN LOCATE(:filter, e.description) > 0 THEN " +
             "SUBSTRING(e.description, " +
