@@ -25,8 +25,13 @@ public interface SearchControllerDocs {
             @RequestParam(required = false) String filter
     );
 
-    @Operation(summary = "작가 필명을 기반으로 검색할때의 API", description = "검색 문자를 포함한 모든 작가를 탐색합니다.")
+    @Operation(summary = "작가 필명을 기반으로 검색할때의 API",
+            description = "page와 size는 입력하지 않을 시 각각 0, 10이 기본값입니다.<br>" +
+                    "검색 문자를 포함한 모든 작가를 탐색합니다."
+    )
     ResponseDto<SearchDto.SearchAuthorResponseDto> getSearchAuthor(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam String penName
     );
 }

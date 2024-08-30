@@ -24,7 +24,7 @@ public class SearchController implements SearchControllerDocs {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam(required = false) StoryGenreEnum genre,
-            @RequestParam(required = false) String filter
+            @RequestParam String filter
     ) {
         SearchStoryResponseDto storyResponseDto = searchService.getSearchStory(page, size, genre, filter);
         return ResponseDto.success("이야기 검색 결과", storyResponseDto);
@@ -33,9 +33,11 @@ public class SearchController implements SearchControllerDocs {
     @Override
     @GetMapping("/author")
     public ResponseDto<SearchAuthorResponseDto> getSearchAuthor(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam String penName
     ) {
-        SearchAuthorResponseDto authorResponseDto = searchService.getSearchAuthor(penName);
+        SearchAuthorResponseDto authorResponseDto = searchService.getSearchAuthor(page, size, penName);
         return ResponseDto.success("작가 검색 결과", authorResponseDto);
     }
 }

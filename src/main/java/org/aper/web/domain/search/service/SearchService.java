@@ -2,11 +2,8 @@ package org.aper.web.domain.search.service;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
-import org.aper.web.domain.search.dto.SearchDto.StoryListResponseDto;
-import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -22,6 +19,7 @@ import java.util.List;
 public class SearchService {
     private final UserRepository userRepository;
     private final EpisodeRepository episodeRepository;
+    private final SearchMapper searchMapper;
 
     public SearchStoryResponseDto getSearchStory(
             int page,
@@ -31,50 +29,13 @@ public class SearchService {
     )
     {
         Pageable pageAble = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-
         List<Object[]> targetStoriesAndEpisodes = episodeRepository.findAllByTitleAndDescription(pageAble, genre, filter).getContent();
-
-
-        return new SearchStoryResponseDto(EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
+        return new SearchStoryResponseDto(searchMapper.EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
     }
 
-    public SearchAuthorResponseDto getSearchAuthor(String penName) {
-        List<User> targetAuthors = userRepository.findAllByPenNameContaining(penName);
-        return new SearchAuthorResponseDto(UserListToAuthorListResponseDto(targetAuthors));
+    public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName) {
+        Pageable pageAble = PageRequest.of(page, size);
+        List<User> targetAuthors = userRepository.findAllByPenNameContaining(pageAble, penName).getContent();
+        return new SearchAuthorResponseDto(searchMapper.UserListToAuthorListResponseDto(targetAuthors));
     }
-
-    private List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<User> userList) {
-        return userList.stream()
-                .map(user ->
-                        new AuthorListResponseDto(
-                                user.getPenName(),
-                                user.getFieldImage(),
-                                user.getDescription(),
-                                user.getUserId()))
-                .toList();
-    }
-
-    private List<StoryListResponseDto> EpisodeListToStoryListResponseDto(List<Object[]> episodeList) {
-        return episodeList.stream()
-                .map(object -> {
-                    Long episodeId = (Long) object[0];
-                    String episodeTitle = (String) object[1];
-                    String description = (String) object[2];
-                    Story story = (Story) object[3];
-                    User user = (User) object[4];
-
-                    return new StoryListResponseDto(
-                            story.getId(),
-                            story.getTitle(),
-                            user.getUserId(),
-                            story.getGenre(),
-                            story.getPublicDate(),
-                            episodeId,
-                            episodeTitle,
-                            description
-                    );
-                })
-                .toList();
-    }
-
 }
