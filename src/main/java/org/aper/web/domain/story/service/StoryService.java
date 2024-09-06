@@ -98,8 +98,8 @@ public class StoryService {
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).title("임시 제목").description("임시 내용").build();
-        kafkaProducerService.sendCreate(episode);
         episodeRepository.save(episode);
+        kafkaProducerService.sendCreate(episode);
         return episodeDtoCreateService.toEpisodeResponseDto(episode);
     }
 }
