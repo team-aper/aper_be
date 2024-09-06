@@ -44,6 +44,12 @@ spring:
             enable: true # StartTLS 활성화 여부
             required: true
 
+  elasticsearch:
+    rest:
+      uris: ${elasticsearch.rest.uris}
+      username: ${elasticsearch.rest.username}
+      password: ${elasticsearch.rest.password}
+
 #logging:
 #    level:
 #      root: DEBUG
@@ -90,7 +96,7 @@ iamport:
     secret: ${iamport.api.secret}
 
 kafka:
-  bootstrap-servers: ec2-3-35-128-30.ap-northeast-2.compute.amazonaws.com:9092
-  key-serializer: org.apache.kafka.common.serialization.StringSerializer
-  value-serializer: org.apache.kafka.common.serialization.StringSerializer
-  topic: dbkafka.aper.episodes
+  bootstrap-servers: ${kafka.bootstrap-servers}
+  key-serializer: ${kafka.key-serializer}
+  value-serializer: ${kafka.value-serializer}
+  topic: ${kafka.topic}
