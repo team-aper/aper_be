@@ -1,34 +1,79 @@
 package org.aper.web.domain.search.entity.document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "episodes")  // 인덱스 이름은 적절하게 변경
-public class SearchEpisode {
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
-    @Field(name = "episode_title", type = FieldType.Text)
+@Getter
+@Setter
+@Document(indexName = "#{@environment.getProperty('kafka.topic')}")
+public class ElasticSearchEpisodeDocument {
+    @Id
+    @Field(name = "_id", type = FieldType.Text)
+    @JsonProperty("_id")
+    private String elasticId;
+
+
+    @Field(name = "episodeId", type = FieldType.Text)
+    @JsonProperty("episodeId")
+    private String episodeId;
+
+    @Field(name = "episodeChapter", type = FieldType.Long)
+    @JsonProperty("episodeChapter")
+    private Long episodeChapter;
+
+    @Field(name = "episodeTitle", type = FieldType.Text)
     @JsonProperty("episodeTitle")
     private String episodeTitle;
 
-    @Field(name = "story_id", type = FieldType.Integer)
-    @JsonProperty("storyId")
-    private Integer storyId;
-
-    @Field(name = "episode_public_date", type = FieldType.Text)  // nullable로 처리된 경우 문자열로 받을 수 있음
-    @JsonProperty("episodePublicDate")
-    private String episodePublicDate;
-
-    @Field(name = "pen_name", type = FieldType.Text)
-    @JsonProperty("penName")
-    private String penName;
-
-    @Field(name = "episode_description", type = FieldType.Text)
+    @Field(name = "episodeDescription", type = FieldType.Text)
     @JsonProperty("episodeDescription")
     private String episodeDescription;
 
-    @Field(name = "story_title", type = FieldType.Text)
+    @Field(name = "episodePublic_date", type = FieldType.Date)
+    @JsonProperty("episodePublicDate")
+    private LocalDateTime episodePublicDate;
+
+    @Field(name = "episodeOnDisplay", type = FieldType.Boolean)
+    @JsonProperty("episodeOnDisplay")
+    private Boolean episodeOnDisplay;
+
+    @Field(name = "storyId", type = FieldType.Long)
+    @JsonProperty("storyId")
+    private Long storyId;
+
+    @Field(name = "storyGenre", type = FieldType.Text)
+    @JsonProperty("storyGenre")
+    private String storyGenre;
+
+    @Field(name = "storyTitle", type = FieldType.Text)
     @JsonProperty("storyTitle")
     private String storyTitle;
 
-    @Field(name = "user_id", type = FieldType.Integer)
+    @Field(name = "storyOnDisplay", type = FieldType.Boolean)
+    @JsonProperty("storyOnDisplay")
+    private Boolean storyOnDisplay;
+
+    @Field(name = "userId", type = FieldType.Long)
     @JsonProperty("userId")
-    private Integer userId;
+    private Long userId;
+
+    @Field(name = "penName", type = FieldType.Text)
+    @JsonProperty("penName")
+    private String penName;
+
+    @Field(name = "fieldImage", type = FieldType.Text)
+    @JsonProperty("fieldImage")
+    private String fieldImage;
+
+    @JsonProperty("highlight")
+    private Map<String, List<String>> highlight;
 }
