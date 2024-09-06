@@ -88,3 +88,8 @@ iamport:
   api:
     key: ${iamport.api.key}
     secret: ${iamport.api.secret}
+
+kafka:
+  bootstrap-servers: ec2-3-35-128-30.ap-northeast-2.compute.amazonaws.com:9092
+  key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  value-serializer: org.apache.kafka.common.serialization.StringSerializer
