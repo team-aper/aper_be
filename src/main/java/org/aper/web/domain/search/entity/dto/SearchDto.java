@@ -1,6 +1,4 @@
-package org.aper.web.domain.search.dto;
-
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+package org.aper.web.domain.search.entity.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

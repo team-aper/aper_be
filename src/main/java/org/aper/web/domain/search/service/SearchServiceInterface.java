@@ -1,6 +1,6 @@
 package org.aper.web.domain.search.service;
 
-import org.aper.web.domain.search.dto.SearchDto.*;
+import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 
 public interface SearchServiceInterface {

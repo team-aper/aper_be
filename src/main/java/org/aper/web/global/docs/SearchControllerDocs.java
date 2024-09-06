@@ -2,10 +2,9 @@ package org.aper.web.global.docs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.aper.web.domain.search.dto.SearchDto;
+import org.aper.web.domain.search.entity.dto.SearchDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ResponseDto;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "검색 API")

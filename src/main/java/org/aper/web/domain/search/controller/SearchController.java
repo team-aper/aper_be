@@ -2,8 +2,8 @@ package org.aper.web.domain.search.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.global.docs.SearchControllerDocs;
-import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
-import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.SearchAuthorResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.search.service.SearchDataBaseService;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ResponseDto;

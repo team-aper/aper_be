@@ -1,7 +1,7 @@
 package org.aper.web.domain.search.service;
 
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.search.dto.SearchDto.*;
+import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;

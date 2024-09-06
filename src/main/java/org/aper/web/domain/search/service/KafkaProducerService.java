@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.search.dto.SearchDto.KafkaEpisodeDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.KafkaEpisodeDto;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
