@@ -39,6 +39,12 @@ spring:
       port: ${dev-redis.port}
       password: ${dev-redis.password}
 
+  elasticsearch:
+    rest:
+      uris: ${elasticsearch.rest.uris}
+      username: ${elasticsearch.rest.username}
+      password: ${elasticsearch.rest.password}
+
 springdoc:
   swagger-ui:
     # swagger-ui 접근 경로. default 값은 /swagger-ui.html이다.
@@ -86,3 +92,9 @@ aws:
       accesskey: ${AWS_IMAGE_ACCESS_KEY}
       secretkey: ${AWS_IMAGE_SECRET_KEY}
     field:
+
+kafka:
+  bootstrap-servers: ${kafka.bootstrap-servers}
+  key-serializer: ${kafka.key-serializer}
+  value-serializer: ${kafka.value-serializer}
+  topic: ${kafka.topic}
