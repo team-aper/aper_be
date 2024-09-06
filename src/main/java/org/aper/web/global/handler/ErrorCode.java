@@ -43,7 +43,10 @@ public enum ErrorCode {
     STORY_NOT_PUBLISHED("S006", "공개되지 않은 스토리입니다."),
 
     // AWS S3
-    S3_UPLOAD_ERROR_OCCURRED("AWS001", "S3 업로드 중 에러가 발생했습니다.");
+    S3_UPLOAD_ERROR_OCCURRED("AWS001", "S3 업로드 중 에러가 발생했습니다."),
+
+    // json
+    JSON_PROCESSING_ERROR("JS001", "JSON 변환 중 에러 발생");
 
     private final String code;
     private final String message;

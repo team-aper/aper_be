@@ -5,25 +5,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.aper.web.domain.search.dto.SearchDto.*;
-import org.aper.web.global.config.KafkaProducerConfig;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.search.dto.SearchDto.KafkaEpisodeDto;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService {
-    private KafkaProducer<String, String> producer;
-    private final KafkaProducerConfig EpisodeProducer;
+    private final KafkaProducer<String, String> producer;
     private final ObjectMapper objectMapper;
+    private final SearchMapper searchMapper;
 
     @Value("${kafka.topic}")
     private String topic;
 
-    public void send(KafkaEpisodeDto episodeDto) throws JsonProcessingException {
-        // DTO 객체를 JSON으로 변환
-        String jsonMessage = objectMapper.writeValueAsString(episodeDto);
-        ProducerRecord<String, String> record = new ProducerRecord<>(topic, jsonMessage);
-        producer.send(record);
+    public void send(Episode episode) {
+        try {
+            KafkaEpisodeDto episodeDto = searchMapper.episodeToKafkaDto(episode);
+            String jsonMessage = objectMapper.writeValueAsString(episodeDto);
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, jsonMessage);
+            producer.send(record);
+        } catch (JsonProcessingException e) {
+            throw new ServiceException(ErrorCode.JSON_PROCESSING_ERROR);
+        }
     }
 }

@@ -1,11 +1,14 @@
 package org.aper.web.domain.story.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
+import org.aper.web.domain.search.service.KafkaProducerService;
+import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -32,6 +35,7 @@ public class StoryService {
     private final StoryValidationService storyValidationService;
     private final StoryDtoCreateService storyDtoCreateService;
     private final EpisodeRepository episodeRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
@@ -95,7 +99,8 @@ public class StoryService {
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
-        Episode episode = Episode.builder().chapter(chapter).story(story).build();
+        Episode episode = Episode.builder().chapter(chapter).story(story).title("임시 제목").description("임시 내용").build();
+        kafkaProducerService.send(episode);
         episodeRepository.save(episode);
         return episodeDtoCreateService.toEpisodeResponseDto(episode);
     }

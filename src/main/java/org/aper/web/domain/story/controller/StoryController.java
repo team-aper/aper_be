@@ -1,5 +1,6 @@
 package org.aper.web.domain.story.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto;
@@ -72,7 +73,7 @@ public class StoryController implements StoryControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storyId,
             @PathVariable Long chapter
-    ){
+    ) throws JsonProcessingException {
         EpisodeResponseDto.CreatedEpisodeDto createdEpisodeData = storyService.createEpisode(userDetails, storyId, chapter);
         return ResponseDto.success("에피소드를 생성하였습니다.", createdEpisodeData);
     }

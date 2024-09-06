@@ -21,6 +21,7 @@ public class SearchDataBaseService implements SearchServiceInterface {
     private final EpisodeRepository episodeRepository;
     private final SearchMapper searchMapper;
 
+    @Override
     public SearchStoryResponseDto getSearchStory(
             int page,
             int size,
@@ -37,6 +38,7 @@ public class SearchDataBaseService implements SearchServiceInterface {
         return new SearchStoryResponseDto(searchMapper.EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
     }
 
+    @Override
     public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName) {
         Pageable pageAble = PageRequest.of(page, size);
         List<User> targetAuthors = userRepository.findAllByPenNameContaining(pageAble, penName).getContent();
