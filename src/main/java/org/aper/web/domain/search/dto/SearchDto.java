@@ -41,6 +41,7 @@ public class SearchDto {
             boolean episodeOnDisplay,
             Long storyId,
             String storyTitle,
+            String storyGenre,
             boolean storyOnDisplay,
             Long userId,
             String penName,

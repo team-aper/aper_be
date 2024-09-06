@@ -51,6 +51,7 @@ public class SearchMapper {
                 episode.isOnDisplay(),
                 story.getId(),
                 story.getTitle(),
+                story.getGenre().name(),
                 story.isOnDisplay(),
                 user.getUserId(),
                 user.getPenName(),

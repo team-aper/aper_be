@@ -22,7 +22,7 @@ public class KafkaProducerService {
     @Value("${kafka.topic}")
     private String topic;
 
-    public void send(Episode episode) {
+    public void sendCreate(Episode episode) {
         try {
             KafkaEpisodeDto episodeDto = searchMapper.episodeToKafkaDto(episode);
             String jsonMessage = objectMapper.writeValueAsString(episodeDto);
