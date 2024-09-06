@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.aper.web.domain.search.dto.SearchDto.*;
 import org.aper.web.global.config.KafkaProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class KafkaProducerService {
     @Value("${kafka.topic}")
     private String topic;
 
-    public void send(KafkaEpisodeDto episodeDto) {
+    public void send(KafkaEpisodeDto episodeDto) throws JsonProcessingException {
         // DTO 객체를 JSON으로 변환
         String jsonMessage = objectMapper.writeValueAsString(episodeDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, jsonMessage);

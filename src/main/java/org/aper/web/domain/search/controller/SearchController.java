@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.global.docs.SearchControllerDocs;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
-import org.aper.web.domain.search.service.SearchService;
+import org.aper.web.domain.search.service.SearchDataBaseService;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 @RequiredArgsConstructor
 public class SearchController implements SearchControllerDocs {
-    private final SearchService searchService;
+    private final SearchDataBaseService searchService;
 
     @Override
     @GetMapping("/story")

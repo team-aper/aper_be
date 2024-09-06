@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SearchService {
+public class SearchDataBaseService implements SearchServiceInterface {
     private final UserRepository userRepository;
     private final EpisodeRepository episodeRepository;
     private final SearchMapper searchMapper;

@@ -31,4 +31,19 @@ public class SearchDto {
             String description,
             Long authorId
     ) {}
+
+    public record KafkaEpisodeDto(
+            Long episodeId,
+            Long episodeChapter,
+            String episodeTitle,
+            String episodeDescription,
+            LocalDateTime episodePublicDate,
+            boolean episodeOnDisplay,
+            Long storyId,
+            String storyTitle,
+            boolean storyOnDisplay,
+            Long userId,
+            String penName,
+            String fieldImage
+    ) {}
 }

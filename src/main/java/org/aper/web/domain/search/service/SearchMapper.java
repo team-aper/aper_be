@@ -1,5 +1,6 @@
 package org.aper.web.domain.search.service;
 
+import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.search.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
@@ -37,5 +38,23 @@ public class SearchMapper {
                     );
                 })
                 .toList();
+    }
+    public KafkaEpisodeDto episodeToKafkaDto(Episode episode) {
+        Story story = episode.getStory();
+        User user = story.getUser();
+        return new KafkaEpisodeDto(
+                episode.getId(),
+                episode.getChapter(),
+                episode.getTitle(),
+                episode.getDescription(),
+                episode.getPublicDate(),
+                episode.isOnDisplay(),
+                story.getId(),
+                story.getTitle(),
+                story.isOnDisplay(),
+                user.getUserId(),
+                user.getPenName(),
+                user.getFieldImage()
+        );
     }
 }
