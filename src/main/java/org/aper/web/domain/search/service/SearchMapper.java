@@ -1,11 +1,16 @@
 package org.aper.web.domain.search.service;
 
 import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.search.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class SearchMapper {
@@ -33,7 +38,7 @@ public class SearchMapper {
                             user.getUserId(),
                             story.getGenre().name(),
                             story.getPublicDate(),
-                            episodeId,
+                            episodeId.toString(),
                             description
                     );
                 })
@@ -57,5 +62,32 @@ public class SearchMapper {
                 user.getPenName(),
                 user.getFieldImage()
         );
+    }
+    public List<StoryListResponseDto> documentListToKafkaDto(List<ElasticSearchEpisodeDocument> episodeDocumentList) {
+        return episodeDocumentList.stream()
+                .map(document -> new StoryListResponseDto(
+                            document.getStoryId(),
+                            document.getStoryTitle(),
+                            document.getUserId(),
+                            document.getStoryGenre(),
+                            document.getEpisodePublicDate(),
+                            document.getEpisodeId(),
+                            document.getEpisodeDescription()
+                    )
+                )
+                .toList();
+    }
+
+    public ElasticSearchEpisodeDocument mapHitToDocument(SearchHit<ElasticSearchEpisodeDocument> hit) {
+        ElasticSearchEpisodeDocument document = hit.getContent();
+        Map<String, List<String>> highlightMap = new HashMap<>(hit.getHighlightFields());
+        String description = getHighlightDescriptionValue(highlightMap);
+        document.setEpisodeDescription(description);
+        return document;
+    }
+
+    private String getHighlightDescriptionValue(Map<String, List<String>> highlightMap) {
+        List<String> highlightValues = highlightMap.get("episodeDescription");
+        return (highlightValues != null && !highlightValues.isEmpty()) ? highlightValues.get(0) : null;
     }
 }
