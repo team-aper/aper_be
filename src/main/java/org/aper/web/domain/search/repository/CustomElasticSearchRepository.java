@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.search.entity.document.CustomSourceFilter;
 import org.aper.web.domain.search.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.search.service.SearchMapper;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
@@ -20,6 +23,7 @@ import org.springframework.data.elasticsearch.core.query.highlight.HighlightPara
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,22 +32,34 @@ public class CustomElasticSearchRepository {
     private ElasticsearchTemplate elasticsearchTemplate;
     private final SearchMapper searchMapper;
 
-    public List<ElasticSearchEpisodeDocument> searchWithQueryBuilders(String filter, String genre, Pageable pageable) {
-        Query query = QueryBuilders.bool(bool -> bool
-                .must(QueryBuilders.multiMatch(multi -> multi
-                        .query(filter)
-                        .fields("episodeTitle", "episodeDescription", "storyTitle")
-                ))
-                .must(QueryBuilders.match(match -> match
-                        .field("storyGenre")
-                        .query(genre)
-                ))
+    public List<ElasticSearchEpisodeDocument> searchWithQueryBuilders(String filter, StoryGenreEnum genre, Pageable pageable) {
+        Query query = QueryBuilders.bool(bool -> {
+                    bool.must(QueryBuilders.multiMatch(multi -> multi
+                            .query(filter)
+                            .fields("episodeTitle", "episodeDescription", "storyTitle")
+                    ));
+                    if (genre != null) {
+                        bool.must(QueryBuilders.match(match -> match
+                                .field("storyGenre")
+                                .query(genre.name())
+                        ));
+                    }
+                    bool.must(QueryBuilders.match(multi -> multi
+                            .query("true")
+                            .field("episodeOnDisplay")
+                    ));
+                    bool.must(QueryBuilders.match(multi -> multi
+                            .query("true")
+                            .field("storyOnDisplay")
+                    ));
+                    return bool;
+                }
         );
 
         HighlightField episodeDescriptionField = new HighlightField("episodeDescription",
                 HighlightFieldParameters.builder()
-                        .withFragmentSize(100)   // 80글자 조각으로 자름
-                        .withNoMatchSize(100)    // 일치하지 않으면 처음 80글자
+                        .withFragmentSize(80)
+                        .withNoMatchSize(80)
                         .build());
 
         Highlight highlight = new Highlight(
@@ -71,4 +87,43 @@ public class CustomElasticSearchRepository {
                 .map(searchMapper::mapHitToDocument)
                 .toList();
     }
+
+    public void delete(Long episodeId) {
+        try {
+            Query query = QueryBuilders.term(t -> t
+                    .field("episodeId")
+                    .value(episodeId)
+            );
+            NativeQuery searchQuery = NativeQuery.builder()
+                    .withQuery(query)
+                    .build();
+            SearchHits<ElasticSearchEpisodeDocument> searchHits = elasticsearchTemplate.search(searchQuery, ElasticSearchEpisodeDocument.class);
+            searchHits.forEach(hit -> {
+                elasticsearchTemplate.delete(hit.getId(), ElasticSearchEpisodeDocument.class);
+            });
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.DOCUMENT_DELETE_FAILED);
+        }
+    }
+
+    public void update(Map<String, Object> data) {
+        try {
+            Long episodeId = Long.parseLong(data.get("episodeId").toString());
+            Query query = QueryBuilders.term(t -> t
+                    .field("episodeId")
+                    .value(episodeId)
+            );
+            NativeQuery searchQuery = NativeQuery.builder()
+                    .withQuery(query)
+                    .build();
+            SearchHits<ElasticSearchEpisodeDocument> searchHits = elasticsearchTemplate.search(searchQuery, ElasticSearchEpisodeDocument.class);
+            searchHits.forEach(hit -> {
+                String documentId = hit.getId();
+                elasticsearchTemplate.delete(documentId, ElasticSearchEpisodeDocument.class);
+            });
+        } catch (Exception e) {
+            throw new ServiceException(ErrorCode.DOCUMENT_UPDATE_FAILED);
+        }
+    }
+
 }
