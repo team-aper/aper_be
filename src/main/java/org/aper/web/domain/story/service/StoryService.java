@@ -40,6 +40,7 @@ public class StoryService {
         Story existStory = storyValidationService.validateStoryOwnership(storyId, userDetails);
         existStory.updateOnDisplay();
         storyRepository.save(existStory);
+        existStory.getEpisodeList().forEach(kafkaProducerService::sendUpdate);
     }
 
     @Transactional
@@ -97,7 +98,7 @@ public class StoryService {
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
-        Episode episode = Episode.builder().chapter(chapter).story(story).build();
+        Episode episode = Episode.builder().chapter(chapter).story(story).title("수정 테스트").description("수정이 되는지 확인").build();
         episodeRepository.save(episode);
         kafkaProducerService.sendCreate(episode);
         return episodeDtoCreateService.toEpisodeResponseDto(episode);

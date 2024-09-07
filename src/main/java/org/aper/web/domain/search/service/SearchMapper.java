@@ -44,7 +44,7 @@ public class SearchMapper {
                 })
                 .toList();
     }
-    public KafkaEpisodeDto episodeToKafkaDto(Episode episode) {
+    public KafkaEpisodeDto episodeToKafkaDto(Episode episode, String operation) {
         Story story = episode.getStory();
         User user = story.getUser();
         return new KafkaEpisodeDto(
@@ -60,7 +60,8 @@ public class SearchMapper {
                 story.isOnDisplay(),
                 user.getUserId(),
                 user.getPenName(),
-                user.getFieldImage()
+                user.getFieldImage(),
+                operation
         );
     }
     public List<StoryListResponseDto> documentListToKafkaDto(List<ElasticSearchEpisodeDocument> episodeDocumentList) {

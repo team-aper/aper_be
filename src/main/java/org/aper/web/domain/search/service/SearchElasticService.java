@@ -24,8 +24,7 @@ public class SearchElasticService implements SearchServiceInterface{
     @Override
     public SearchStoryResponseDto getSearchStory(int page, int size, StoryGenreEnum genre, String filter) {
         Pageable pageAble = PageRequest.of(page, size);
-        String stringGenre = genre == null ? "" : genre.name();
-        List<ElasticSearchEpisodeDocument> searchResult = customElasticSearchRepository.searchWithQueryBuilders(filter, stringGenre, pageAble);
+        List<ElasticSearchEpisodeDocument> searchResult = customElasticSearchRepository.searchWithQueryBuilders(filter, genre, pageAble);
         return new SearchStoryResponseDto(searchMapper.documentListToKafkaDto(searchResult));
     }
 
