@@ -2,7 +2,7 @@ package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
-import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
+import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class StoryDtoCreateService {
+public class StoryMapper {
 
-    private final EpisodeDtoCreateService episodeDtoCreateService;
+    private final EpisodeMapper episodeDtoCreateService;
 
     public GetStoryDto createGetStoryDtoWithEpisodes(Story story) {
 

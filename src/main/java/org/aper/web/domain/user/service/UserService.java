@@ -3,12 +3,13 @@ package org.aper.web.domain.user.service;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.image.service.S3ImageService;
-import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
-import org.aper.web.domain.user.entity.DeleteAccount;
+import org.aper.web.domain.user.dto.UserRequestDto.ChangeDescriptionDto;
+import org.aper.web.domain.user.dto.UserRequestDto.ChangeEmailDto;
+import org.aper.web.domain.user.dto.UserRequestDto.ChangePenNameDto;
+import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
+import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserRoleEnum;
-import org.aper.web.domain.user.repository.DeleteAccountRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -22,16 +23,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
-    private final DeleteAccountRepository deleteAccountRepository;
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       S3ImageService s3ImageService,
-                       DeleteAccountRepository deleteAccountRepository) {
+                       S3ImageService s3ImageService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
-        this.deleteAccountRepository = deleteAccountRepository;
     }
 
     public User findUser(String email){
