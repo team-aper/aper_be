@@ -100,3 +100,4 @@ kafka:
   key-serializer: ${kafka.key-serializer}
   value-serializer: ${kafka.value-serializer}
   topic: ${kafka.topic}
+  consumer-group-id: ${kafka.consumer-group-id}
