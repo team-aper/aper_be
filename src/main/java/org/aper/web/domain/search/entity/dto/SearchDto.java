@@ -43,6 +43,7 @@ public class SearchDto {
             boolean storyOnDisplay,
             Long userId,
             String penName,
-            String fieldImage
+            String fieldImage,
+            String operation
     ) {}
 }
