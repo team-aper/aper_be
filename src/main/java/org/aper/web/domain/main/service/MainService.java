@@ -1,14 +1,12 @@
 package org.aper.web.domain.main.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.episode.specification.EpisodeSpecification;
-import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.main.dto.response.GetCurationsResponseDto;
 import org.aper.web.domain.curation.entity.Curation;
 import org.aper.web.domain.curation.repository.CurationRepository;
-import org.aper.web.domain.main.dto.response.GetEpisodesResponseDto;
-import org.aper.web.domain.main.dto.response.GetUsersResponseDto;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.episode.specification.EpisodeSpecification;
+import org.aper.web.domain.main.dto.MainResponseDto.*;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,33 +31,23 @@ public class MainService {
         this.episodeRepository = episodeRepository;
     }
 
-    public List<GetCurationsResponseDto> getCurations(int page, int size) {
+    public GetCurationsListResponseDto getCurations(int page, int size) {
         PageRequest pageRequest = PageRequest.of(Math.max(page - 1, 0), size, Sort.Direction.DESC, "createdAt");
 
-        List<Curation> curations  = curationRepository.findAllForMain(pageRequest).getContent();
-        List<GetCurationsResponseDto> responseDtoList = new ArrayList<>();
+        List<Curation> curations = curationRepository.findAllForMain(pageRequest).getContent();
 
-        for (Curation curation : curations) {
-            responseDtoList.add(new GetCurationsResponseDto(curation));
-        }
-
-        return responseDtoList;
+        return MainMapper.toGetCurationsListResponseDto(curations);
     }
 
-    public List<GetUsersResponseDto> getUsers(int page, int size) {
+    public GetUsersListResponseDto getUsers(int page, int size) {
         PageRequest pageRequest = PageRequest.of(Math.max(page - 1, 0), size, Sort.Direction.ASC, "userId");
 
-        List<User> users  = userRepository.findAllForMain(pageRequest).getContent();
-        List<GetUsersResponseDto> responseDtoList = new ArrayList<>();
+        List<User> users = userRepository.findAllForMain(pageRequest).getContent();
 
-        for (User user : users) {
-            responseDtoList.add(new GetUsersResponseDto(user));
-        }
-
-        return responseDtoList;
+        return MainMapper.toGetUsersListResponseDto(users);
     }
 
-    public List<GetEpisodesResponseDto> getEpisodes(int page, int size, StoryGenreEnum storyGenre) {
+    public GetEpisodesListResponseDto getEpisodes(int page, int size, StoryGenreEnum storyGenre) {
         PageRequest pageRequest = PageRequest.of(Math.max(page - 1, 0), size, Sort.Direction.DESC, "createdAt");
 
         Specification<Episode> spec = Specification
@@ -68,13 +55,8 @@ public class MainService {
                 .and(EpisodeSpecification.isStoryOnDisplay())
                 .and(EpisodeSpecification.hasStoryGenre(storyGenre));
 
-        List<Episode> episodes  = episodeRepository.findAll(spec, pageRequest).getContent();
-        List<GetEpisodesResponseDto> responseDtoList = new ArrayList<>();
+        List<Episode> episodes = episodeRepository.findAll(spec, pageRequest).getContent();
 
-        for (Episode episode : episodes) {
-            responseDtoList.add(new GetEpisodesResponseDto(episode));
-        }
-
-        return responseDtoList;
+        return MainMapper.toGetEpisodesListResponseDto(episodes);
     }
 }
