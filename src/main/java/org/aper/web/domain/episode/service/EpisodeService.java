@@ -8,6 +8,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.search.service.KafkaProducerService;
 import org.aper.web.domain.story.service.StoryValidationService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -22,32 +23,33 @@ public class EpisodeService {
     private final EpisodeValidationService episodeValidationService;
     private final EpisodeDtoCreateService episodeDtoCreateService;
     private final StoryValidationService storyValidationService;
+    private final KafkaProducerService producerService;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {
         Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
         episodeValidationService.validateUserIsAuthor(episode, userDetails);
-
         episode.updateOnDisplay();
         episodeRepository.save(episode);
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
     public void changeTitle(UserDetailsImpl userDetails, Long episodeId, TitleChangeDto titleChangeDto) {
         Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
         episodeValidationService.validateUserIsAuthor(episode, userDetails);
-
         episode.updateTitle(titleChangeDto.title());
         episodeRepository.save(episode);
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
     public void changeText(UserDetailsImpl userDetails, Long episodeId, TextChangeDto textChangeDto) {
         Episode episode = episodeValidationService.validateEpisodeExists(episodeId);
         episodeValidationService.validateUserIsAuthor(episode, userDetails);
-
         episode.updateText(textChangeDto.text());
         episodeRepository.save(episode);
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
@@ -57,6 +59,7 @@ public class EpisodeService {
         episodeRepository.delete(episode);
         episodeRepository.flush();
         episodeRepository.decrementChaptersAfterDeletion(episodeDto.storyId(), episodeDto.chapter());
+        producerService.sendDelete(episodeId);
     }
 
     public EpisodeHeaderDto getEpisodeHeader(UserDetailsImpl userDetails, Long episodeId) {
