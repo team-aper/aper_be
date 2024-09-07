@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EpisodeValidationService {
+public class EpisodeHelper {
     private final EpisodeRepository episodeRepository;
 
     public Episode validateEpisodeExists(Long episodeId) {

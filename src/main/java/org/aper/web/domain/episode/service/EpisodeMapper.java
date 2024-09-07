@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class EpisodeDtoCreateService {
+public class EpisodeMapper {
 
     private final EpisodeRepository episodeRepository;
 
@@ -35,7 +35,7 @@ public class EpisodeDtoCreateService {
     }
 
     @Transactional(readOnly = true)
-    public List<EpisodeResponseDto.CreatedEpisodeDto> getPublishedEpisodesWithDDay(Long userId) {
+    public List<CreatedEpisodeDto> getPublishedEpisodesWithDDay(Long userId) {
         List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(userId);
 
         if (episodes.isEmpty()){

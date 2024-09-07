@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StoryValidationService {
+public class StoryHelper {
     private final StoryRepository storyRepository;
 
     public Story validateStoryOwnership(Long storyId, UserDetailsImpl userDetails) {
