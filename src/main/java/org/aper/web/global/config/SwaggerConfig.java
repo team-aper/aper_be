@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -32,8 +33,13 @@ public class SwaggerConfig {
                         .scheme("Bearer")
                         .bearerFormat("Bearer"));
 
+        Server httpsServer = new Server()
+                .url("https://api.aper.cc")
+                .description("HTTPS 서버");
+
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
-                .components(components);
+                .components(components)
+                .addServersItem(httpsServer);
     }
 }
