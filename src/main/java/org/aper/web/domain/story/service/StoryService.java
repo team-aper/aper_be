@@ -6,7 +6,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
-import org.aper.web.domain.search.service.KafkaProducerService;
+import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -33,14 +33,14 @@ public class StoryService {
     private final StoryValidationService storyValidationService;
     private final StoryDtoCreateService storyDtoCreateService;
     private final EpisodeRepository episodeRepository;
-    private final KafkaProducerService kafkaProducerService;
+    private final KafkaEpisodesProducerService kafkaEpisodesProducerService;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
         Story existStory = storyValidationService.validateStoryOwnership(storyId, userDetails);
         existStory.updateOnDisplay();
         storyRepository.save(existStory);
-        existStory.getEpisodeList().forEach(kafkaProducerService::sendUpdate);
+        existStory.getEpisodeList().forEach(kafkaEpisodesProducerService::sendUpdate);
     }
 
     @Transactional
@@ -100,7 +100,7 @@ public class StoryService {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).title("수정 테스트").description("수정이 되는지 확인").build();
         episodeRepository.save(episode);
-        kafkaProducerService.sendCreate(episode);
+        kafkaEpisodesProducerService.sendCreate(episode);
         return episodeDtoCreateService.toEpisodeResponseDto(episode);
     }
 

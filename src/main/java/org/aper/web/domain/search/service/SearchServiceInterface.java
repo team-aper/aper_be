@@ -10,6 +10,11 @@ public interface SearchServiceInterface {
             StoryGenreEnum genre,
             String filter
     );
+    SearchPenNameResponseDto getOnlyPenName(
+            int page,
+            int size,
+            String penName
+    );
     SearchAuthorResponseDto getSearchAuthor(
             int page,
             int size,
