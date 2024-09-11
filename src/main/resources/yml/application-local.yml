@@ -99,5 +99,6 @@ kafka:
   bootstrap-servers: ${kafka.bootstrap-servers}
   key-serializer: ${kafka.key-serializer}
   value-serializer: ${kafka.value-serializer}
-  topic: ${kafka.topic}
+  episodes-topic: ${kafka.episodes-topic}
+  user-topic: ${kafka.user-topic}
   consumer-group-id: ${kafka.consumer-group-id}
