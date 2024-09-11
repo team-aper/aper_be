@@ -1,4 +1,4 @@
-package org.aper.web.domain.search.entity.document;
+package org.aper.web.domain.elasticsearch.entity.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-@Document(indexName = "#{@environment.getProperty('kafka.topic')}")
+@Document(indexName = "#{@environment.getProperty('kafka.episodes-topic')}")
 public class ElasticSearchEpisodeDocument {
     @Id
     @Field(name = "_id", type = FieldType.Text)
