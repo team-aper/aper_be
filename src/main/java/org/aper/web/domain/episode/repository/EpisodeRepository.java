@@ -20,7 +20,7 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "JOIN e.story s " +
             "JOIN s.user u " +
             "WHERE u.userId = :authorId")
-    List<Episode> findAllByEpisode(Long authorId);
+    List<Episode> findAllByUserId(Long authorId);
 
     @Query("SELECT e FROM Episode e " +
             "JOIN e.story s " +
@@ -66,5 +66,9 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
                                                 @Param("genre") StoryGenreEnum genre,
                                                 @Param("filter") String filter);
 
+    @Query("SELECT e.id FROM Episode e")
+    List<Long> findAllEpisodeId();
 
+    @Query("SELECT e FROM Episode e WHERE e.id IN (:episodeIds)")
+    List<Episode> findByIdList(List<Long> episodeIds);
 }
