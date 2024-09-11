@@ -2,6 +2,7 @@ package org.aper.web.domain.search.service;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.search.entity.dto.SearchDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
@@ -36,6 +37,11 @@ public class SearchDataBaseService implements SearchServiceInterface {
                 filter)
                 .getContent();
         return new SearchStoryResponseDto(searchMapper.EpisodeListToStoryListResponseDto(targetStoriesAndEpisodes));
+    }
+
+    @Override
+    public SearchDto.SearchPenNameResponseDto getOnlyPenName(int page, int size, String penName) {
+        return null;
     }
 
     @Override

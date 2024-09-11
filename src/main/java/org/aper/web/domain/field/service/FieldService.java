@@ -34,7 +34,7 @@ public class FieldService {
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
         boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
         List<Episode> episodeList = isMyField
-                ? episodeRepository.findAllByEpisode(authorId)
+                ? episodeRepository.findAllByUserId(authorId)
                 : episodeRepository.findAllByEpisodeOnlyPublished(authorId);
 
         List<HomeDetailsResponseDto> detailsList = fieldMapper.toHomeDetailsResponseDtoList(episodeList);

@@ -8,7 +8,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.search.service.KafkaProducerService;
+import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.story.service.StoryValidationService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -23,7 +23,7 @@ public class EpisodeService {
     private final EpisodeValidationService episodeValidationService;
     private final EpisodeDtoCreateService episodeDtoCreateService;
     private final StoryValidationService storyValidationService;
-    private final KafkaProducerService producerService;
+    private final KafkaEpisodesProducerService producerService;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {

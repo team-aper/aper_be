@@ -6,9 +6,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.aper.web.domain.elasticsearch.repository.UserElasticSearchRepository;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.search.entity.dto.SearchDto.KafkaUserDto;
-import org.aper.web.domain.elasticsearch.repository.EpisodesElasticSearchRepository;
-import org.aper.web.domain.search.service.SearchMapper;
+import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaUserDto;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaUserProducerService {
     private final KafkaProducer<String, String> producer;
-    private final SearchMapper searchMapper;
+    private final KafkaMapper kafkaMapper;
     private final UserElasticSearchRepository elasticSearchRepository;
     private final EpisodeRepository episodeRepository;
     private final KafkaEpisodesProducerService episodesProducerService;
@@ -31,14 +29,14 @@ public class KafkaUserProducerService {
     private String usersTopic;
 
     public void sendCreate(User user) {
-        KafkaUserDto userDto = searchMapper.userToKafkaDto(user, "create");
+        KafkaUserDto userDto = kafkaMapper.userToKafkaDto(user, "create");
         String jsonMessage = jsonObjectMapper.writeValueAsString(userDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(usersTopic, jsonMessage);
         producer.send(record);
     }
 
     public void sendUpdate(User user) {
-        KafkaUserDto userDto = searchMapper.userToKafkaDto(user, "update");
+        KafkaUserDto userDto = kafkaMapper.userToKafkaDto(user, "update");
         String jsonMessage = jsonObjectMapper.writeValueAsString(userDto);
         producer.send(new ProducerRecord<>(usersTopic, jsonMessage));
     }

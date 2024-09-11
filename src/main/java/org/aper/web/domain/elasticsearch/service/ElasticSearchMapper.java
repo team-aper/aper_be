@@ -3,23 +3,23 @@ package org.aper.web.domain.elasticsearch.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
-import org.aper.web.domain.search.service.SearchMapper;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ElasticSearchMapper {
-    private final SearchMapper searchMapper;
 
     public List<ElasticSearchEpisodeDocument> HitsToEpisodeDocument(SearchHits<ElasticSearchEpisodeDocument> searchHits) {
         return searchHits.getSearchHits()
                 .stream()
-                .map(searchMapper::mapHitToDocument)
+                .map(this::mapHitToDocument)
                 .toList();
     }
 
@@ -46,5 +46,18 @@ public class ElasticSearchMapper {
         return esIdsSet.stream()
                 .filter(id -> !mysqlIdsSet.contains(id))
                 .toList();
+    }
+
+    private ElasticSearchEpisodeDocument mapHitToDocument(SearchHit<ElasticSearchEpisodeDocument> hit) {
+        ElasticSearchEpisodeDocument document = hit.getContent();
+        Map<String, List<String>> highlightMap = new HashMap<>(hit.getHighlightFields());
+        String description = getHighlightDescriptionValue(highlightMap);
+        document.setEpisodeDescription(description);
+        return document;
+    }
+
+    private String getHighlightDescriptionValue(Map<String, List<String>> highlightMap) {
+        List<String> highlightValues = highlightMap.get("episodeDescription");
+        return (highlightValues != null && !highlightValues.isEmpty()) ? highlightValues.get(0) : null;
     }
 }

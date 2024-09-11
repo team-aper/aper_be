@@ -5,8 +5,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.aper.web.domain.elasticsearch.repository.EpisodesElasticSearchRepository;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.search.entity.dto.SearchDto.KafkaEpisodeDto;
-import org.aper.web.domain.search.service.SearchMapper;
+import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaEpisodeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -18,21 +17,21 @@ import java.util.Map;
 public class KafkaEpisodesProducerService {
     private final KafkaProducer<String, String> producer;
     private final JsonObjectMapper objectMapper;
-    private final SearchMapper searchMapper;
+    private final KafkaMapper kafkaMapper;
     private final EpisodesElasticSearchRepository elasticSearchRepository;
 
     @Value("${kafka.episodes-topic}")
     private String episodesTopic;
 
     public void sendCreate(Episode episode) {
-        KafkaEpisodeDto episodeDto = searchMapper.episodeToKafkaDto(episode, "create");
+        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, "create");
         String jsonMessage = objectMapper.writeValueAsString(episodeDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(episodesTopic, jsonMessage);
         producer.send(record);
     }
 
     public void sendUpdate(Episode episode) {
-        KafkaEpisodeDto episodeDto = searchMapper.episodeToKafkaDto(episode, "update");
+        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, "update");
         String jsonMessage = objectMapper.writeValueAsString(episodeDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(episodesTopic, jsonMessage);
         producer.send(record);
