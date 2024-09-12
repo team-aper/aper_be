@@ -50,7 +50,7 @@ public class EpisodeMapper {
     public CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
-        String dDayString = dDay >= 0 ? "D+" + dDay : "D-" + Math.abs(dDay);
+        String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
 
         String truncatedDescription = truncateDescription(episode.getDescription());
 
