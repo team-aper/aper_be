@@ -9,8 +9,7 @@ public class EpisodeResponseDto {
             String title,
             Long chapter,
             String description,
-            LocalDateTime createDate,
-            LocalDateTime publicDate,
+            LocalDateTime date,
             boolean isPublished,
             String dDay
     ) {
@@ -24,8 +23,7 @@ public class EpisodeResponseDto {
             String episodeTitle,
             Long chapter,
             String genre,
-            LocalDateTime createdDate,
-            LocalDateTime publicDate,
+            LocalDateTime date,
             boolean isPublished
     ){}
 

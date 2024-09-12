@@ -7,6 +7,7 @@ import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -18,6 +19,7 @@ public class StoryMapper {
     public GetStoryDto createGetStoryDtoWithEpisodes(Story story) {
 
         List<CreatedEpisodeDto> myEpisodes = episodeDtoCreateService.getEpisodesWithDDay(story.getId());
+        LocalDateTime date = story.isOnDisplay() ? story.getPublicDate() : story.getCreatedAt();
 
         return new GetStoryDto(
                 story.getTitle(),
@@ -25,8 +27,7 @@ public class StoryMapper {
                 story.getUser().getPenName(),
                 story.getGenre().name(),
                 story.getLineStyle().name(),
-                story.getCreatedAt(),
-                story.getPublicDate(),
+                date,
                 story.isOnDisplay(),
                 myEpisodes
         );
@@ -42,7 +43,6 @@ public class StoryMapper {
                 story.getUser().getPenName(),
                 story.getGenre().name(),
                 story.getLineStyle().name(),
-                story.getCreatedAt(),
                 story.getPublicDate(),
                 story.isOnDisplay(),
                 publishedEpisodes

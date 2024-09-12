@@ -11,6 +11,7 @@ import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,22 +52,26 @@ public class EpisodeMapper {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
         String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
-
         String truncatedDescription = truncateDescription(episode.getDescription());
+        LocalDateTime date = episode.isOnDisplay() ? episode.getPublicDate() : episode.getCreatedAt();
+
 
         return new EpisodeResponseDto.CreatedEpisodeDto(
                 episode.getId(),
                 episode.getTitle(),
                 episode.getChapter(),
                 truncatedDescription,
-                episode.getCreatedAt(),
-                episode.getPublicDate(),
+                date,
                 episode.isOnDisplay(),
                 dDayString
         );
     }
 
     public EpisodeHeaderDto toEpisodeHeaderDto(Episode episode){
+
+        LocalDateTime date = episode.isOnDisplay() ? episode.getPublicDate() : episode.getCreatedAt();
+
+
         return new EpisodeHeaderDto(
                 episode.getId(),
                 episode.getStory().getUser().getUserId(),
@@ -75,8 +80,7 @@ public class EpisodeMapper {
                 episode.getStory().getTitle(),
                 episode.getChapter(),
                 episode.getStory().getGenre().name(),
-                episode.getCreatedAt(),
-                episode.getPublicDate(),
+                date,
                 episode.isOnDisplay()
         );
     }
