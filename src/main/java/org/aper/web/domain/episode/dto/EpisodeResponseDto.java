@@ -20,11 +20,13 @@ public class EpisodeResponseDto {
             Long episodeId,
             Long authorId,
             Long storyId,
-            String title,
+            String storyTitle,
+            String episodeTitle,
             Long chapter,
             String genre,
             LocalDateTime createdDate,
-            LocalDateTime publicDate
+            LocalDateTime publicDate,
+            boolean isPublished
     ){}
 
     public record EpisodeTextDto(

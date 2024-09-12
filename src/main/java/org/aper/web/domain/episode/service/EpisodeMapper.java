@@ -72,10 +72,13 @@ public class EpisodeMapper {
                 episode.getStory().getUser().getUserId(),
                 episode.getStory().getId(),
                 episode.getTitle(),
+                episode.getStory().getTitle(),
                 episode.getChapter(),
                 episode.getStory().getGenre().name(),
                 episode.getCreatedAt(),
-                episode.getPublicDate());
+                episode.getPublicDate(),
+                episode.isOnDisplay()
+        );
     }
 
     public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
