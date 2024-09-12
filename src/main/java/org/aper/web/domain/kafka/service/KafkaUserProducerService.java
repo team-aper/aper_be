@@ -9,7 +9,6 @@ import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaUserDto;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,19 +45,6 @@ public class KafkaUserProducerService {
         String jsonMessage = jsonObjectMapper.writeValueAsString(Map.of("operation", "delete", "userId", userId));
         producer.send(new ProducerRecord<>(usersTopic, jsonMessage));
         episodeList.forEach(episode -> episodesProducerService.sendDelete(episode.getId()));
-    }
-
-    @KafkaListener(topics = "${kafka.user-topic}", groupId = "${kafka.consumer-group-id}")
-    public void consume(String message) {
-        Map<String, Object> data = jsonObjectMapper.readValue(message);
-        String operation = (String) data.get("operation");
-        if (operation.equals("delete")) {
-            Long episodeId = Long.parseLong(data.get("userId").toString());
-            elasticSearchRepository.delete(episodeId);
-        }
-        if (operation.equals("update")){
-            elasticSearchRepository.update(data);
-        }
     }
 }
 
