@@ -59,6 +59,7 @@ public class StoryService {
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
+        kafkaEpisodesProducerService.sendCreate(Episode.builder().story(story).build());
 
         return new CreatedStoryDto(story.getId());
     }
@@ -92,13 +93,15 @@ public class StoryService {
     @Transactional
     public void deleteStory(UserDetailsImpl userDetails, Long storyId) {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        episodeRepository.findAllByStoryId(storyId).forEach(ep -> kafkaEpisodesProducerService.sendDelete(ep.getId()));
         storyRepository.deleteEpisodesByStoryId(story.getId());
         storyRepository.deleteById(story.getId());;
+
     }
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
-        Episode episode = Episode.builder().chapter(chapter).story(story).title("수정 테스트").description("수정이 되는지 확인").build();
+        Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
         kafkaEpisodesProducerService.sendCreate(episode);
         return episodeDtoCreateService.toEpisodeResponseDto(episode);

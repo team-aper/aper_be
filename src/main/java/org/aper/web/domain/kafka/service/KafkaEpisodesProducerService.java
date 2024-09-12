@@ -23,14 +23,14 @@ public class KafkaEpisodesProducerService {
     private String episodesTopic;
 
     public void sendCreate(Episode episode) {
-        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, "create");
+        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, episode.getStory(), "create");
         String jsonMessage = objectMapper.writeValueAsString(episodeDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(episodesTopic, jsonMessage);
         producer.send(record);
     }
 
     public void sendUpdate(Episode episode) {
-        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, "update");
+        KafkaEpisodeDto episodeDto = kafkaMapper.episodeToKafkaDto(episode, episode.getStory(),"update");
         String jsonMessage = objectMapper.writeValueAsString(episodeDto);
         ProducerRecord<String, String> record = new ProducerRecord<>(episodesTopic, jsonMessage);
         producer.send(record);

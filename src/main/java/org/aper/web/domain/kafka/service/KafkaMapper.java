@@ -6,8 +6,7 @@ import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 
 public class KafkaMapper {
-    public KafkaEpisodeDto episodeToKafkaDto(Episode episode, String operation) {
-        Story story = episode.getStory();
+    public KafkaEpisodeDto episodeToKafkaDto(Episode episode, Story story, String operation) {
         User user = story.getUser();
         return new KafkaEpisodeDto(
                 episode.getId(),
