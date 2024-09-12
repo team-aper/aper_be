@@ -5,11 +5,11 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class StoryMapper {
 

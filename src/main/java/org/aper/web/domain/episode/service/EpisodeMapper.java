@@ -8,14 +8,14 @@ import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class EpisodeMapper {
 
@@ -50,7 +50,7 @@ public class EpisodeMapper {
     public CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
         int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
-        String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
+        String dDayString = dDay >= 0 ? "D+" + dDay : "D-" + Math.abs(dDay);
 
         String truncatedDescription = truncateDescription(episode.getDescription());
 

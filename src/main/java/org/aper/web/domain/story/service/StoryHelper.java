@@ -6,9 +6,9 @@ import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class StoryHelper {
     private final StoryRepository storyRepository;
