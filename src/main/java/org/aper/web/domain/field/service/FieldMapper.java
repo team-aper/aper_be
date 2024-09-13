@@ -34,12 +34,15 @@ public class FieldMapper {
     }
 
     public StoriesDetailsResponseDto toStoriesDetailsResponseDto(Story story) {
+
+        LocalDateTime date = story.isOnDisplay() ? story.getPublicDate() : story.getCreatedAt();
+
         return new StoriesDetailsResponseDto(
                 story.getId(),
                 story.getTitle(),
                 story.getRoutine().name(),
                 story.getGenre().name(),
-                story.getPublicDate(),
+                date,
                 story.isOnDisplay()
         );
     }
