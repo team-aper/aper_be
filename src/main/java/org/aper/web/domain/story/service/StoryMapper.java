@@ -2,22 +2,24 @@ package org.aper.web.domain.story.service;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
-import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
+import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
 import org.aper.web.domain.story.entity.Story;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class StoryDtoCreateService {
+public class StoryMapper {
 
-    private final EpisodeDtoCreateService episodeDtoCreateService;
+    private final EpisodeMapper episodeDtoCreateService;
 
     public GetStoryDto createGetStoryDtoWithEpisodes(Story story) {
 
         List<CreatedEpisodeDto> myEpisodes = episodeDtoCreateService.getEpisodesWithDDay(story.getId());
+        LocalDateTime date = story.isOnDisplay() ? story.getPublicDate() : story.getCreatedAt();
 
         return new GetStoryDto(
                 story.getTitle(),
@@ -25,8 +27,7 @@ public class StoryDtoCreateService {
                 story.getUser().getPenName(),
                 story.getGenre().name(),
                 story.getLineStyle().name(),
-                story.getCreatedAt(),
-                story.getPublicDate(),
+                date,
                 story.isOnDisplay(),
                 myEpisodes
         );
@@ -42,7 +43,6 @@ public class StoryDtoCreateService {
                 story.getUser().getPenName(),
                 story.getGenre().name(),
                 story.getLineStyle().name(),
-                story.getCreatedAt(),
                 story.getPublicDate(),
                 story.isOnDisplay(),
                 publishedEpisodes

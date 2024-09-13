@@ -34,6 +34,12 @@ public class SearchDto {
             String penName,
             String fieldImageUrl,
             String description,
-            Long authorId
+            Long authorId,
+            List<AuthorStoryListResponseDto> storyList
+    ) {}
+
+    public record AuthorStoryListResponseDto(
+            String storyTitle,
+            Long storyId
     ) {}
 }

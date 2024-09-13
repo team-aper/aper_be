@@ -17,8 +17,7 @@ public class StoryResponseDto {
             String penName,
             String genre,
             String lineStyle,
-            LocalDateTime createdDate,
-            LocalDateTime publicDate,
+            LocalDateTime date,
             boolean isPublished,
             List<CreatedEpisodeDto> episodes
     ){}

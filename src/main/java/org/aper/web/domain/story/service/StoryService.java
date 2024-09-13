@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.episode.service.EpisodeDtoCreateService;
-import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
+import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -29,18 +28,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
-    private final EpisodeDtoCreateService episodeDtoCreateService;
-    private final StoryValidationService storyValidationService;
-    private final StoryDtoCreateService storyDtoCreateService;
+    private final EpisodeMapper episodeMapper;
+    private final StoryHelper storyHelper;
+    private final StoryMapper storyMapper;
     private final EpisodeRepository episodeRepository;
-    private final KafkaEpisodesProducerService kafkaEpisodesProducerService;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
-        Story existStory = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        Story existStory = storyHelper.validateStoryOwnership(storyId, userDetails);
         existStory.updateOnDisplay();
         storyRepository.save(existStory);
-        existStory.getEpisodeList().forEach(kafkaEpisodesProducerService::sendUpdate);
     }
 
     @Transactional
@@ -55,33 +52,32 @@ public class StoryService {
                 .user(userDetails.user())
                 .build();
 
-        List<Episode> episodes = episodeDtoCreateService.createEpisodeList(routineEnum, story);
+        List<Episode> episodes = episodeMapper.createEpisodeList(routineEnum, story);
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
-        kafkaEpisodesProducerService.sendCreate(Episode.builder().story(story).build());
 
         return new CreatedStoryDto(story.getId());
     }
 
     @Transactional(readOnly = true)
     public GetStoryDto getStory(UserDetailsImpl userDetails, Long storyId) {
-        Story story = storyValidationService.validateStoryAccessibility(storyId);
+        Story story = storyHelper.validateStoryAccessibility(storyId);
 
-        if (storyValidationService.isOwnStory(storyId, userDetails)) {
-            return storyDtoCreateService.createGetStoryDtoWithEpisodes(story);
+        if (storyHelper.isOwnStory(storyId, userDetails)) {
+            return storyMapper.createGetStoryDtoWithEpisodes(story);
         }
 
         if (!story.isOnDisplay()) {
             throw new ServiceException(ErrorCode.STORY_NOT_PUBLISHED);
         }
 
-        return storyDtoCreateService.createGetStoryDtoWithPublishedEpisodes(story);
+        return storyMapper.createGetStoryDtoWithPublishedEpisodes(story);
     }
 
     @Transactional
     public void changeCover(UserDetailsImpl userDetails, Long storyId, StoryRequestDto.CoverChangeDto coverChangeDto) {
-        Story story =  storyValidationService.validateStoryOwnership(storyId, userDetails);
+        Story story =  storyHelper.validateStoryOwnership(storyId, userDetails);
         story.updateCover(
                 coverChangeDto.title(),
                 StoryGenreEnum.fromString(coverChangeDto.genre()),
@@ -92,19 +88,15 @@ public class StoryService {
 
     @Transactional
     public void deleteStory(UserDetailsImpl userDetails, Long storyId) {
-        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
-        episodeRepository.findAllByStoryId(storyId).forEach(ep -> kafkaEpisodesProducerService.sendDelete(ep.getId()));
+        Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
         storyRepository.deleteEpisodesByStoryId(story.getId());
         storyRepository.deleteById(story.getId());;
-
     }
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
-        Story story = storyValidationService.validateStoryOwnership(storyId, userDetails);
+        Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
-        kafkaEpisodesProducerService.sendCreate(episode);
-        return episodeDtoCreateService.toEpisodeResponseDto(episode);
+        return episodeMapper.toEpisodeResponseDto(episode);
     }
-
 }

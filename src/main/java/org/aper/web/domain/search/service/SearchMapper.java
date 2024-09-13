@@ -2,9 +2,7 @@ package org.aper.web.domain.search.service;
 
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorListResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorPenNameResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.StoryListResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,16 @@ public class SearchMapper {
                                 user.getPenName(),
                                 user.getFieldImage(),
                                 user.getDescription(),
-                                user.getUserId()))
+                                user.getUserId(),
+                                storyListToResponseDto(user.getStoryList())
+                        )
+                )
+                .toList();
+    }
+
+    private List<AuthorStoryListResponseDto> storyListToResponseDto(List<Story> storyList) {
+        return storyList.stream()
+                .map(story -> new AuthorStoryListResponseDto(story.getTitle(), story.getId()))
                 .toList();
     }
 
