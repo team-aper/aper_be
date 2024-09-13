@@ -41,6 +41,12 @@ public class StoryService {
         existStory.updateOnDisplay();
         storyRepository.save(existStory);
 
+        //에피소드가 없는 스토리의 경우 엘라스틱서치에 넣을 수는 있으나 데이터를 관리하기 어려워짐
+//        List<Episode> episodeList = existStory.getEpisodeList();
+//        if (episodeList.isEmpty()) {
+//            producerService.sendUpdateOnlyStory(existStory);
+//            return;
+//        }
         existStory.getEpisodeList().forEach(producerService::sendUpdate);
     }
 
@@ -103,7 +109,7 @@ public class StoryService {
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
-        Episode episode = Episode.builder().chapter(chapter).story(story).build();
+        Episode episode = Episode.builder().chapter(chapter).story(story).title("스토리 수정").description("아이 오이 어이").build();
         episodeRepository.save(episode);
         producerService.sendCreate(episode);
         return episodeMapper.toEpisodeResponseDto(episode);

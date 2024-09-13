@@ -31,12 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.id IN (:ids)")
     List<User> findByIdList(List<Long> ids);
 
-    @Query(value = "SELECT * FROM ( " +
-            "   SELECT s.*, ROW_NUMBER() OVER (PARTITION BY u.user_id ORDER BY s.public_date DESC) as rn " +
-            "   FROM users u " +
-            "   LEFT JOIN stories s ON u.user_id = s.user_id " +
-            "   WHERE u.user_id IN :ids " +
-            ") as subquery WHERE rn <= 3", nativeQuery = true)
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
     List<User> findByIdListWithStories(List<Long> ids);
-
 }

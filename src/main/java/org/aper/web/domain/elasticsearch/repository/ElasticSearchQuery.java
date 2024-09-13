@@ -59,6 +59,13 @@ public class ElasticSearchQuery {
         );
     }
 
+    public Query storyIdQuery(Long filter) {
+        return QueryBuilders.term(t -> t
+                .field("storyId")
+                .value(filter)
+        );
+    }
+
     public Query userIdQuery(Long filter) {
         return QueryBuilders.term(t -> t
                 .field("userId")

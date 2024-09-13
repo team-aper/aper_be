@@ -55,6 +55,14 @@ public class EpisodesElasticSearchRepository {
         searchHits.forEach(hit -> {elasticsearchTemplate.delete(hit.getId(), ElasticSearchEpisodeDocument.class);});
     }
 
+    public void updateOnlyStory(Map<String, Object> data) {
+        Long storyId = Long.parseLong(data.get("storyId").toString());
+        Query query = elasticSearchQuery.storyIdQuery(storyId);
+        NativeQuery searchQuery = elasticSearchQuery.onlyNativeQuery(query);
+        SearchHits<ElasticSearchEpisodeDocument> searchHits = elasticsearchTemplate.search(searchQuery, ElasticSearchEpisodeDocument.class);
+        searchHits.forEach(hit -> {elasticsearchTemplate.delete(hit.getId(), ElasticSearchEpisodeDocument.class);});
+    }
+
     public List<Long> searchAllEpisodeIdList() {
         Query query = elasticSearchQuery.matchAllQuery();
         NativeQuery searchQuery = elasticSearchQuery.onlyNativeQuery(query);

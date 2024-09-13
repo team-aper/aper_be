@@ -26,6 +26,9 @@ public class KafkaConsumer {
         if (operation.equals("update")){
             episodeElasticSearchRepository.update(data);
         }
+        if (operation.equals("onlyStory")) {
+            episodeElasticSearchRepository.updateOnlyStory(data);
+        }
     }
 
     @KafkaListener(topics = "${kafka.user-topic}", groupId = "${kafka.consumer-group-id}")
@@ -41,3 +44,4 @@ public class KafkaConsumer {
         }
     }
 }
+

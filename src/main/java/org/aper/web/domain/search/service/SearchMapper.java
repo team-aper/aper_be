@@ -7,6 +7,7 @@ import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -27,6 +28,8 @@ public class SearchMapper {
 
     private List<AuthorStoryListResponseDto> storyListToResponseDto(List<Story> storyList) {
         return storyList.stream()
+                .sorted(Comparator.comparing(Story::getPublicDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .limit(3)
                 .map(story -> new AuthorStoryListResponseDto(story.getTitle(), story.getId()))
                 .toList();
     }
