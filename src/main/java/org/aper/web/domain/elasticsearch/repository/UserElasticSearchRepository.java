@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
 import org.aper.web.domain.elasticsearch.service.ElasticSearchMapper;
-import org.aper.web.domain.search.service.SearchMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
@@ -20,7 +19,6 @@ import java.util.Map;
 public class UserElasticSearchRepository {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
-    private final SearchMapper searchMapper;
     private final ElasticSearchMapper elasticSearchMapper;
     private final ElasticSearchQuery elasticSearchQuery;
 
@@ -40,7 +38,7 @@ public class UserElasticSearchRepository {
     }
 
     public void update(Map<String, Object> data) {
-        Long userId = Long.parseLong(data.get("episodeId").toString());
+        Long userId = Long.parseLong(data.get("userId").toString());
         Query query = elasticSearchQuery.userIdQuery(userId);
         NativeQuery searchQuery = elasticSearchQuery.onlyNativeQuery(query);
         SearchHits<ElasticSearchUserDocument> searchHits = elasticsearchTemplate.search(searchQuery, ElasticSearchUserDocument.class);

@@ -9,7 +9,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+@Slf4j(topic = "scheduling")
 @RequiredArgsConstructor
 @Component
 public class Scheduler {
@@ -17,15 +17,20 @@ public class Scheduler {
     private final ElasticSyncService syncService;
 
     @Scheduled(cron = "0 0 6 * * *")//오전 6시 주기
-    @Retryable(backoff = @Backoff(delay = 600000))
+    @Retryable(backoff = @Backoff(delay = 600000))//10분 주기로 3번까지 시도
     public void deleteAccountPerDay() {
         deleteService.deleteAccountScheduler();
     }
 
-    @Scheduled(cron = "0 0 4 * * *")//오전 6시 주기
-    @Retryable(backoff = @Backoff(delay = 600000))
-    public void syncMysqlElasticSearch() {
+    @Scheduled(cron = "0 0 3 * * *")//오전 3시 주기
+    @Retryable(backoff = @Backoff(delay = 600000))//10분 주기로 3번까지 시도
+    public void syncMysqlElasticSearchUser() {
         syncService.syncUser();
+    }
+
+    @Scheduled(cron = "0 0 4 * * *")//오전 4시 주기
+    @Retryable(backoff = @Backoff(delay = 600000))//10분 주기로 3번까지 시도
+    public void syncMysqlElasticSearchEpisodes() {
         syncService.syncEpisodes();
     }
 }

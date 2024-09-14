@@ -109,7 +109,7 @@ public class StoryService {
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
-        Episode episode = Episode.builder().chapter(chapter).story(story).title("스토리 수정").description("아이 오이 어이").build();
+        Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
         producerService.sendCreate(episode);
         return episodeMapper.toEpisodeResponseDto(episode);

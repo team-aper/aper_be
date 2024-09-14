@@ -67,6 +67,6 @@ public interface UserControllerDocs {
             @RequestBody DeletePasswordDto deletePasswordDto
     );
 
-    @Operation(summary = "계정 탈퇴 API 테스트", description = "계정 탈퇴 스케쥴러 실행 테스트 API")
+    @Operation(summary = "계정 탈퇴 싱크 맞추기 개발용 API 테스트", description = "계정 탈퇴 스케쥴러 실행하는 개발용 테스트 API")
     ResponseDto<Void> deleteAccountScheduler();
 }

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
 import org.aper.web.domain.elasticsearch.service.ElasticSearchMapper;
-import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +24,6 @@ import java.util.Map;
 public class EpisodesElasticSearchRepository {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
-    private final SearchMapper searchMapper;
     private final ElasticSearchMapper elasticSearchMapper;
     private final ElasticSearchQuery elasticSearchQuery;
 
