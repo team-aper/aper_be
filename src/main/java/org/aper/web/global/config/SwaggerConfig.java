@@ -33,13 +33,13 @@ public class SwaggerConfig {
                         .scheme("Bearer")
                         .bearerFormat("Bearer"));
 
-//        Server httpsServer = new Server()
-//                .url("https://api.aper.cc")
-//                .description("HTTPS 서버");
+        Server httpsServer = new Server()
+                .url("https://api.aper.cc")
+                .description("HTTPS 서버");
 
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
-                .components(components);
-//                .addServersItem(httpsServer);
+                .components(components)
+                .addServersItem(httpsServer);
     }
 }
