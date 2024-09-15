@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.repository;
 
+import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.penName LIKE %:penName%")
     Page<User> findAllByPenNameContaining(Pageable pageable, String penName);
+
+    @Query("SELECT u.userId FROM User u")
+    List<Long> findAllUserId();
+
+    @Query("SELECT u FROM User u WHERE u.id IN (:ids)")
+    List<User> findByIdList(List<Long> ids);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
+    List<User> findByIdListWithStories(List<Long> ids);
 }

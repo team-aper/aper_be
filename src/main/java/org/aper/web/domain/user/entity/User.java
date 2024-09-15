@@ -46,7 +46,7 @@ public class User {
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn
+    @JoinColumn(name = "id")
     private DeleteAccount deleteAccount;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)

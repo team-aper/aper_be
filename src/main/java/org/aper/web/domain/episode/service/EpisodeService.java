@@ -8,6 +8,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.*;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.story.service.StoryHelper;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -22,6 +23,7 @@ public class EpisodeService {
     private final EpisodeHelper episodeHelper;
     private final EpisodeMapper episodeMapper;
     private final StoryHelper storyHelper;
+    private final KafkaEpisodesProducerService producerService;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {
@@ -30,6 +32,8 @@ public class EpisodeService {
 
         episode.updateOnDisplay();
         episodeRepository.save(episode);
+
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
@@ -39,6 +43,8 @@ public class EpisodeService {
 
         episode.updateTitle(titleChangeDto.title());
         episodeRepository.save(episode);
+
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
@@ -48,6 +54,8 @@ public class EpisodeService {
 
         episode.updateText(textChangeDto.text());
         episodeRepository.save(episode);
+
+        producerService.sendUpdate(episode);
     }
 
     @Transactional
@@ -57,6 +65,8 @@ public class EpisodeService {
         episodeRepository.delete(episode);
         episodeRepository.flush();
         episodeRepository.decrementChaptersAfterDeletion(episodeDto.storyId(), episodeDto.chapter());
+
+        producerService.sendDelete(episodeId);
     }
 
     public EpisodeHeaderDto getEpisodeHeader(UserDetailsImpl userDetails, Long episodeId) {

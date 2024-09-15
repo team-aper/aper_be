@@ -111,4 +111,11 @@ public class UserController implements UserControllerDocs {
         deleteService.deleteAccount(userDetails.user(), deletePasswordDto);
         return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
     }
+
+    @Override
+    @DeleteMapping("/scheduler/test")
+    public ResponseDto<Void> deleteAccountScheduler() {
+        deleteService.deleteAccountScheduler();
+        return ResponseDto.success("계정 탈퇴 스케쥴러 작동 완료");
+    }
 }

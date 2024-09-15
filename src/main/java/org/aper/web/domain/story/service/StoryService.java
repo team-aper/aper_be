@@ -6,6 +6,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.service.EpisodeMapper;
+import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -32,12 +33,21 @@ public class StoryService {
     private final StoryHelper storyHelper;
     private final StoryMapper storyMapper;
     private final EpisodeRepository episodeRepository;
+    private final KafkaEpisodesProducerService producerService;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
         Story existStory = storyHelper.validateStoryOwnership(storyId, userDetails);
         existStory.updateOnDisplay();
         storyRepository.save(existStory);
+
+        //에피소드가 없는 스토리의 경우 엘라스틱서치에 넣을 수는 있으나 데이터를 관리하기 어려워짐
+//        List<Episode> episodeList = existStory.getEpisodeList();
+//        if (episodeList.isEmpty()) {
+//            producerService.sendUpdateOnlyStory(existStory);
+//            return;
+//        }
+        existStory.getEpisodeList().forEach(producerService::sendUpdate);
     }
 
     @Transactional
@@ -56,6 +66,9 @@ public class StoryService {
         story.addEpisodes(episodes);
 
         storyRepository.save(story);
+
+        Episode kafkaEpisode = Episode.builder().story(story).build();
+        producerService.sendCreate(kafkaEpisode);
 
         return new CreatedStoryDto(story.getId());
     }
@@ -89,6 +102,7 @@ public class StoryService {
     @Transactional
     public void deleteStory(UserDetailsImpl userDetails, Long storyId) {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
+        episodeRepository.findAllByStoryId(storyId).forEach(ep -> producerService.sendDelete(ep.getId()));
         storyRepository.deleteEpisodesByStoryId(story.getId());
         storyRepository.deleteById(story.getId());;
     }
@@ -97,6 +111,7 @@ public class StoryService {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
+        producerService.sendCreate(episode);
         return episodeMapper.toEpisodeResponseDto(episode);
     }
 }

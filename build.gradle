@@ -24,6 +24,12 @@ repositories {
 }
 
 dependencies {
+    //elastic
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    //kafka
+    implementation 'org.apache.kafka:kafka-clients:3.5.1'
+    implementation 'org.springframework.kafka:spring-kafka'
+
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     //iamport

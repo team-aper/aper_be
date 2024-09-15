@@ -3,11 +3,9 @@ package org.aper.web.domain.user.service;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.image.service.S3ImageService;
-import org.aper.web.domain.user.dto.UserRequestDto.ChangeDescriptionDto;
-import org.aper.web.domain.user.dto.UserRequestDto.ChangeEmailDto;
-import org.aper.web.domain.user.dto.UserRequestDto.ChangePenNameDto;
-import org.aper.web.domain.user.dto.UserRequestDto.SignupRequestDto;
-import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
+import org.aper.web.domain.kafka.service.KafkaUserProducerService;
+import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
@@ -23,13 +21,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
+    private final KafkaUserProducerService producerService;
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       S3ImageService s3ImageService) {
+                       S3ImageService s3ImageService,
+                       KafkaUserProducerService producerService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
+        this.producerService = producerService;
     }
 
     public User findUser(String email){
@@ -53,6 +54,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+        producerService.sendCreate(user);
 
         return new SignupResponseDto(penName);
     }
@@ -62,6 +64,7 @@ public class UserService {
         String newPenName = changePenNameDto.penName();
         user.updatePenName(newPenName);
         userRepository.save((user));
+        producerService.sendUpdate(user);
     }
 
     @Transactional

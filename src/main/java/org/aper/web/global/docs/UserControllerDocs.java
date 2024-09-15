@@ -8,6 +8,7 @@ import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,4 +66,7 @@ public interface UserControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody DeletePasswordDto deletePasswordDto
     );
+
+    @Operation(summary = "계정 탈퇴 싱크 맞추기 개발용 API 테스트", description = "계정 탈퇴 스케쥴러 실행하는 개발용 테스트 API")
+    ResponseDto<Void> deleteAccountScheduler();
 }

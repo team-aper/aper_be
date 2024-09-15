@@ -1,9 +1,13 @@
 package org.aper.web.domain.search.service;
 
-import org.aper.web.domain.search.dto.SearchDto.*;
+import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
+import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
+import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -15,9 +19,21 @@ public class SearchMapper {
                                 user.getPenName(),
                                 user.getFieldImage(),
                                 user.getDescription(),
-                                user.getUserId()))
+                                user.getUserId(),
+                                storyListToResponseDto(user.getStoryList())
+                        )
+                )
                 .toList();
     }
+
+    private List<AuthorStoryListResponseDto> storyListToResponseDto(List<Story> storyList) {
+        return storyList.stream()
+                .sorted(Comparator.comparing(Story::getPublicDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed())
+                .limit(3)
+                .map(story -> new AuthorStoryListResponseDto(story.getTitle(), story.getId()))
+                .toList();
+    }
+
     public List<StoryListResponseDto> EpisodeListToStoryListResponseDto(List<Object[]> episodeList) {
         return episodeList.stream()
                 .map(object -> {
@@ -32,10 +48,33 @@ public class SearchMapper {
                             user.getUserId(),
                             story.getGenre().name(),
                             story.getPublicDate(),
-                            episodeId,
+                            episodeId.toString(),
                             description
                     );
                 })
+                .toList();
+    }
+
+    public List<StoryListResponseDto> episodesDocumentListToResponseDto(List<ElasticSearchEpisodeDocument> episodeDocumentList) {
+        return episodeDocumentList.stream()
+                .map(document -> new StoryListResponseDto(
+                            document.getStoryId(),
+                            document.getStoryTitle(),
+                            document.getUserId(),
+                            document.getStoryGenre(),
+                            document.getEpisodePublicDate(),
+                            document.getEpisodeId(),
+                            document.getEpisodeDescription()
+                    )
+                )
+                .toList();
+    }
+
+    public List<AuthorPenNameResponseDto> userDocumentListToPenNameResponseDto(List<ElasticSearchUserDocument> userList) {
+        return userList.stream()
+                .map(user ->
+                        new AuthorPenNameResponseDto(
+                                user.getPenName()))
                 .toList();
     }
 }

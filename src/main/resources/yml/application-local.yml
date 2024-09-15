@@ -44,6 +44,12 @@ spring:
             enable: true # StartTLS 활성화 여부
             required: true
 
+  elasticsearch:
+    rest:
+      uris: ${elasticsearch.rest.uris}
+      username: ${elasticsearch.rest.username}
+      password: ${elasticsearch.rest.password}
+
 #logging:
 #    level:
 #      root: DEBUG
@@ -88,3 +94,11 @@ iamport:
   api:
     key: ${iamport.api.key}
     secret: ${iamport.api.secret}
+
+kafka:
+  bootstrap-servers: ${kafka.bootstrap-servers}
+  key-serializer: ${kafka.key-serializer}
+  value-serializer: ${kafka.value-serializer}
+  episodes-topic: ${kafka.episodes-topic}
+  user-topic: ${kafka.user-topic}
+  consumer-group-id: ${kafka.consumer-group-id}

@@ -1,5 +1,6 @@
 package org.aper.web.global.docs;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -77,7 +78,7 @@ public interface StoryControllerDocs {
             @Parameter(description = "인증된 사용자 정보", required = true) @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Parameter(description = "에피소드를 생성할 스토리의 ID", required = true) @PathVariable Long storyId,
             @Parameter(description = "생성할 에피소드의 chapter", required = true) @PathVariable Long chapter
-    );
+    ) throws JsonProcessingException;
 
 
 }
