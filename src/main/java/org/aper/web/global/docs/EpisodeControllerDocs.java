@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
-import org.aper.web.domain.episode.dto.EpisodeRequestDto.TextChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeTextDto;
@@ -49,17 +48,6 @@ public interface EpisodeControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long episodeId,
             @RequestBody TitleChangeDto titleChangeDto);
-
-    @Operation(summary = "에피소드 텍스트 변경", description = "특정 에피소드의 텍스트를 변경합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "텍스트 저장에 성공하였습니다.",
-                    content = @Content)
-    })
-    @PutMapping("/{episodeId}/text")
-    ResponseDto<Void> changeText(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long episodeId,
-            @RequestBody TextChangeDto textChangeDto);
 
     @Operation(summary = "에피소드 삭제", description = "특정 에피소드를 삭제합니다.")
     @ApiResponses(value = {
