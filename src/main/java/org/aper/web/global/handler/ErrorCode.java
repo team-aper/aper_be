@@ -45,11 +45,14 @@ public enum ErrorCode {
     // AWS S3
     S3_UPLOAD_ERROR_OCCURRED("AWS001", "S3 업로드 중 에러가 발생했습니다."),
 
-    // elastic
+    // Elastic
     JSON_PROCESSING_ERROR("ES001", "JSON 변환 중 에러 발생"),
     DOCUMENT_UPDATE_FAILED("ES002", "엘라스틱 서치 데이터 업데이트에 실패했습니다."),
     DOCUMENT_DELETE_FAILED("ES003", "엘라스틱 서치 데이터 삭제에 실패했습니다."),
-    ELASTICSEARCH_CONNECT_FAILED("ES004", "엘라스틱 서치에 요청을 실패했습니다.");
+    ELASTICSEARCH_CONNECT_FAILED("ES004", "엘라스틱 서치에 요청을 실패했습니다."),
+
+    // Paragraph
+    PARAGRAPH_NOT_FOUND("P001", "존재하지 않는 문단입니다.");
 
     private final String code;
     private final String message;
