@@ -41,7 +41,7 @@ public class Episode extends BaseSoftDeleteEntity {
     @JoinColumn(name = "story_id")
     private Story story;
 
-    @Schema(description = "Episode Descriptions", nullable = true)
+    @Schema(description = "Episode Description's Paragraphs", nullable = true)
     @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Paragraph> paragraphs = new ArrayList<>();
 

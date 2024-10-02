@@ -5,23 +5,25 @@ import java.util.List;
 
 public class ParagraphRequestDto {
 
-    public record ParagraphDto(
+    public record ItemPayload(
             @NotBlank(message = "UUID is required.")
-            String uuid,
-
-            @NotBlank(message = "Content is required.")
             String content,
 
-            @NotBlank(message = "Previous Uuid is required")
-            String previousUuid,
+            @NotBlank(message = "Content is required.")
+            String id,
 
-            @NotBlank(message = "Next Uuid is required")
-            String nextUuid
+            String prev,
+
+            String next
     ) {}
 
-    public record BatchPayload(
-            List<ParagraphDto> modified,
-            List<ParagraphDto> added,
-            List<String> deleted
+    public record BatchRequest (
+            List<BatchOperation> batch
+    ) {}
+
+    public record BatchOperation (
+            String method,
+            String url,
+            List<ItemPayload> body
     ) {}
 }
