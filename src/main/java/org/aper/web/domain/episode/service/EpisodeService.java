@@ -8,6 +8,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeTextDto;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
+import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.domain.story.service.StoryHelper;
 import org.aper.web.global.handler.ErrorCode;
@@ -15,6 +16,8 @@ import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +46,6 @@ public class EpisodeService {
         episodeHelper.validateUserIsAuthor(episode, userDetails);
 
         episode.updateTitle(titleChangeDto.title());
-
-        if (paragraphRepository.existsByEpisodeId(episodeId)){
-            String truncatedParagraph = episodeHelper.truncateParagraph(episode.getParagraphs().get(0).getContent());
-            episode.updateDescription(truncatedParagraph);
-        }
 
         episodeRepository.save(episode);
 
@@ -81,13 +79,15 @@ public class EpisodeService {
     public EpisodeTextDto getEpisodeText(UserDetailsImpl userDetails, Long episodeId) {
         Episode episode = episodeHelper.validateEpisodeExists(episodeId);
         if (storyHelper.isOwnStory(episode.getStory().getId(), userDetails)){
-            return new EpisodeTextDto(episode.getParagraphs());
+            return new EpisodeTextDto(episodeHelper.getSortedParagraphs(episode.getParagraphs()));
         }
 
         if (!episode.isOnDisplay()){
             throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
         }
 
-        return new EpisodeTextDto(episode.getParagraphs());
+        List<Paragraphs> sortedParagraphs = episodeHelper.getSortedParagraphs(episode.getParagraphs());
+
+        return new EpisodeTextDto(sortedParagraphs);
     }
 }

@@ -3,11 +3,16 @@ package org.aper.web.domain.episode.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
+import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
+import org.aper.web.domain.paragraph.entity.Paragraph;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -28,11 +33,32 @@ public class EpisodeHelper {
         }
     }
 
-    public String truncateParagraph(String paragraph) {
-        if (paragraph == null) {
-            return null;
+    public List<Paragraphs> getSortedParagraphs(List<Paragraph> paragraphs) {
+
+        Paragraph firstParagraph = paragraphs.stream()
+                .filter(p -> p.getPreviousUuid() == null)
+                .findFirst()
+                .orElseThrow(() -> new ServiceException(ErrorCode.PARAGRAPH_NOT_FOUND));
+
+        List<Paragraphs> sortedParagraphs = new ArrayList<>();
+        Paragraph current = firstParagraph;
+
+        while (current != null) {
+            sortedParagraphs.add(new Paragraphs(
+                    current.getUuid(),
+                    current.getContent(),
+                    current.getPreviousUuid(),
+                    current.getNextUuid()
+            ));
+
+            String nextUuid = current.getNextUuid();
+            current = paragraphs.stream()
+                    .filter(p -> nextUuid != null && nextUuid.equals(p.getUuid()))
+                    .findFirst()
+                    .orElse(null);
         }
-        return paragraph.length() > 250 ? paragraph.substring(0, 250) + "..." : paragraph + "...";
+
+        return sortedParagraphs;
     }
 
 }

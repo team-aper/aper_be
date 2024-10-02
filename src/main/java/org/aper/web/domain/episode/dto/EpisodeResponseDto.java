@@ -1,6 +1,6 @@
 package org.aper.web.domain.episode.dto;
 
-import org.aper.web.domain.paragraph.entity.Paragraph;
+import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +31,6 @@ public class EpisodeResponseDto {
     ){}
 
     public record EpisodeTextDto(
-            List<Paragraph> paragraphs
+            List<Paragraphs> paragraphs
     ){}
 }
