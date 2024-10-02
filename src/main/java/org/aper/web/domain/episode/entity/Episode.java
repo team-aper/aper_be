@@ -64,4 +64,8 @@ public class Episode extends BaseSoftDeleteEntity {
     public void updateTitle(String title) {
         this.title = title;
     }
+
+    public void updateDescription(String truncatedParagraph) {
+        this.description = truncatedParagraph;
+    }
 }

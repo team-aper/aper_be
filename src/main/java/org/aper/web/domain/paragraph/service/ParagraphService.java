@@ -1,9 +1,10 @@
 package org.aper.web.domain.paragraph.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.BatchPayload;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ParagraphDto;
 import org.aper.web.domain.paragraph.entity.Paragraph;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,16 @@ public class ParagraphService {
     private final ParagraphHelper paragraphHelper;
 
     @Transactional
-    public void processBatch(Long episodeId, List<ParagraphDto> modified, List<ParagraphDto> added, List<String> deleted, UserDetailsImpl userDetails) {
-        handleModifiedParagraphs(modified, userDetails);
-        handleAddedParagraphs(episodeId, added);
-        handleDeletedParagraphs(deleted);
+    public void processBatch(Long episodeId, BatchPayload batchPayload, UserDetailsImpl userDetails) {
+        handleModifiedParagraphs(batchPayload.modified(), userDetails);
+        handleAddedParagraphs(episodeId, batchPayload.added());
+        handleDeletedParagraphs(batchPayload.deleted());
     }
 
     private void handleModifiedParagraphs(List<ParagraphDto> modified, UserDetailsImpl userDetails) {
         for (ParagraphDto dto : modified) {
             Paragraph paragraph = paragraphHelper.validateParagraphOwnership(dto.uuid(), userDetails);
 
-            // 필드별로 값이 다를 때만 업데이트
             if (!paragraph.getContent().equals(dto.content())) {
                 paragraph.updateContent(dto.content());
             }
@@ -66,4 +66,5 @@ public class ParagraphService {
             paragraphRepository.delete(paragraph);
         }
     }
+
 }

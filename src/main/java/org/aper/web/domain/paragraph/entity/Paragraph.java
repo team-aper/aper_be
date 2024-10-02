@@ -33,7 +33,6 @@ public class Paragraph {
         this.episode = episode;
     }
 
-    // 문단 업데이트 메서드 (상태 변경만 관리)
     public void updateContent(String content) {
         this.content = content;
     }

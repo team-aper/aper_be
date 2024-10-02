@@ -9,5 +9,5 @@ public interface ParagraphRepository extends JpaRepository<Paragraph, String> {
 
     Optional<Paragraph> findByUuid(String uuid);
 
-    Optional<Paragraph> findByEpisode_IdAndUuid(Long episodeId, String uuid);
+    boolean existsByEpisodeId(Long episodeId);
 }

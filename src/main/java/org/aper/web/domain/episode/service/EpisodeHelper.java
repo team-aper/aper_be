@@ -28,4 +28,11 @@ public class EpisodeHelper {
         }
     }
 
+    public String truncateParagraph(String paragraph) {
+        if (paragraph == null) {
+            return null;
+        }
+        return paragraph.length() > 250 ? paragraph.substring(0, 250) + "..." : paragraph + "...";
+    }
+
 }

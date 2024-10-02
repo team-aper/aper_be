@@ -11,8 +11,8 @@ public class EpisodeResponseDto {
             Long episodeId,
             String title,
             Long chapter,
-            String description,
             LocalDateTime date,
+            String description,
             boolean isPublished,
             String dDay
     ) {
@@ -31,6 +31,6 @@ public class EpisodeResponseDto {
     ){}
 
     public record EpisodeTextDto(
-            List<Paragraph> text
+            List<Paragraph> paragraphs
     ){}
 }
