@@ -56,7 +56,8 @@ public enum ErrorCode {
     PARAGRAPH_ALREADY_EXISTS("P002", "이미 존재하는 uuid 입니다."),
 
     // Batch
-    INVALID_BATCH_REQUEST("B001", "유효하지 않은 요청입니다.");
+    INVALID_BATCH_REQUEST("B001", "Invalid batch request"),
+    INVALID_BATCH_URL("B002", "Invalid URL format");
 
     private final String code;
     private final String message;
