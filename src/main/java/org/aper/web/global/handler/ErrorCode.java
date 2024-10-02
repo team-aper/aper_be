@@ -52,7 +52,11 @@ public enum ErrorCode {
     ELASTICSEARCH_CONNECT_FAILED("ES004", "엘라스틱 서치에 요청을 실패했습니다."),
 
     // Paragraph
-    PARAGRAPH_NOT_FOUND("P001", "존재하지 않는 문단입니다.");
+    PARAGRAPH_NOT_FOUND("P001", "존재하지 않는 문단입니다."),
+    PARAGRAPH_ALREADY_EXISTS("P002", "이미 존재하는 uuid 입니다."),
+
+    // Batch
+    INVALID_BATCH_REQUEST("B001", "유효하지 않은 요청입니다.");
 
     private final String code;
     private final String message;
