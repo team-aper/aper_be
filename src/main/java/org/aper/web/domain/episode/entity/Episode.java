@@ -32,7 +32,6 @@ public class Episode extends BaseSoftDeleteEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime publicDate;
 
-
     @Schema(description = "Episode Description", nullable = true)
     @Column(columnDefinition = "TEXT", name = "description")
     private String description;
