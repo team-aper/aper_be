@@ -24,7 +24,9 @@ public interface AuthControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(schema = @Schema(implementation = UserInfo.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 로그인 요청", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "403", description = "인증 실패", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+            @ApiResponse(responseCode = "401", description = "만료된 엑세스 토큰", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "접근 권한 없음", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     ResponseDto<UserInfo> login(
             @Parameter(description = "로그인 요청 데이터", required = true) @RequestBody @Valid LoginRequestDto loginRequestDto,
@@ -35,7 +37,9 @@ public interface AuthControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "토큰 재발급 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "403", description = "토큰 재발급 실패", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+            @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "토큰 재발급 실패", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     ResponseDto<Void> reissue(
             @Parameter(hidden = true) HttpServletRequest request,
