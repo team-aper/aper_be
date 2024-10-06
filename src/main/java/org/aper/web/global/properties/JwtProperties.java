@@ -13,7 +13,7 @@ import java.util.Base64;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "jwt.secret.key")
+@ConfigurationProperties(prefix = "secret.key")
 public class JwtProperties {
 
     @Bean

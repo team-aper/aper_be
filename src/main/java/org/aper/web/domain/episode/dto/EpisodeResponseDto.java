@@ -1,6 +1,9 @@
 package org.aper.web.domain.episode.dto;
 
+import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class EpisodeResponseDto {
 
@@ -8,8 +11,8 @@ public class EpisodeResponseDto {
             Long episodeId,
             String title,
             Long chapter,
-            String description,
             LocalDateTime date,
+            String description,
             boolean isPublished,
             String dDay
     ) {
@@ -28,6 +31,6 @@ public class EpisodeResponseDto {
     ){}
 
     public record EpisodeTextDto(
-            String text
+            List<Paragraphs> paragraphs
     ){}
 }

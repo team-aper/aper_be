@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class EpisodeMapper {
 
     private final EpisodeRepository episodeRepository;
+    private final DDayService dDayService;
 
     @Transactional(readOnly = true)
     public List<CreatedEpisodeDto> getEpisodesWithDDay(Long storyId) {
@@ -50,18 +51,15 @@ public class EpisodeMapper {
 
     public CreatedEpisodeDto toEpisodeResponseDto(Episode episode) {
         StoryRoutineEnum routine = episode.getStory().getRoutine();
-        int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue());
+        int dDay = routine.calculateEpisodeDDay(episode.getCreatedAt(), episode.getChapter().intValue(), dDayService);
         String dDayString = dDay >= 0 ? "D-" + dDay : "D+" + Math.abs(dDay);
-        String truncatedDescription = truncateDescription(episode.getDescription());
         LocalDateTime date = episode.isOnDisplay() ? episode.getPublicDate() : episode.getCreatedAt();
-
-
         return new EpisodeResponseDto.CreatedEpisodeDto(
                 episode.getId(),
                 episode.getTitle(),
                 episode.getChapter(),
-                truncatedDescription,
                 date,
+                episode.getDescription(),
                 episode.isOnDisplay(),
                 dDayString
         );
@@ -70,7 +68,6 @@ public class EpisodeMapper {
     public EpisodeHeaderDto toEpisodeHeaderDto(Episode episode){
 
         LocalDateTime date = episode.isOnDisplay() ? episode.getPublicDate() : episode.getCreatedAt();
-
 
         return new EpisodeHeaderDto(
                 episode.getId(),
@@ -87,13 +84,5 @@ public class EpisodeMapper {
 
     public List<Episode> createEpisodeList(StoryRoutineEnum routineEnum, Story story) {
         return routineEnum.createEpisodes(story);
-    }
-
-    private String truncateDescription(String description) {
-        if (description == null) {
-            return null;
-        }
-
-        return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 }

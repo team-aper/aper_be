@@ -7,10 +7,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.aper.web.domain.paragraph.entity.Paragraph;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +24,6 @@ public class Episode extends BaseSoftDeleteEntity {
     private Long chapter;
 
     @Schema(description = "Post Title", nullable = true)
-    @Column(nullable = true)
     private String title;
 
     @Column(name = "on_display", columnDefinition = "boolean default false")
@@ -31,19 +33,24 @@ public class Episode extends BaseSoftDeleteEntity {
     protected LocalDateTime publicDate;
 
     @Schema(description = "Episode Description", nullable = true)
-    @Column(columnDefinition = "TEXT", nullable = true)
+    @Column(columnDefinition = "TEXT", name = "description")
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "story_id")
     private Story story;
 
+    @Schema(description = "Episode Description's Paragraphs", nullable = true)
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Paragraph> paragraphs = new ArrayList<>();
+
     @Builder
-    public Episode(Long chapter, String title, String description, Story story) {
+    public Episode(Long chapter, String title, String description, Story story, List<Paragraph> paragraphs) {
         this.chapter = chapter;
         this.title = title;
         this.description = description;
         this.story = story;
+        this.paragraphs = paragraphs;
     }
 
     public void updateOnDisplay() {
@@ -57,11 +64,7 @@ public class Episode extends BaseSoftDeleteEntity {
         this.title = title;
     }
 
-    public void updateText(String text) {
-        this.description = text;
-    }
-
-    public void updatePublicDate() {
-        this.publicDate = LocalDateTime.now();
+    public void updateDescription(String truncatedParagraph) {
+        this.description = truncatedParagraph;
     }
 }
