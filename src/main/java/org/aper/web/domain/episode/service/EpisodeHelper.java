@@ -38,7 +38,11 @@ public class EpisodeHelper {
         Paragraph firstParagraph = paragraphs.stream()
                 .filter(p -> p.getPreviousUuid() == null)
                 .findFirst()
-                .orElseThrow(() -> new ServiceException(ErrorCode.PARAGRAPH_NOT_FOUND));
+                .orElse(null);
+
+        if (firstParagraph == null) {
+            return new ArrayList<>();
+        }
 
         List<Paragraphs> sortedParagraphs = new ArrayList<>();
         Paragraph current = firstParagraph;
