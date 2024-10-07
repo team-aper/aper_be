@@ -57,7 +57,10 @@ public enum ErrorCode {
 
     // Batch
     INVALID_BATCH_REQUEST("B001", "Invalid batch request"),
-    INVALID_BATCH_URL("B002", "Invalid URL format");
+    INVALID_BATCH_URL("B002", "Invalid URL format"),
+
+    // Chat
+    TUTOR_NOT_FOUND("CH001", "존재하지 않는 튜터입니다.");
 
     private final String code;
     private final String message;

@@ -5,12 +5,13 @@ import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.ChatRoomView;
 import org.aper.web.domain.chat.repository.ChatParticipantRepository;
-import org.aper.web.domain.chat.repository.ChatRoomViewRepository;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
+import org.aper.web.domain.chat.repository.ChatRoomViewRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.dto.ResponseDto;
-import org.springframework.security.core.parameters.P;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,9 +116,9 @@ public class ChatService {
 
         if (user.isEmpty()){
             if (tutor) {
-                throw new IllegalArgumentException("튜터를 찾을 수 없습니다.");
+                throw new ServiceException(ErrorCode.TUTOR_NOT_FOUND);
             }
-            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
         }
         return user.get();
     }
