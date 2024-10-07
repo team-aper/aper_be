@@ -22,6 +22,14 @@ import org.springframework.web.bind.annotation.*;
 public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 생성", description = "새로운 스토리를 생성합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "스토리 생성 성공", content = @Content(schema = @Schema(implementation = CreatedStoryDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+                    "C002 - 유효성 검사 실패)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+    })
     @PostMapping
     ResponseDto<CreatedStoryDto> createStory(
             @Parameter(description = "인증된 사용자 정보", required = true) @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -30,7 +38,15 @@ public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 조회", description = "특정 ID에 해당하는 스토리의 상세 정보를 조회합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "스토리 조회 성공", content = @Content(schema = @Schema(implementation = GetStoryDto.class)))
+            @ApiResponse(responseCode = "200", description = "스토리 조회 성공", content = @Content(schema = @Schema(implementation = GetStoryDto.class))),
+            @ApiResponse(responseCode = "403", description = "스토리 작성자가 아님 또는 스토리가 공개되지 않음 (ErrorCode 목록: \n" +
+                    "S002 - 해당 이야기의 작성자가 아닙니다,\n" +
+                    "S006 - 공개되지 않은 스토리입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 스토리 (ErrorCode: S001 - 존재하지 않는 이야기입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/{storyId}")
     ResponseDto<GetStoryDto> getStory(
@@ -40,7 +56,13 @@ public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 커버 변경", description = "특정 ID에 해당하는 스토리의 커버 이미지를 변경합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "스토리 커버 변경 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+            @ApiResponse(responseCode = "200", description = "스토리 커버 변경 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "스토리 작성자가 아님 (ErrorCode: S002 - 해당 이야기의 작성자가 아닙니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 스토리 (ErrorCode: S001 - 존재하지 않는 이야기입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @PutMapping("/{storyId}/cover")
     ResponseDto<Void> changeCover(
@@ -51,7 +73,13 @@ public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 공개 상태 변경", description = "특정 ID에 해당하는 스토리의 공개 상태를 변경합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "스토리 공개 상태 변경 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+            @ApiResponse(responseCode = "200", description = "스토리 공개 상태 변경 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "스토리 작성자가 아님 (ErrorCode: S002 - 해당 이야기의 작성자가 아닙니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 스토리 (ErrorCode: S001 - 존재하지 않는 이야기입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @PutMapping("/{storyId}/publish")
     ResponseDto<Void> changeStoryPublicStatus(
@@ -61,7 +89,13 @@ public interface StoryControllerDocs {
 
     @Operation(summary = "스토리 삭제", description = "특정 ID에 해당하는 스토리를 삭제합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "스토리 삭제 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+            @ApiResponse(responseCode = "200", description = "스토리 삭제 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "스토리 작성자가 아님 (ErrorCode: S002 - 해당 이야기의 작성자가 아닙니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 스토리 (ErrorCode: S001 - 존재하지 않는 이야기입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @DeleteMapping("/{storyId}")
     ResponseDto<Void> deleteStory(
@@ -71,7 +105,13 @@ public interface StoryControllerDocs {
 
     @Operation(summary = "에피소드 생성", description = "특정 스토리 ID에 해당하는 새로운 에피소드 템플릿을 생성합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "에피소드 생성 성공", content = @Content(schema = @Schema(implementation = EpisodeResponseDto.CreatedEpisodeDto.class)))
+            @ApiResponse(responseCode = "200", description = "에피소드 생성 성공", content = @Content(schema = @Schema(implementation = EpisodeResponseDto.CreatedEpisodeDto.class))),
+            @ApiResponse(responseCode = "403", description = "스토리 작성자가 아님 (ErrorCode: S002 - 해당 이야기의 작성자가 아닙니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 스토리 (ErrorCode: S001 - 존재하지 않는 이야기입니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
     })
     @PostMapping("/{storyId}/episode/{chapter}")
     ResponseDto<EpisodeResponseDto.CreatedEpisodeDto> createEpisode(
@@ -79,6 +119,4 @@ public interface StoryControllerDocs {
             @Parameter(description = "에피소드를 생성할 스토리의 ID", required = true) @PathVariable Long storyId,
             @Parameter(description = "생성할 에피소드의 chapter", required = true) @PathVariable Long chapter
     ) throws JsonProcessingException;
-
-
 }
