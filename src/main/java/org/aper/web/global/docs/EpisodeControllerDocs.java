@@ -10,6 +10,7 @@ import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeTextDto;
+import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,13 +26,13 @@ public interface EpisodeControllerDocs {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 에피소드 또는 스토리 (ErrorCode 목록: \n" +
                     "E001 - 존재하지 않는 에피소드입니다,\n" +
                     "S001 - 존재하지 않는 이야기입니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = "공개되지 않은 에피소드 또는 스토리의 작성자가 아님 (ErrorCode 목록: \n" +
                     "E003 - 공개되지 않은 에피소드입니다,\n" +
                     "S002 - 해당 이야기의 작성자가 아닙니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/{episodeId}/header")
     ResponseDto<EpisodeHeaderDto> getEpisodeHeader(
@@ -45,13 +46,13 @@ public interface EpisodeControllerDocs {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 에피소드 또는 스토리 (ErrorCode 목록: \n" +
                     "E001 - 존재하지 않는 에피소드입니다,\n" +
                     "S001 - 존재하지 않는 이야기입니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = "공개되지 않은 에피소드 또는 스토리의 작성자가 아님 (ErrorCode 목록: \n" +
                     "E003 - 공개되지 않은 에피소드입니다,\n" +
                     "S002 - 해당 이야기의 작성자가 아닙니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @GetMapping("/{episodeId}/text")
     ResponseDto<EpisodeTextDto> getEpisodeText(
@@ -61,17 +62,17 @@ public interface EpisodeControllerDocs {
     @Operation(summary = "에피소드 제목 변경", description = "특정 에피소드의 제목을 변경합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "제목 변경에 성공하였습니다.",
-                    content = @Content),
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 에피소드 또는 스토리 (ErrorCode 목록: \n" +
                     "E001 - 존재하지 않는 에피소드입니다,\n" +
                     "S001 - 존재하지 않는 이야기입니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = "에피소드 또는 스토리의 작성자가 아님 (ErrorCode 목록: \n" +
                     "E002 - 해당 에피소드의 작성자가 아닙니다,\n" +
                     "S002 - 해당 이야기의 작성자가 아닙니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/{episodeId}/title")
     ResponseDto<Void> changeTitle(
@@ -82,17 +83,17 @@ public interface EpisodeControllerDocs {
     @Operation(summary = "에피소드 삭제", description = "특정 에피소드를 삭제합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "에피소드를 삭제하였습니다.",
-                    content = @Content),
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 에피소드 또는 스토리 (ErrorCode 목록: \n" +
                     "E001 - 존재하지 않는 에피소드입니다,\n" +
                     "S001 - 존재하지 않는 이야기입니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = "에피소드 또는 스토리의 작성자가 아님 (ErrorCode 목록: \n" +
                     "E002 - 해당 에피소드의 작성자가 아닙니다,\n" +
                     "S002 - 해당 이야기의 작성자가 아닙니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @DeleteMapping("/{episodeId}")
     ResponseDto<Void> deleteEpisode(
@@ -103,17 +104,17 @@ public interface EpisodeControllerDocs {
     @Operation(summary = "에피소드 공개 상태 변경", description = "특정 에피소드의 공개 상태를 변경합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "에피소드의 공개 상태 변경에 성공했습니다.",
-                    content = @Content),
+                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 에피소드 또는 스토리 (ErrorCode 목록: \n" +
                     "E001 - 존재하지 않는 에피소드입니다,\n" +
                     "S001 - 존재하지 않는 이야기입니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = "에피소드 또는 스토리의 작성자가 아님 (ErrorCode 목록: \n" +
                     "E002 - 해당 에피소드의 작성자가 아닙니다,\n" +
                     "S002 - 해당 이야기의 작성자가 아닙니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PutMapping("/{episodeId}/publish")
     ResponseDto<Void> changeEpisodePublicStatus(

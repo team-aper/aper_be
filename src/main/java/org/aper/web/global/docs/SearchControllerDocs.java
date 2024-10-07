@@ -10,6 +10,7 @@ import org.aper.web.domain.search.entity.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchPenNameResponseDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,9 +27,9 @@ public interface SearchControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "검색 성공", content = @Content(schema = @Schema(implementation = SearchStoryResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
             ResponseDto<SearchStoryResponseDto> getSearchStory(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -45,9 +46,9 @@ public interface SearchControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "필명 검색 성공", content = @Content(schema = @Schema(implementation = SearchPenNameResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<SearchPenNameResponseDto> getSearchAuthorOnlyPenName(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -63,9 +64,9 @@ public interface SearchControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "작가 검색 성공", content = @Content(schema = @Schema(implementation = SearchAuthorResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<SearchAuthorResponseDto> getSearchAuthor(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -79,7 +80,7 @@ public interface SearchControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "싱크 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<Void> testSyncEpisode();
 

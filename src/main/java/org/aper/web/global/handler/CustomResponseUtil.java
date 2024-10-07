@@ -86,12 +86,4 @@ public class CustomResponseUtil {
         }
     }
 
-    private static String convertObjectToJson(Object data) {
-        try {
-            return objectMapper.writeValueAsString(data);
-        } catch (IOException e) {
-            log.error("Error converting object to JSON", e);
-            return "{}";
-        }
-    }
 }
