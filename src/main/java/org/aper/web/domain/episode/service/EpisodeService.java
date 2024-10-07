@@ -9,7 +9,6 @@ import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
-import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.domain.story.service.StoryHelper;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -27,7 +26,6 @@ public class EpisodeService {
     private final EpisodeMapper episodeMapper;
     private final StoryHelper storyHelper;
     private final KafkaEpisodesProducerService producerService;
-    private final ParagraphRepository paragraphRepository;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {
