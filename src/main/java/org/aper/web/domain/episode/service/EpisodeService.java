@@ -78,6 +78,7 @@ public class EpisodeService {
 
     public EpisodeTextDto getEpisodeText(UserDetailsImpl userDetails, Long episodeId) {
         Episode episode = episodeHelper.validateEpisodeExists(episodeId);
+
         if (storyHelper.isOwnStory(episode.getStory().getId(), userDetails)){
             return new EpisodeTextDto(episodeHelper.getSortedParagraphs(episode.getParagraphs()));
         }

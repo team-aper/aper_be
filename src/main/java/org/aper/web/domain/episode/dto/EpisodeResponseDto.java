@@ -31,6 +31,6 @@ public class EpisodeResponseDto {
     ){}
 
     public record EpisodeTextDto(
-            List<Paragraphs> paragraphs
+            List<Paragraphs> text
     ){}
 }
