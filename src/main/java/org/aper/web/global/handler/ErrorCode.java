@@ -36,12 +36,12 @@ public enum ErrorCode {
     EPISODE_NOT_PUBLISHED(HttpStatus.FORBIDDEN,"E003", "공개되지 않은 에피소드입니다."),
 
     // Story
-    STORY_NOT_FOUND(HttpStatus.NOT_FOUND,"S001", "존재 하지 않는 이야기입니다."),
+    STORY_NOT_FOUND(HttpStatus.NOT_FOUND,"S001", "존재하지 않는 이야기입니다."),
     NOT_AUTHOR_OF_STORY(HttpStatus.FORBIDDEN,"S002", "해당 이야기의 작성자가 아닙니다."),
     INVALID_ROUTINE(HttpStatus.BAD_REQUEST,"S003", "유효하지 않은 루틴입니다."),
     INVALID_STORY_LINE(HttpStatus.BAD_REQUEST,"S004", "유효하지 않은 줄글 스타일입니다."),
     INVALID_GENRE(HttpStatus.BAD_REQUEST,"S005", "유효하지 않은 장르입니다."),
-    STORY_NOT_PUBLISHED(HttpStatus.FORBIDDEN,"S006", "공개되지 않은 스토리입니다."),
+    STORY_NOT_PUBLISHED(HttpStatus.FORBIDDEN,"S006", "공개되지 않은 이야기입니다."),
 
     // AWS S3
     S3_UPLOAD_ERROR_OCCURRED(HttpStatus.INTERNAL_SERVER_ERROR,"AWS001", "S3 업로드 중 에러가 발생했습니다."),
@@ -57,8 +57,8 @@ public enum ErrorCode {
     PARAGRAPH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"P002", "이미 존재하는 uuid 입니다."),
 
     // Batch
-    INVALID_BATCH_REQUEST(HttpStatus.BAD_REQUEST,"B001", "Invalid batch request"),
-    INVALID_BATCH_URL(HttpStatus.BAD_REQUEST,"B002", "Invalid URL format"),
+    INVALID_BATCH_REQUEST(HttpStatus.BAD_REQUEST,"B001", "잘못된 배치 요청입니다."),
+    INVALID_BATCH_URL(HttpStatus.BAD_REQUEST,"B002", "잘못된 URL입니다. (url 예시 : /episode/{episodeId)"),
 
     // Chat
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다.");
