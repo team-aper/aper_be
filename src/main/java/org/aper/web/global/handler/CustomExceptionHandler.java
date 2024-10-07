@@ -89,13 +89,13 @@ public class CustomExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     public void handleServiceException(ServiceException e, HttpServletResponse response) {
         log.error("handleServiceException", e);
-        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
+        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus(), e.getCode());
     }
 
     @ExceptionHandler(TokenException.class)
     public void handleTokenException(TokenException e, HttpServletResponse response) {
         log.error("handleTokenException", e);
-        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus(), e.getErrorCode().getCode());
     }
 
     @ExceptionHandler(Exception.class)

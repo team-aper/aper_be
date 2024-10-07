@@ -39,6 +39,11 @@ public class CustomResponseUtil {
         responseWithMessage(response, message, status);
     }
 
+    public static void fail(HttpServletResponse response, String message, HttpStatus status, String code) {
+        log.info("CustomResponseUtil.fail called with message: {}, status: {}, code: {}", message, status, code);
+        responseWithMessageAndCode(response, message, status, code);
+    }
+
     public static void fail(HttpServletResponse response, String message, Map<String, String> errors, HttpStatus status) {
         log.info("CustomResponseUtil.fail called with message: {}, errors: {}, status: {}", message, errors, status);
         response.setStatus(status.value());
@@ -59,6 +64,17 @@ public class CustomResponseUtil {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter writer = response.getWriter()) {
             writer.write("{\"message\": \"" + message + "\", \"status\": " + status.value() + "}");
+        } catch (IOException e) {
+            log.error("Error writing response", e);
+        }
+    }
+
+    private static void responseWithMessageAndCode(HttpServletResponse response, String message, HttpStatus status, String code) {
+        response.setStatus(status.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write("{\"message\": \"" + message + "\", \"status\": " + status.value() + "\", \"code\": \"" + code + "}");
         } catch (IOException e) {
             log.error("Error writing response", e);
         }

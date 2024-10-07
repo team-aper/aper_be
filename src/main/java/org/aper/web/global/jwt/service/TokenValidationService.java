@@ -40,7 +40,7 @@ public class TokenValidationService {
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
-            throw new TokenException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCESS_TOKEN_IS_NULL);
+            throw new TokenException(HttpStatus.NOT_FOUND, ErrorCode.ACCESS_TOKEN_IS_NULL);
         }
 
         return verificationResult.getClaims();
@@ -61,7 +61,7 @@ public class TokenValidationService {
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.REFRESH_TOKEN_NOT_EXISTS);
+            throw new TokenException(HttpStatus.NOT_FOUND, ErrorCode.REFRESH_TOKEN_IS_NULL);
         }
     }
 
