@@ -29,7 +29,6 @@ public class ParagraphService {
     public void processBatch(BatchRequest request, UserDetailsImpl userDetails) {
         List<BatchOperation> operations = request.batch();
         Set<String> deletedUuids = new HashSet<>();
-        Set<String> processedUuids = new HashSet<>();
         boolean firstParagraphUpdated = false;
 
         for (BatchOperation operation : operations) {
@@ -41,12 +40,12 @@ public class ParagraphService {
                     handleDeletedParagraph(operation.body(), deletedUuids, episode.getParagraphs());
                     break;
                 case "PUT":
-                    if (handleModifiedParagraph(operation.body(), deletedUuids, processedUuids)) {
+                    if (handleModifiedParagraph(operation.body(), deletedUuids)) {
                         firstParagraphUpdated = true;
                     }
                     break;
                 case "POST":
-                    if (handleAddedParagraph(episode, operation.body(), deletedUuids, processedUuids)) {
+                    if (handleAddedParagraph(episode, operation.body(), deletedUuids)) {
                         firstParagraphUpdated = true;
                     }
                     break;
@@ -102,12 +101,12 @@ public class ParagraphService {
 
 
 
-    private boolean handleModifiedParagraph(List<ItemPayload> itemPayloads, Set<String> deletedUuids, Set<String> processedUuids) {
+    private boolean handleModifiedParagraph(List<ItemPayload> itemPayloads, Set<String> deletedUuids) {
         List<Paragraph> paragraphsToSave = new ArrayList<>();
         boolean firstParagraphUpdated = false;
 
         for (ItemPayload itemPayload : itemPayloads) {
-            if (deletedUuids.contains(itemPayload.id()) || processedUuids.contains(itemPayload.id())) {
+            if (deletedUuids.contains(itemPayload.id())) {
                 continue;
             }
 
@@ -128,7 +127,6 @@ public class ParagraphService {
             }
 
             paragraphsToSave.add(paragraph);
-            processedUuids.add(itemPayload.id());
         }
 
         paragraphRepository.saveAll(paragraphsToSave);
@@ -137,12 +135,12 @@ public class ParagraphService {
         return firstParagraphUpdated;
     }
 
-    private boolean handleAddedParagraph(Episode episode, List<ItemPayload> itemPayloads, Set<String> deletedUuids, Set<String> processedUuids) {
+    private boolean handleAddedParagraph(Episode episode, List<ItemPayload> itemPayloads, Set<String> deletedUuids) {
         List<Paragraph> paragraphsToAdd = new ArrayList<>();
         boolean firstParagraphAdded = false;
 
         for (ItemPayload itemPayload : itemPayloads) {
-            if (deletedUuids.contains(itemPayload.id()) || processedUuids.contains(itemPayload.id())) {
+            if (deletedUuids.contains(itemPayload.id())) {
                 continue;
             }
 
@@ -163,7 +161,6 @@ public class ParagraphService {
             }
 
             paragraphsToAdd.add(newParagraph);
-            processedUuids.add(itemPayload.id());
         }
 
         paragraphRepository.saveAll(paragraphsToAdd);
