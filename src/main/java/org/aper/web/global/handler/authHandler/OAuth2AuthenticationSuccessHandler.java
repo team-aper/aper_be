@@ -56,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             errors.put("cause", "OAuth2 인증 중 사용자를 찾을 수 없습니다.");
             errors.put("provider", provider);
 
-            CustomResponseUtil.fail(response, ErrorCode.USER_NOT_FOUND.getMessage(), errors, HttpStatus.NOT_FOUND);
+            CustomResponseUtil.fail(response, ErrorCode.USER_NOT_FOUND, errors);
             return;
         }
 

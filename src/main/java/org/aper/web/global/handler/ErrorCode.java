@@ -12,7 +12,7 @@ public enum ErrorCode {
     IO_EXCEPTION(HttpStatus.BAD_REQUEST, "C003","IO Error"),
 
     // Auth
-    AUTHENTICATION_FAILED(HttpStatus.BAD_REQUEST, "A001", "인증에 실패하였습니다."),
+    AUTHENTICATION_FAILED(HttpStatus.UNAUTHORIZED, "A001", "인증에 실패하였습니다."),
     REFRESH_TOKEN_IS_NULL(HttpStatus.NOT_FOUND,"A002", "리프레시 토큰을 찾을 수 없습니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.FORBIDDEN,"A003", "유효하지 않은 리프레시 토큰입니다."),
     INVALID_ACCESS_TOKEN(HttpStatus.FORBIDDEN,"A004", "유효하지 않은 엑세스 토큰입니다."),
@@ -21,6 +21,7 @@ public enum ErrorCode {
     ACCESS_TOKEN_IS_NULL(HttpStatus.FORBIDDEN,"A007", "엑세스 토큰이 존재하지 않습니다."),
     BLACK_LISTED_TOKEN(HttpStatus.FORBIDDEN,"A008", "블랙리스트에 등록된 토큰입니다."),
     AUTH_NOT_FOUND(HttpStatus.FORBIDDEN,"A009", "사용자의 권한을 찾을 수 없습니다."),
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "A010", "로그인 필요. 인증되지 않은 사용자입니다."),
 
     // User
     ALREADY_EXIST_EMAIL(HttpStatus.BAD_REQUEST,"U001", "이미 가입된 이메일입니다."),

@@ -14,12 +14,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -31,23 +32,22 @@ public class CustomExceptionHandler {
         BindingResult result = e.getBindingResult();
 
         for (FieldError error : result.getFieldErrors()) {
-            errorMap.put(error.getField(), error.getDefaultMessage());
+            errorMap.put(simplifyFieldName(error.getField()), error.getDefaultMessage());
         }
 
         log.error("handleMethodArgumentNotValidException", e);
-        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE.getMessage(), errorMap, HttpStatus.BAD_REQUEST);
+        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE, errorMap);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public void handleConstraintViolationException(ConstraintViolationException e, HttpServletResponse response) {
         Map<String, String> errorMap = new HashMap<>();
-        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
-        for (ConstraintViolation<?> violation : violations) {
-            String errorMessage = violation.getMessage();
-            errorMap.put("validation error", errorMessage);
+        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+            errorMap.put(simplifyFieldName(violation.getPropertyPath().toString()), violation.getMessage());
         }
+
         log.error("handleConstraintViolationException", e);
-        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE.getMessage(), errorMap, HttpStatus.BAD_REQUEST);
+        CustomResponseUtil.fail(response, ErrorCode.INVALID_INPUT_VALUE, errorMap);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -65,13 +65,13 @@ public class CustomExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public void handleAccessDeniedException(AccessDeniedException e, HttpServletResponse response) {
         log.error("handleAccessDeniedException", e);
-        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(IOException.class)
     public void handleIOException(IOException e, HttpServletResponse response) {
         log.error("handleIOException", e);
-        CustomResponseUtil.fail(response, ErrorCode.IO_EXCEPTION.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        CustomResponseUtil.fail(response, ErrorCode.IO_EXCEPTION);
     }
 
     @ExceptionHandler(IamportResponseException.class)
@@ -95,13 +95,13 @@ public class CustomExceptionHandler {
     @ExceptionHandler(TokenException.class)
     public void handleTokenException(TokenException e, HttpServletResponse response) {
         log.error("handleTokenException", e);
-        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus(), e.getErrorCode().getCode());
+        CustomResponseUtil.fail(response, e.getMessage(), e.getStatus(), e.getCode());
     }
 
     @ExceptionHandler(Exception.class)
     public void handleException(Exception e, HttpServletResponse response) {
         log.error("handleException", e);
-        CustomResponseUtil.fail(response, ErrorCode.INTERNAL_SERVER_ERROR.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        CustomResponseUtil.fail(response, ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -110,4 +110,10 @@ public class CustomExceptionHandler {
         CustomResponseUtil.fail(response, e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    private String simplifyFieldName(String fieldName) {
+        if (fieldName.contains(".")) {
+            return fieldName.substring(fieldName.lastIndexOf(".") + 1);
+        }
+        return fieldName;
+    }
 }

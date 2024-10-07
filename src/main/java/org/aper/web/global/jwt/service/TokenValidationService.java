@@ -6,7 +6,6 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.TokenException;
 import org.aper.web.global.jwt.dto.TokenVerificationResult;
 import org.aper.web.global.jwt.dto.VerifiedToken;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -26,48 +25,44 @@ public class TokenValidationService {
     }
 
     public Claims verifyAccessToken(String accessToken) {
-        // 블랙리스트 검증
         checkIfBlacklisted(accessToken);
 
-        // 토큰 유효성 검증
         VerifiedToken verificationResult = verifyToken(accessToken, accessKey);
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)) {
-            return verificationResult.getClaims();  // 만료된 경우에도 클레임을 반환
+            return verificationResult.getClaims();  // 만료된 경우 클레임 반환
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_ACCESS_TOKEN);
+            throw new TokenException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
-            throw new TokenException(HttpStatus.NOT_FOUND, ErrorCode.ACCESS_TOKEN_IS_NULL);
+            throw new TokenException(ErrorCode.ACCESS_TOKEN_IS_NULL);
         }
 
         return verificationResult.getClaims();
     }
 
     public void verifyRefreshToken(String refreshToken) {
-        // 블랙리스트 검증
         checkIfBlacklisted(refreshToken);
 
-        // 리프레시 토큰 유효성 검증
         VerifiedToken verificationResult = verifyToken(refreshToken, refreshKey);
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.EXPIRED)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.EXPIRED_REFRESH_TOKEN);
+            throw new TokenException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.INVALID)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new TokenException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         if (verificationResult.getTokenVerificationResult().equals(TokenVerificationResult.NULL)) {
-            throw new TokenException(HttpStatus.NOT_FOUND, ErrorCode.REFRESH_TOKEN_IS_NULL);
+            throw new TokenException(ErrorCode.REFRESH_TOKEN_IS_NULL);
         }
     }
 
     private void checkIfBlacklisted(String token) {
         if (tokenBlacklistService.isTokenBlacklisted(token)) {
-            throw new TokenException(HttpStatus.FORBIDDEN, ErrorCode.BLACK_LISTED_TOKEN);
+            throw new TokenException(ErrorCode.BLACK_LISTED_TOKEN);
         }
     }
 
