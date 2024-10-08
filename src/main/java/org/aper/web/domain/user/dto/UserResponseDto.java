@@ -8,19 +8,11 @@ public class UserResponseDto {
             String penName
     ) {}
 
-    public record HistoryEducationDto(
+    public record HistoryResponseDto(
+            Long historyId,
+            String historyType,
             LocalDate date,
             LocalDate endDate,
-            String description
-    ) {}
-
-    public record HistoryAwardDto(
-            LocalDate date,
-            String description
-    ) {}
-
-    public record HistoryPublicationDto(
-            LocalDate date,
             String description
     ) {}
 }

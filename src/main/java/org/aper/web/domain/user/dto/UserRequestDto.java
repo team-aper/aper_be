@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.aper.web.domain.user.valid.UserValidationGroup.*;
-import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 public class UserRequestDto {
 
@@ -76,8 +78,10 @@ public class UserRequestDto {
             String password
     ){}
 
-    public record ChangeEducationDto(
-            @NotBlank(message = "입학 날짜를 입력해주세요.", groups = NotBlankGroup.class)
+    public record HistoryRequestDto(
+            Long historyId,
+            String historyType,
+            @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             LocalDate date,
 
@@ -86,19 +90,9 @@ public class UserRequestDto {
             String description
     ){}
 
-    public record ChangeAwardDto(
-            @NotBlank(message = "수상 날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            LocalDate date,
-
+    public record ClassDescriptionRequestDto(
+            @NotBlank(message = "수업 소개를 입력해주세요.", groups = NotBlankGroup.class)
+            @Size(max = 2000, message = "수업 소개는 최대 2000자까지 입력할 수 있습니다.")
             String description
-    ){}
-
-    public record ChangePublicationDto(
-            @NotBlank(message = "출간 날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            LocalDate date,
-
-            String description
-    ){}
+    ) {}
 }
