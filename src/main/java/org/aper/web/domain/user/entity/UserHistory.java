@@ -30,8 +30,20 @@ public class UserHistory {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @Column(nullable = false)
-    private String title;
-
     private String description;
+
+    public void updateHistory(LocalDate date, LocalDate endDate, String description, HistoryTypeEnum historyType) {
+        this.date = date;
+        this.description = description;
+        this.historyType = historyType;
+
+        if (endDate != null) {
+            this.endDate = endDate;
+        }
+    }
+
+    public void updateUser(User user){
+        this.user = user;
+    }
+
 }
