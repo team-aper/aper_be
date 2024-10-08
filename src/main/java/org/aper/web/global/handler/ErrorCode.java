@@ -60,7 +60,9 @@ public enum ErrorCode {
     INVALID_BATCH_URL("B002", "Invalid URL format"),
 
     // UserHistory
-    INVALID_HISTORY("UH001", "존재하지 않는 사용자 이력 종류입니다.");
+    INVALID_HISTORY("UH001", "존재하지 않는 사용자 이력 종류입니다."),
+    HISTORY_NOT_FOUND("UH002", "존재하지 않는 이력 입니다."),
+    HISTORY_OWNER_MISMATCH("UH003", "요청한 유저와 해당 이력의 주인이 일치하지 않습니다");
 
     private final String code;
     private final String message;
