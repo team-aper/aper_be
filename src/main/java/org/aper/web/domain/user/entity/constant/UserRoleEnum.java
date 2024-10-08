@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.entity;
+package org.aper.web.domain.user.entity.constant;
 
 import lombok.Getter;
 
