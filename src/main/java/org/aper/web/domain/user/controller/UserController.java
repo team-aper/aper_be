@@ -18,6 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @Validated(UserValidationSequence.class)
@@ -101,6 +103,11 @@ public class UserController implements UserControllerDocs {
         String imageUrl = userService.changeImage(userDetails.user(), fieldImageFile);
         return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
     }
+
+    @PutMapping("/history/education")
+    public ResponseDto<List<HistoryEducation>> changeEducation(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    )
 
     @Override
     @DeleteMapping("/account/delete")

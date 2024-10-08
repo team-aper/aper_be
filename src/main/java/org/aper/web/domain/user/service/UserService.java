@@ -7,7 +7,7 @@ import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.UserRoleEnum;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

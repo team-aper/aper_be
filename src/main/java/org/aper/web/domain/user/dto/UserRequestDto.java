@@ -71,4 +71,8 @@ public class UserRequestDto {
             @NotBlank(message = "비밀번호를 입력해 주세요.", groups = NotBlankGroup.class)
             String password
     ){}
+
+    public record ChangeEducationDto(
+
+    ){}
 }

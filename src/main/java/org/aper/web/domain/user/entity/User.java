@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ public class User {
 
     @Column
     private String penName;
+
+    @Column
+    private String contactEmail;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
