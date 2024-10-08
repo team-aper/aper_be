@@ -2,14 +2,10 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.user.service.*;
 import org.aper.web.global.docs.UserControllerDocs;
-import org.aper.web.domain.user.dto.UserRequestDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
-import org.aper.web.domain.user.service.DeleteService;
-import org.aper.web.domain.user.service.EmailCertService;
-import org.aper.web.domain.user.service.PasswordService;
-import org.aper.web.domain.user.service.UserService;
 import org.aper.web.domain.user.valid.UserValidationSequence;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -29,15 +25,18 @@ public class UserController implements UserControllerDocs {
     private final EmailCertService emailCertService;
     private final PasswordService passwordService;
     private final DeleteService deleteService;
+    private final UserHistoryService userHistoryService;
 
     public UserController(UserService userService,
                           EmailCertService emailCertService,
                           PasswordService passwordService,
-                          DeleteService deleteService) {
+                          DeleteService deleteService,
+                          UserHistoryService historyService) {
         this.userService = userService;
         this.emailCertService = emailCertService;
         this.passwordService = passwordService;
         this.deleteService = deleteService;
+        this.userHistoryService = historyService;
     }
 
     @PostMapping("/signup")
@@ -78,7 +77,7 @@ public class UserController implements UserControllerDocs {
     @PutMapping("/email/change")
     public ResponseDto<Void> changeEmail(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid UserRequestDto.ChangeEmailDto changeEmailDto
+            @RequestBody @Valid ChangeEmailDto changeEmailDto
     ) {
         userService.changeEmail(userDetails.user(), changeEmailDto);
         return ResponseDto.success("이메일 변경에 성공하였습니다.");
@@ -104,10 +103,35 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
     }
 
-    @PutMapping("/history/education")
-    public ResponseDto<List<HistoryEducation>> changeEducation(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    )
+    @Override
+    @PutMapping("/history")
+    public ResponseDto<Void> changeEducation(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody List<HistoryRequestDto> historyDtoList
+    ) {
+        userHistoryService.changeHistory(userDetails, historyDtoList);
+        return ResponseDto.success("작가 이력 작성 완료.");
+    }
+
+    @Override
+    @PutMapping("/contact/email/change")
+    public ResponseDto<Void> changeContactEmail(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid ChangeEmailDto changeEmailDto
+    ) {
+        userService.changeContactEmail(userDetails.user(), changeEmailDto);
+        return ResponseDto.success("컨택 이메일 변경에 성공하였습니다.");
+    }
+
+    @Override
+    @PutMapping("/class/description/change")
+    public ResponseDto<Void> changeClassDescription(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid ClassDescriptionRequestDto requestDto
+    ) {
+        userService.changeClassDescription(userDetails.user(), requestDto);
+        return ResponseDto.success("1:1 수업 소개 변경에 성공하였습니다.");
+    }
 
     @Override
     @DeleteMapping("/account/delete")
