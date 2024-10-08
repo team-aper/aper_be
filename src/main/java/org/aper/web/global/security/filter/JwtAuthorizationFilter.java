@@ -12,7 +12,6 @@ import org.aper.web.global.handler.exception.TokenException;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,7 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             try{
                 Claims claims = tokenProvider.getUserInfoFromAccessToken(tokenValue);
                 if (claims.getExpiration().before(new Date())){
-                    CustomResponseUtil.fail(response, ErrorCode.EXPIRED_ACCESS_TOKEN.getMessage(), HttpStatus.UNAUTHORIZED);
+                    CustomResponseUtil.fail(response, ErrorCode.EXPIRED_ACCESS_TOKEN);
                     return;
                 }
                 String username = claims.getSubject();
