@@ -70,6 +70,9 @@ public class UserService {
     @Transactional
     public void changeEmail(User user, ChangeEmailDto changeEmailDto) {
         String newEmail = changeEmailDto.email();
+        if (userRepository.existsByEmail(newEmail)) {
+            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
+        }
         user.updateEmail(newEmail);
         userRepository.save((user));
     }
@@ -99,5 +102,17 @@ public class UserService {
             String fileKey = existFieldImage.split(".amazonaws.com/")[1];
             s3ImageService.deleteFile(fileKey);
         }
+    }
+
+    public void changeContactEmail(User user, ChangeEmailDto changeEmailDto) {
+        String newEmail = changeEmailDto.email();
+        user.updateContactEmail(newEmail);
+        userRepository.save((user));
+    }
+
+    public void changeClassDescription(User user, ClassDescriptionRequestDto requestDto) {
+        String classDescription = requestDto.description();
+        user.updateClassDescription(classDescription);
+        userRepository.save((user));
     }
 }
