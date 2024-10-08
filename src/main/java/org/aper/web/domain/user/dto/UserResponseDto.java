@@ -1,6 +1,6 @@
 package org.aper.web.domain.user.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class UserResponseDto {
 
@@ -9,18 +9,18 @@ public class UserResponseDto {
     ) {}
 
     public record HistoryEducationDto(
-            LocalDateTime date,
-            LocalDateTime endDate,
+            LocalDate date,
+            LocalDate endDate,
             String description
     ) {}
 
     public record HistoryAwardDto(
-            LocalDateTime date,
+            LocalDate date,
             String description
     ) {}
 
     public record HistoryPublicationDto(
-            LocalDateTime date,
+            LocalDate date,
             String description
     ) {}
 }

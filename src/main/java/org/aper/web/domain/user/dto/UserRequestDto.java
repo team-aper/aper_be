@@ -1,8 +1,12 @@
 package org.aper.web.domain.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.aper.web.domain.user.valid.UserValidationGroup.*;
+import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class UserRequestDto {
 
@@ -73,6 +77,28 @@ public class UserRequestDto {
     ){}
 
     public record ChangeEducationDto(
+            @NotBlank(message = "입학 날짜를 입력해주세요.", groups = NotBlankGroup.class)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate date,
 
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate endDate,
+            String description
+    ){}
+
+    public record ChangeAwardDto(
+            @NotBlank(message = "수상 날짜를 입력해주세요.", groups = NotBlankGroup.class)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate date,
+
+            String description
+    ){}
+
+    public record ChangePublicationDto(
+            @NotBlank(message = "출간 날짜를 입력해주세요.", groups = NotBlankGroup.class)
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate date,
+
+            String description
     ){}
 }
