@@ -6,18 +6,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.BatchRequest;
+import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
+import org.aper.web.global.batch.dto.BatchRequestDto.BatchRequest;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Paragraph Batch", description = "문단 자동 저장을 위한 배치 처리 API")
-public interface ParagraphControllerDocs {
+@Tag(name = "Batch", description = "배치 처리 API")
+public interface BatchControllerDocs {
 
     @Operation(summary = "문단 'POST', 'PUT', 'DELETE' 요청에 대한 batch 처리",
-            description = "문단 자동 저장 기능을 위한 배치 요청을 처리하는 API입니다.")
+            description = "배치 요청을 처리하는 API입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공적으로 배치 요청을 처리했습니다."),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
@@ -38,8 +39,8 @@ public interface ParagraphControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<Void> processBatch(
-            @RequestBody BatchRequest request,
+    ResponseDto<Void> processParagraphBatch(
+            @RequestBody BatchRequest<ItemPayload> request,
             @AuthenticationPrincipal UserDetailsImpl userDetails);
 
 }
