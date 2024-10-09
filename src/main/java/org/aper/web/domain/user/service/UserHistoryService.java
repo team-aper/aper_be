@@ -1,6 +1,8 @@
 package org.aper.web.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.field.service.FieldHelper;
+import org.aper.web.domain.field.service.FieldMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.UserHistory;
@@ -18,6 +20,8 @@ import java.util.List;
 public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
     private final UserHistoryMapper userHistoryMapper;
+    private final FieldHelper fieldHelper;
+    private final FieldMapper fieldMapper;
 
     public List<HistoryResponseDto> changeHistory(UserDetailsImpl userDetails, List<HistoryRequestDto> historyDtoList) {
         List<UserHistory> historiesToSave = historyDtoList.stream()

@@ -6,6 +6,8 @@ import org.aper.web.domain.field.dto.FieldResponseDto.FieldHeaderResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.HomeResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesResponseDto;
 import org.aper.web.domain.field.service.FieldService;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.service.UserHistoryService;
 import org.aper.web.global.docs.FieldControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class FieldController implements FieldControllerDocs {
     private final FieldService fieldService;
+    private final UserHistoryService userHistoryService;
 
     @Override
     @GetMapping("/header/{authorId}")
@@ -52,5 +55,23 @@ public class FieldController implements FieldControllerDocs {
             @PathVariable Long authorId) {
         DetailsResponseDto fieldDetailsData = fieldService.getDetailsData(authorId);
         return ResponseDto.success("작가 필드 작가 정보 데이터", fieldDetailsData);
+    }
+
+    @Override
+    @GetMapping("/history")
+    public ResponseDto<HistoryOwnershipResponseDto> getHistoriesData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId) {
+        HistoryOwnershipResponseDto historyList = fieldService.getHistory(authorId);
+        return ResponseDto.success("작가 이력 정보", historyList);
+    }
+
+    @Override
+    @GetMapping("/class/description")
+    public ResponseDto<ClassDescriptionResponseDto> getClassDescription(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId) {
+        ClassDescriptionResponseDto classDescription = fieldService.getClassDescription(authorId);
+        return ResponseDto.success("1:1 수업 소개 정보", classDescription);
     }
 }

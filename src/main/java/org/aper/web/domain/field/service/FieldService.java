@@ -6,7 +6,10 @@ import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.field.dto.FieldResponseDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.user.repository.UserHistoryRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -22,13 +25,14 @@ public class FieldService {
     private final EpisodeRepository episodeRepository;
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
+    private final UserHistoryRepository userHistoryRepository;
     private final FieldMapper fieldMapper;
     private final FieldHelper fieldHelper;
 
     public FieldHeaderResponseDto getAuthorInfo(Long authorId) {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription());
+        return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription(), user.getContactEmail());
     }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
@@ -55,5 +59,16 @@ public class FieldService {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         return fieldMapper.toDetailsResponseDto(user);
+    }
+
+    public HistoryOwnershipResponseDto getHistory(Long authorId) {
+        List<UserHistory> historyList = userHistoryRepository.findAllByUserUserId(authorId);
+        return fieldMapper.userHistoryToDto(historyList);
+    }
+
+    public ClassDescriptionResponseDto getClassDescription(Long authorId) {
+        User user = userRepository.findById(authorId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        return fieldMapper.classDescriptionToDto(user);
     }
 }
