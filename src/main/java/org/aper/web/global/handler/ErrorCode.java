@@ -56,10 +56,12 @@ public enum ErrorCode {
     // Paragraph
     PARAGRAPH_NOT_FOUND(HttpStatus.NOT_FOUND,"P001", "존재하지 않는 문단입니다."),
     PARAGRAPH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"P002", "이미 존재하는 uuid 입니다."),
+    PARAGRAPH_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "P003", "이미 삭제된 uuid 입니다."),
 
     // Batch
     INVALID_BATCH_REQUEST(HttpStatus.BAD_REQUEST,"B001", "잘못된 배치 요청입니다."),
-    INVALID_BATCH_URL(HttpStatus.BAD_REQUEST,"B002", "잘못된 URL입니다. (url 예시 : /episode/{episodeId)"),
+    INVALID_BATCH_URL(HttpStatus.BAD_REQUEST,"B002", "잘못된 URL입니다."),
+    INVALID_DOMAIN(HttpStatus.BAD_REQUEST, "B003", "잘못된 도메인입니다."),
 
     // Chat
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다.");
