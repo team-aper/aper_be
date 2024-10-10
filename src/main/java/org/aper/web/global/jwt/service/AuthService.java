@@ -15,7 +15,6 @@ import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.dto.GeneratedToken;
 import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.security.UserDetailsImpl;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -87,7 +86,6 @@ public class AuthService {
         String storedRefreshToken = refreshTokenService.getRefreshToken(email);
         tokenValidationService.verifyRefreshToken(storedRefreshToken);
 
-        // 블랙리스트 추가
         blacklistTokens(accessTokenValue, storedRefreshToken);
 
         return generateNewTokens(email, request, response);
@@ -95,7 +93,7 @@ public class AuthService {
 
     private void validateTokenPresence(String token) {
         if (!StringUtils.hasText(token)) {
-            throw new TokenException(HttpStatus.BAD_REQUEST, ErrorCode.ACCESS_TOKEN_IS_NULL);
+            throw new TokenException(ErrorCode.ACCESS_TOKEN_IS_NULL);
         }
     }
 

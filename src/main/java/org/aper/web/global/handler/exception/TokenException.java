@@ -8,13 +8,17 @@ import org.springframework.security.core.AuthenticationException;
 @Getter
 public class TokenException extends AuthenticationException {
 
-    private final ErrorCode errorCode;
     private final HttpStatus status;
+    private final String code;
 
-    public TokenException(HttpStatus status, ErrorCode errorCode) {
+    public TokenException(ErrorCode errorCode) {
         super(errorCode.getMessage());
-        this.errorCode = errorCode;
-        this.status = status;
+        this.status = errorCode.getStatus();
+        this.code = errorCode.getCode();
     }
 
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
 }
