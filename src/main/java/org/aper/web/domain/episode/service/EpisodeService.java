@@ -10,6 +10,9 @@ import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
 import org.aper.web.domain.story.service.StoryHelper;
+import org.aper.web.domain.subscription.entity.Subscription;
+import org.aper.web.domain.subscription.repository.SubscriptionRepository;
+import org.aper.web.domain.subscription.service.RedisPublisher;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -26,6 +29,8 @@ public class EpisodeService {
     private final EpisodeMapper episodeMapper;
     private final StoryHelper storyHelper;
     private final KafkaEpisodesProducerService producerService;
+    private final RedisPublisher redisPublisher;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Transactional
     public void changePublicStatus(Long episodeId, UserDetailsImpl userDetails) {
@@ -36,6 +41,12 @@ public class EpisodeService {
         episodeRepository.save(episode);
 
         producerService.sendUpdate(episode);
+
+        List<Subscription> subscribers = subscriptionRepository.findAllByAuthor_UserId(userDetails.user().getUserId());
+        for (Subscription subscription : subscribers) {
+            Long subscriberId = subscription.getSubscriber().getUserId();
+            redisPublisher.publish(subscriberId, true);
+        }
     }
 
     @Transactional
