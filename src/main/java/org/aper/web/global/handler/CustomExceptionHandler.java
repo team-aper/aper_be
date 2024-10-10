@@ -106,8 +106,8 @@ public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public void handleException(Exception e, HttpServletResponse response) {
         log.error("handleException", e);
-        slackService.sendErrorMessageToSlack("General Exception: " + e.getMessage());
         CustomResponseUtil.fail(response, ErrorCode.INTERNAL_SERVER_ERROR);
+        slackService.sendErrorMessageToSlack("General Exception: " + e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
