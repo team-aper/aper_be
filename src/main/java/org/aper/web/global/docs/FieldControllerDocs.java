@@ -10,6 +10,7 @@ import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.FieldHeaderResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.HomeResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesResponseDto;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -50,4 +51,24 @@ public interface FieldControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<DetailsResponseDto> getDetailsData(@PathVariable Long authorId);
+
+    @Operation(summary = "작가 이력 get API", description = "토큰 필수 x, 학력, 수상, 출간물 기록들 각각 리스트에 담아서 리턴")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "작가 이력 조회 성공", content = @Content(schema = @Schema(implementation = HistoryResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<HistoryResponseDto> getHistoriesData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId);
+
+    @Operation(summary = "작가의 1:1 수업 소개 get API", description = "토큰 필수 x, 작가의 1:1 수업 소개 내용을 요청 할 수 있는 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "작가 1:1 수업 소개 조회 성공", content = @Content(schema = @Schema(implementation = ClassDescriptionResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<ClassDescriptionResponseDto> getClassDescription(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId);
 }

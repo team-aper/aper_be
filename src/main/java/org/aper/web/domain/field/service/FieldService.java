@@ -61,7 +61,7 @@ public class FieldService {
         return fieldMapper.toDetailsResponseDto(user);
     }
 
-    public HistoryOwnershipResponseDto getHistory(Long authorId) {
+    public HistoryResponseDto getHistory(Long authorId) {
         List<UserHistory> historyList = userHistoryRepository.findAllByUserUserId(authorId);
         return fieldMapper.userHistoryToDto(historyList);
     }

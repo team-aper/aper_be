@@ -43,4 +43,40 @@ public interface BatchControllerDocs {
             @RequestBody BatchRequest<ItemPayload> request,
             @AuthenticationPrincipal UserDetailsImpl userDetails);
 
+    @Operation(
+            summary = "유저 정보 'PUT' 요청에 대한 배치 처리",
+            description = "유저 정보와 관련된 여러 'PUT' 요청을 배치로 처리하는 API입니다. 여러 수정 작업을 한 번에 처리할 수 있습니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 배치 요청을 처리했습니다."),
+            @ApiResponse(responseCode = "400", description = """
+            잘못된 요청입니다. ErrorCode 목록:
+            - C002: 유효성 검사 실패 (Invalid input value),
+            - B001: 잘못된 배치 요청 (Invalid batch request),
+            - B002: 잘못된 URL 형식 (Invalid URL format).""",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = """
+            리소스를 찾을 수 없습니다. ErrorCode 목록:
+            - U002: 등록되지 않은 회원 (User not found),
+            - P001: 존재하지 않는 문단 (Paragraph not found),
+            - S001: 존재하지 않는 이야기 (Story not found),
+            - UH001: 존재하지 않는 이력 (History not found).""",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = """
+            접근 권한이 없습니다. ErrorCode 목록:
+            - A004: 유효하지 않은 엑세스 토큰 (Invalid access token),
+            - A009: 사용자의 권한을 찾을 수 없음 (Auth not found),
+            - E002: 에피소드 작성자가 아님 (Not author of episode),
+            - S002: 이야기 작성자가 아님 (Not author of story).""",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = """
+            서버 내부 오류입니다. ErrorCode 목록:
+            - C001: 내부 서버 오류 (Internal server error),
+            - AWS001: S3 업로드 에러 (S3 upload error occurred),
+            - ES001: JSON 변환 에러 (JSON processing error).""",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    <T> ResponseDto<Void> processUserInfoBatch(
+            @RequestBody BatchRequest<T> request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails);
 }

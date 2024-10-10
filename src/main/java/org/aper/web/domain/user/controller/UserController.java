@@ -109,7 +109,7 @@ public class UserController implements UserControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody List<HistoryRequestDto> historyDtoList
     ) {
-        userHistoryService.changeHistory(userDetails, historyDtoList);
+        userHistoryService.changeHistory(userDetails.user(), historyDtoList);
         return ResponseDto.success("작가 이력 작성 완료.");
     }
 
@@ -120,7 +120,7 @@ public class UserController implements UserControllerDocs {
             @RequestBody @Valid ChangeEmailDto changeEmailDto
     ) {
         userService.changeContactEmail(userDetails.user(), changeEmailDto);
-        return ResponseDto.success("컨택 이메일 변경에 성공하였습니다.");
+        return ResponseDto.success("컨택 이메일 작성에 성공하였습니다.");
     }
 
     @Override

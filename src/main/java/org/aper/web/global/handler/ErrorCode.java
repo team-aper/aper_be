@@ -64,7 +64,13 @@ public enum ErrorCode {
     INVALID_DOMAIN(HttpStatus.BAD_REQUEST, "B003", "잘못된 도메인입니다."),
 
     // Chat
-    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다.");
+    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다."),
+
+    // User History
+    HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
+    HISTORY_OWNER_MISMATCH(HttpStatus.BAD_REQUEST, "UH002", "해당 이력을 작성 할 수 있는 권한이 없습니다."),
+    INVALID_HISTORY(HttpStatus.BAD_REQUEST, "UH003", "존재하지 않는 종류의 이력 입니다.");
+
 
     private final String code;
     private final String message;

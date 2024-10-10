@@ -9,8 +9,8 @@ import java.util.List;
 
 @Component
 public class UserHistoryMapper {
-    public HistoryResponseDto UserHistoryToDto(UserHistory history, HistoryTypeEnum historyType) {
-        return new HistoryResponseDto(
+    public HistoryDetailResponseDto UserHistoryToDto(UserHistory history, HistoryTypeEnum historyType) {
+        return new HistoryDetailResponseDto(
                 history.getId(),
                 historyType.name(),
                 history.getDate(),
@@ -19,7 +19,7 @@ public class UserHistoryMapper {
         );
     }
 
-    public List<HistoryResponseDto> UserHistoriesToDtoList(List<UserHistory> histories) {
+    public List<HistoryDetailResponseDto> UserHistoriesToDtoList(List<UserHistory> histories) {
         return histories.stream()
                 .map(history -> {
                     HistoryTypeEnum historyType = HistoryTypeEnum.fromString(history.getHistoryType().name());

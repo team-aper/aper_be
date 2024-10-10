@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.field.service.FieldHelper;
 import org.aper.web.domain.field.service.FieldMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
 import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
 import org.aper.web.domain.user.repository.UserHistoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
-import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,10 +20,9 @@ import java.util.List;
 public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
     private final UserHistoryMapper userHistoryMapper;
-    private final FieldHelper fieldHelper;
-    private final FieldMapper fieldMapper;
 
-    public List<HistoryResponseDto> changeHistory(UserDetailsImpl userDetails, List<HistoryRequestDto> historyDtoList) {
+    @Transactional
+    public void changeHistory(User user, List<HistoryRequestDto> historyDtoList) {
         List<UserHistory> historiesToSave = historyDtoList.stream()
                 .map(historyDto -> {
                     UserHistory history = historyDto.historyId() == null
@@ -32,10 +31,10 @@ public class UserHistoryService {
                             .orElseThrow(() -> new ServiceException(ErrorCode.HISTORY_NOT_FOUND));
 
                     if (historyDto.historyId() == null) {
-                        history.updateUser(userDetails.user());
+                        history.updateUser(user);
                     }
 
-                    if (historyDto.historyId() != null && !history.getUser().getUserId().equals(userDetails.user().getUserId())) {
+                    if (historyDto.historyId() != null && !history.getUser().getUserId().equals(user.getUserId())) {
                         throw new ServiceException(ErrorCode.HISTORY_OWNER_MISMATCH);
                     }
 
@@ -50,6 +49,6 @@ public class UserHistoryService {
                 .toList();
 
         userHistoryRepository.saveAll(historiesToSave);
-        return userHistoryMapper.UserHistoriesToDtoList(historiesToSave);
+        userHistoryMapper.UserHistoriesToDtoList(historiesToSave);
     }
 }

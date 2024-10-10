@@ -59,10 +59,10 @@ public class FieldController implements FieldControllerDocs {
 
     @Override
     @GetMapping("/history")
-    public ResponseDto<HistoryOwnershipResponseDto> getHistoriesData(
+    public ResponseDto<HistoryResponseDto> getHistoriesData(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId) {
-        HistoryOwnershipResponseDto historyList = fieldService.getHistory(authorId);
+        HistoryResponseDto historyList = fieldService.getHistory(authorId);
         return ResponseDto.success("작가 이력 정보", historyList);
     }
 

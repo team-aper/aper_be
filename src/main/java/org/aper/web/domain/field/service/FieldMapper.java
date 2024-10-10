@@ -78,13 +78,13 @@ public class FieldMapper {
         return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 
-    public HistoryOwnershipResponseDto userHistoryToDto(List<UserHistory> userHistoryList) {
-        List<HistoryResponseDto> educationList = new ArrayList<>();
-        List<HistoryResponseDto> awardList = new ArrayList<>();
-        List<HistoryResponseDto> publicationList = new ArrayList<>();
+    public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList) {
+        List<HistoryDetailResponseDto> educationList = new ArrayList<>();
+        List<HistoryDetailResponseDto> awardList = new ArrayList<>();
+        List<HistoryDetailResponseDto> publicationList = new ArrayList<>();
 
         userHistoryList.forEach(userHistory -> {
-            HistoryResponseDto responseDto = new HistoryResponseDto(
+            HistoryDetailResponseDto responseDto = new HistoryDetailResponseDto(
                     userHistory.getId(),
                     userHistory.getHistoryType().name(),
                     userHistory.getDate(),
@@ -103,7 +103,7 @@ public class FieldMapper {
             }
         });
 
-        return new HistoryOwnershipResponseDto(
+        return new HistoryResponseDto(
                 educationList,
                 awardList,
                 publicationList

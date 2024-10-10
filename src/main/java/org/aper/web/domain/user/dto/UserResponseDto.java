@@ -9,13 +9,13 @@ public class UserResponseDto {
             String penName
     ) {}
 
-    public record HistoryOwnershipResponseDto(
-            List<HistoryResponseDto> educationResponseDtoList,
-            List<HistoryResponseDto> awardResponseDtoList,
-            List<HistoryResponseDto> publicationResponseList
+    public record HistoryResponseDto(
+            List<HistoryDetailResponseDto> educationResponseDtoList,
+            List<HistoryDetailResponseDto> awardResponseDtoList,
+            List<HistoryDetailResponseDto> publicationResponseList
     ) {}
 
-    public record HistoryResponseDto(
+    public record HistoryDetailResponseDto(
             Long historyId,
             String historyType,
             LocalDate date,
