@@ -58,7 +58,7 @@ public class FieldController implements FieldControllerDocs {
     }
 
     @Override
-    @GetMapping("/history")
+    @GetMapping("/history/{authorId}")
     public ResponseDto<HistoryResponseDto> getHistoriesData(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId) {
@@ -67,7 +67,7 @@ public class FieldController implements FieldControllerDocs {
     }
 
     @Override
-    @GetMapping("/class/description")
+    @GetMapping("/class/description/{authorId}")
     public ResponseDto<ClassDescriptionResponseDto> getClassDescription(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId) {

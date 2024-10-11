@@ -87,4 +87,3 @@ public class UserBatchService<T> implements BatchService<T> {
         userService.changeClassDescription(userDetails.user(), classDescriptionDto);
     }
 }
-

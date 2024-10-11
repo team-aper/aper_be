@@ -58,16 +58,12 @@ public interface BatchControllerDocs {
             @ApiResponse(responseCode = "404", description = """
             리소스를 찾을 수 없습니다. ErrorCode 목록:
             - U002: 등록되지 않은 회원 (User not found),
-            - P001: 존재하지 않는 문단 (Paragraph not found),
-            - S001: 존재하지 않는 이야기 (Story not found),
-            - UH001: 존재하지 않는 이력 (History not found).""",
+            - UH001: 존재하지 않는 작가 이력 (History not found).""",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "403", description = """
             접근 권한이 없습니다. ErrorCode 목록:
             - A004: 유효하지 않은 엑세스 토큰 (Invalid access token),
-            - A009: 사용자의 권한을 찾을 수 없음 (Auth not found),
-            - E002: 에피소드 작성자가 아님 (Not author of episode),
-            - S002: 이야기 작성자가 아님 (Not author of story).""",
+            - A009: 사용자의 권한을 찾을 수 없음 (Auth not found).""",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = """
             서버 내부 오류입니다. ErrorCode 목록:
