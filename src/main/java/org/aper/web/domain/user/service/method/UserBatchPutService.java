@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.batch;
+package org.aper.web.domain.user.service.method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
@@ -6,22 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.service.UserHistoryService;
 import org.aper.web.domain.user.service.UserService;
-import org.aper.web.global.batch.dto.BatchRequestDto.BatchOperation;
-import org.aper.web.global.batch.dto.BatchRequestDto.BatchRequest;
-import org.aper.web.global.batch.service.BatchService;
-import org.aper.web.global.handler.ErrorCode;
-import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.batch.service.method.BatchPutService;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 @Service
 @RequiredArgsConstructor
-public class UserBatchService<T> implements BatchService<T> {
+public class UserBatchPutService<T> implements BatchPutService<T> {
     private final UserService userService;
     private final UserHistoryService userHistoryService;
     private final ObjectMapper objectMapper;
@@ -38,24 +36,14 @@ public class UserBatchService<T> implements BatchService<T> {
         batchHandlers.put("/class/description/change", this::handleClassDescriptionChange);
     }
 
-    @Override
-    @Transactional
-    public void processBatch(BatchRequest<T> request, UserDetailsImpl userDetails) {
-        List<BatchOperation<T>> operations = request.batch();
-        Iterator<BatchOperation<T>> iterator = operations.iterator();
-
-        while (iterator.hasNext()) {
-            BatchOperation<T> operation = iterator.next();
-            String url = operation.url();
-            List<T> operationDto = operation.body();
-            BiConsumer<List<T>, UserDetailsImpl> handler = batchHandlers.get(url);
-            Optional.ofNullable(handler)
-                    .orElseThrow(() -> new ServiceException(ErrorCode.INVALID_BATCH_REQUEST))
-                    .accept(operationDto, userDetails);
-            iterator.remove();
-        }
+    public BiConsumer<List<T>, UserDetailsImpl> getBatchHandler(String url) {
+        return batchHandlers.get(url);
     }
 
+    @Override
+    public boolean handleModifiedOperation(List<T> itemPayloads, Set<String> deletedUuids) {
+        return false;
+    }
 
     private void handlePenNameChange(List<T> operationDto, UserDetailsImpl userDetails) {
         ChangePenNameDto penNameDto = objectMapper.convertValue(operationDto.get(0), ChangePenNameDto.class);

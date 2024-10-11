@@ -2,7 +2,7 @@ package org.aper.web.global.batch.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
-import org.aper.web.domain.user.batch.UserBatchService;
+import org.aper.web.domain.user.service.UserBatchService;
 import org.aper.web.global.batch.dto.BatchRequestDto.BatchRequest;
 import org.aper.web.global.batch.service.BatchService;
 import org.aper.web.global.docs.BatchControllerDocs;
