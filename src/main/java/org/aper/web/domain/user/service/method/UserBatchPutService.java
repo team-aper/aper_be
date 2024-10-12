@@ -3,6 +3,7 @@ package org.aper.web.domain.user.service.method;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.image.service.ImageEncoder;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.service.UserHistoryService;
 import org.aper.web.domain.user.service.UserService;
@@ -23,6 +24,7 @@ public class UserBatchPutService<T> implements BatchPutService<T> {
     private final UserService userService;
     private final UserHistoryService userHistoryService;
     private final ObjectMapper objectMapper;
+    private final ImageEncoder imageEncoder;
 
     private final Map<String, BiConsumer<List<T>, UserDetailsImpl>> batchHandlers = new HashMap<>();
 
@@ -51,8 +53,10 @@ public class UserBatchPutService<T> implements BatchPutService<T> {
     }
 
     private void handleImageChange(List<T> operationDto, UserDetailsImpl userDetails) {
-        MultipartFile imageFile = objectMapper.convertValue(operationDto.get(0), MultipartFile.class);
-        userService.changeImage(userDetails.user(), imageFile);
+        ChangeBatchImageDto imageDto = objectMapper.convertValue(operationDto.get(0), ChangeBatchImageDto.class);
+        String imageBase64 = imageDto.imageBase64();
+        MultipartFile multipartFile = imageEncoder.Base64ToMultipartFile(imageBase64);
+        userService.changeImage(userDetails.user(), multipartFile);
     }
 
     private void handleDescriptionChange(List<T> operationDto, UserDetailsImpl userDetails) {

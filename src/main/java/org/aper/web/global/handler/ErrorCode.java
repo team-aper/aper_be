@@ -44,8 +44,9 @@ public enum ErrorCode {
     INVALID_GENRE(HttpStatus.BAD_REQUEST,"S005", "유효하지 않은 장르입니다."),
     STORY_NOT_PUBLISHED(HttpStatus.FORBIDDEN,"S006", "공개되지 않은 이야기입니다."),
 
-    // AWS S3
-    S3_UPLOAD_ERROR_OCCURRED(HttpStatus.INTERNAL_SERVER_ERROR,"AWS001", "S3 업로드 중 에러가 발생했습니다."),
+    // Image
+    S3_UPLOAD_ERROR_OCCURRED(HttpStatus.INTERNAL_SERVER_ERROR,"I001", "S3 업로드 중 에러가 발생했습니다."),
+    BASE64_DECODE_FAILED(HttpStatus.BAD_REQUEST, "I002", "base64 이미지 디코딩에 실패했습니다."),
 
     // Elastic
     JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"ES001", "JSON 변환 중 에러 발생"),

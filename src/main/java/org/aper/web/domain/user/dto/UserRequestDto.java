@@ -62,6 +62,11 @@ public class UserRequestDto {
             String penName
     ){}
 
+    public record ChangeBatchImageDto(
+            @NotBlank(message = "base64로 변환된 이미지를 입력해주세요.", groups = NotBlankGroup.class)
+            String imageBase64
+    ){}
+
     public record ChangeEmailDto(
             @NotBlank(message = "이메일을 입력해주세요.", groups = EmailBlankGroup.class)
             @Email(message = "이메일 형식이 아닙니다.", groups = EmailGroup.class)
