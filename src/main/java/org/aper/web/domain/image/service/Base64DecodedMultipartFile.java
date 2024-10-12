@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Service
 public class Base64DecodedMultipartFile implements MultipartFile {
     private final byte[] fileContent;
     private final String fileName;
