@@ -45,7 +45,8 @@ public interface BatchControllerDocs {
 
     @Operation(
             summary = "유저 정보 'PUT' 요청에 대한 배치 처리",
-            description = "유저 정보와 관련된 여러 'PUT' 요청을 배치로 처리하는 API입니다. 여러 수정 작업을 한 번에 처리할 수 있습니다."
+            description = "유저 정보와 관련된 여러 'PUT' 요청을 배치로 처리하는 API입니다. 여러 수정 작업을 한 번에 처리할 수 있습니다.<br>" +
+            "이미지의 경우 base64로 인코딩 후 헤더 정보까지 같이 보내면 됩니다."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공적으로 배치 요청을 처리했습니다."),

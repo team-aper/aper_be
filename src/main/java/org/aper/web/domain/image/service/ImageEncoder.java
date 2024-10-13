@@ -19,7 +19,7 @@ public class ImageEncoder {
             String base64Data = base64Parts[1];
             byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
 
-            String fileName = UUID.randomUUID().toString() + ".jpg";
+            String fileName = UUID.randomUUID() + ".jpg";
             return new Base64DecodedMultipartFile(decodedBytes, fileName);
         } catch (IllegalArgumentException e) {
             throw new ServiceException(ErrorCode.BASE64_DECODE_FAILED);
