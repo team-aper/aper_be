@@ -4,27 +4,32 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
+import org.aper.web.global.slack.SlackService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class CustomExceptionHandler {
+
+    private final SlackService slackService;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletResponse response) {
@@ -102,6 +107,7 @@ public class CustomExceptionHandler {
     public void handleException(Exception e, HttpServletResponse response) {
         log.error("handleException", e);
         CustomResponseUtil.fail(response, ErrorCode.INTERNAL_SERVER_ERROR);
+        slackService.sendErrorMessageToSlack("General Exception: " + e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
