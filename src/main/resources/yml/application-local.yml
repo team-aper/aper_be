@@ -104,3 +104,8 @@ kafka:
   episodes-topic: ${kafka.episodes-topic}
   user-topic: ${kafka.user-topic}
   consumer-group-id: ${kafka.consumer-group-id}
+
+slack:
+  webhook:
+    url: ${slack.url}
+  enabled: false
