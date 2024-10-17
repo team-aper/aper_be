@@ -78,6 +78,17 @@ public class EpisodeService {
             return episodeMapper.toEpisodeHeaderDto(episode);
         }
 
+        boolean isRead = false;
+
+        if (userDetails != null) {
+            Long userId = userDetails.user().getUserId();
+            isRead = episodeHelper.isEpisodeRead(userId, episodeId);
+
+            if (!isRead) {
+                episodeHelper.markEpisodeAsRead(userId, episodeId);
+            }
+        }
+
         if (!episode.isOnDisplay()){
             throw new ServiceException(ErrorCode.EPISODE_NOT_PUBLISHED);
         }
