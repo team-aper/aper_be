@@ -64,7 +64,11 @@ public enum ErrorCode {
     INVALID_DOMAIN(HttpStatus.BAD_REQUEST, "B003", "잘못된 도메인입니다."),
 
     // Chat
-    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다.");
+    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다."),
+
+    // Subscription
+    SUBSCRIBER_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 유저입니다."),
+    AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다.");
 
     private final String code;
     private final String message;
