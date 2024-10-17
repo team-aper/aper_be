@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.repository;
 
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +27,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.userId FROM User u")
     List<Long> findAllUserId();
 
-    @Query("SELECT u FROM User u WHERE u.id IN (:ids)")
+    @Query("SELECT u FROM User u WHERE u.userId IN (:ids)")
     List<User> findByIdList(List<Long> ids);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
     List<User> findByIdListWithStories(List<Long> ids);
+
+    @Query("SELECT u FROM User u " +
+            "JOIN u.storyList st " +
+            "JOIN Subscription s ON u.userId = s.author.userId " +
+            "WHERE st.genre = :genre " +
+            "GROUP BY u " +
+            "ORDER BY COUNT(s.subscriber) DESC")
+    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre);
 }

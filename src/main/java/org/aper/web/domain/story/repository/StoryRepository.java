@@ -37,4 +37,5 @@ public interface StoryRepository extends JpaRepository<Story, Long>, JpaSpecific
     @Query("DELETE FROM Episode e WHERE e.story.id = :storyId")
     void deleteEpisodesByStoryId(@Param("storyId") Long storyId);
 
+    List<Story> findTop3ByUser_UserIdOrderByPublicDateDesc(Long authorId);
 }
