@@ -21,4 +21,9 @@ public class StoryResponseDto {
             boolean isPublished,
             List<CreatedEpisodeDto> episodes
     ){}
+
+    public record GetRecommendedStory(
+            Long storyId,
+            String storyTitle
+    ){}
 }
