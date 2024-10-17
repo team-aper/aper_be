@@ -47,6 +47,7 @@ public class SubscriptionResponseDto {
             String fieldImageUrl,
             String description,
             Long authorId,
-            List<GetRecommendedStory> storyList
+            List<GetRecommendedStory> storyList,
+            Long subscribers
     ){}
 }
