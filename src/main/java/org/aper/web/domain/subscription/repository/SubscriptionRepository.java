@@ -19,4 +19,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Long countByAuthorId(Long authorId);
 
 
+    List<Subscription> findAllBySubscriber_UserId(Long userId);
 }
