@@ -10,13 +10,14 @@ import java.util.List;
 @Component
 public class UserHistoryMapper {
     public HistoryDetailResponseDto UserHistoryToDto(UserHistory history, HistoryTypeEnum historyType) {
-        return new HistoryDetailResponseDto(
-                history.getId(),
-                historyType.name(),
-                history.getDate(),
-                historyType == HistoryTypeEnum.EDUCATION ? history.getEndDate() : null,
-                history.getDescription()
-        );
+//        return new HistoryDetailResponseDto(
+//                history.getId(),
+//                historyType.name(),
+//                history.getDate(),
+//                historyType == HistoryTypeEnum.EDUCATION ? history.getEndDate() : null,
+//                history.getDescription()
+//        );
+        return null;
     }
 
     public List<HistoryDetailResponseDto> UserHistoriesToDtoList(List<UserHistory> histories) {

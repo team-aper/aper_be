@@ -3,7 +3,9 @@ package org.aper.web.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.aper.web.domain.user.entity.constant.EndDateTypeEnum;
 import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
+import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
 
 import java.time.LocalDate;
 
@@ -23,6 +25,14 @@ public class UserHistory {
     @Column(nullable = false)
     private HistoryTypeEnum historyType;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private EndDateTypeEnum endDateType;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private StartDateTypeEnum startDateType;
+
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -32,14 +42,24 @@ public class UserHistory {
 
     private String description;
 
-    public void updateHistory(LocalDate date, LocalDate endDate, String description, HistoryTypeEnum historyType) {
+    public void updateEducation(
+            LocalDate date,
+            LocalDate endDate,
+            String description,
+            EndDateTypeEnum endDateType,
+            StartDateTypeEnum startDateType) {
+        this.date = date;
+        this.description = description;
+        this.historyType = HistoryTypeEnum.EDUCATION;
+        this.endDate = endDate;
+        this.endDateType = endDateType;
+        this.startDateType = startDateType;
+    }
+
+    public void updateAwardPublication(LocalDate date, String description, HistoryTypeEnum historyType) {
         this.date = date;
         this.description = description;
         this.historyType = historyType;
-
-        if (endDate != null) {
-            this.endDate = endDate;
-        }
     }
 
     public void updateUser(User user){

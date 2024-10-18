@@ -20,6 +20,8 @@ public class UserResponseDto {
             String historyType,
             LocalDate date,
             LocalDate endDate,
+            String startDateType,
+            String endDateType,
             String description
     ) {}
 

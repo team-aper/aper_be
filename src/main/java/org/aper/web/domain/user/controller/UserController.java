@@ -105,7 +105,7 @@ public class UserController implements UserControllerDocs {
 
     @Override
     @PutMapping("/history")
-    public ResponseDto<Void> changeEducation(
+    public ResponseDto<Void> changeHistory(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody List<HistoryRequestDto> historyDtoList
     ) {

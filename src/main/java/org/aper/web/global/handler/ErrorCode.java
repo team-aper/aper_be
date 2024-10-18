@@ -70,7 +70,10 @@ public enum ErrorCode {
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
     HISTORY_OWNER_MISMATCH(HttpStatus.BAD_REQUEST, "UH002", "해당 이력을 작성 할 수 있는 권한이 없습니다."),
-    INVALID_HISTORY(HttpStatus.BAD_REQUEST, "UH003", "존재하지 않는 종류의 이력 입니다.");
+    INVALID_HISTORY(HttpStatus.BAD_REQUEST, "UH003", "존재하지 않는 종류의 이력 입니다."),
+    INVALID_ENDDATEVALUE(HttpStatus.BAD_REQUEST, "UH004", "존재하지 않는 종료 형태입니다."),
+    INVALID_STARTDATEVALUE(HttpStatus.BAD_REQUEST, "UH005", "존재하지 않는 시작 형태입니다.");
+
 
 
     private final String code;

@@ -30,7 +30,6 @@ public class BatchController implements BatchControllerDocs {
     @PutMapping("/user")
     public <T> ResponseDto<Void> processUserInfoBatch(@RequestBody BatchRequest<T> request,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println(request);
         userBatchService.processBatch(request, userDetails);
         return ResponseDto.success("유저 정보 배치 요청에 성공하였습니다.");
     }

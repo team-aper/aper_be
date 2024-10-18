@@ -85,7 +85,11 @@ public class UserRequestDto {
 
     public record HistoryRequestDto(
             Long historyId,
+            @NotBlank(message = "이력의 종류를 입력해 주세요.", groups = NotBlankGroup.class)
             String historyType,
+            String endDateType,
+            String startDateType,
+
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             LocalDate date,
