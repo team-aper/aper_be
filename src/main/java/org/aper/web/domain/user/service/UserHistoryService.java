@@ -22,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
-    private final UserHistoryMapper userHistoryMapper;
 
     @Transactional
     public void changeHistory(User user, List<HistoryRequestDto> historyDtoList) {
@@ -41,7 +40,6 @@ public class UserHistoryService {
                 .toList();
 
         userHistoryRepository.saveAll(historiesToSave);
-//        userHistoryMapper.UserHistoriesToDtoList(historiesToSave);
     }
 
     private UserHistory createOrFindHistory(User user, HistoryRequestDto historyDto) {
