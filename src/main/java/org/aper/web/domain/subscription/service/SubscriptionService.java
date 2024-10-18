@@ -36,6 +36,7 @@ public class SubscriptionService {
 
     private static final String READ_KEY_PREFIX = "episode:read:";
 
+    @Transactional
     public void subscribe(UserDetailsImpl userDetails, Long authorId) {
         User subscriber = userRepository.findById(userDetails.user().getUserId())
                 .orElseThrow(() -> new ServiceException(ErrorCode.SUBSCRIBER_NOT_FOUND));
