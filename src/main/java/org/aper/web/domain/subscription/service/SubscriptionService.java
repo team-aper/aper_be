@@ -72,6 +72,7 @@ public class SubscriptionService {
 
                     Story latestStory = stories.get(0);
                     Episode latestEpisode = latestStory.getEpisodeList().get(0);
+                    boolean isRead = isEpisodeRead(subscriber.getUserId(), latestEpisode.getId());
 
                     return new SubscribedAuthor(
                             author.getPenName(),
@@ -85,7 +86,7 @@ public class SubscriptionService {
                             latestEpisode.getId().toString(),
                             latestEpisode.getTitle(),
                             latestEpisode.getDescription(),
-                            isEpisodeRead(subscriber.getUserId(), latestEpisode.getId())
+                            isRead
                     );
                 })
                 .collect(Collectors.toList());
