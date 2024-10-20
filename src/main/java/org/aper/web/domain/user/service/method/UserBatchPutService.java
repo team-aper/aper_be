@@ -5,6 +5,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.image.service.ImageEncoder;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.constant.UserBatchTypeEnum;
 import org.aper.web.domain.user.service.UserHistoryService;
 import org.aper.web.domain.user.service.UserService;
 import org.aper.web.global.batch.service.method.BatchPutService;
@@ -30,12 +32,12 @@ public class UserBatchPutService<T> implements BatchPutService<T> {
 
     @PostConstruct
     public void initBatchHandlers() {
-        batchHandlers.put("/penname/change", this::handlePenNameChange);
-        batchHandlers.put("/image", this::handleImageChange);
-        batchHandlers.put("/description/change", this::handleDescriptionChange);
-        batchHandlers.put("/contact/email/change", this::handleEmailChange);
-        batchHandlers.put("/history", this::handleHistoryChange);
-        batchHandlers.put("/class/description/change", this::handleClassDescriptionChange);
+        batchHandlers.put(UserBatchTypeEnum.PENNAME.name(), this::handlePenNameChange);
+        batchHandlers.put(UserBatchTypeEnum.IMAGE.name(), this::handleImageChange);
+        batchHandlers.put(UserBatchTypeEnum.DESCRIPTION.name(), this::handleDescriptionChange);
+        batchHandlers.put(UserBatchTypeEnum.CONTACTMAIL.name(), this::handleEmailChange);
+        batchHandlers.put(UserBatchTypeEnum.HISTORY.name(), this::handleHistoryChange);
+        batchHandlers.put(UserBatchTypeEnum.CLASSDESCRIPTION.name(), this::handleClassDescriptionChange);
     }
 
     public BiConsumer<List<T>, UserDetailsImpl> getBatchHandler(String url) {

@@ -9,6 +9,8 @@ import org.aper.web.domain.user.valid.UserValidationGroup.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 
 public class UserRequestDto {
 
@@ -91,11 +93,11 @@ public class UserRequestDto {
             String startDateType,
 
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            LocalDate date,
+            @DateTimeFormat(pattern = "yyyy-MM")
+            YearMonth date,
 
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            LocalDate endDate,
+            @DateTimeFormat(pattern = "yyyy-MM")
+            YearMonth endDate,
             String description
     ){}
 

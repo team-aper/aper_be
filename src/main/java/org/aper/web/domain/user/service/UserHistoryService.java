@@ -68,3 +68,4 @@ public class UserHistoryService {
         history.updateAwardPublication(historyDto.date(), historyDto.description(), historyType);
     }
 }
+

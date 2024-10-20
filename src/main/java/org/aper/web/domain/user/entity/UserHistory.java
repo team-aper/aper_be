@@ -8,6 +8,8 @@ import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
 import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
 
 import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
 
 @Entity
 @Getter
@@ -34,17 +36,17 @@ public class UserHistory {
     private StartDateTypeEnum startDateType;
 
     @Column(nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
+    private YearMonth date;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM")
+    private YearMonth endDate;
 
     private String description;
 
     public void updateEducation(
-            LocalDate date,
-            LocalDate endDate,
+            YearMonth date,
+            YearMonth endDate,
             String description,
             EndDateTypeEnum endDateType,
             StartDateTypeEnum startDateType) {
@@ -56,7 +58,7 @@ public class UserHistory {
         this.startDateType = startDateType;
     }
 
-    public void updateAwardPublication(LocalDate date, String description, HistoryTypeEnum historyType) {
+    public void updateAwardPublication(YearMonth date, String description, HistoryTypeEnum historyType) {
         this.date = date;
         this.description = description;
         this.historyType = historyType;
