@@ -1,5 +1,6 @@
 package org.aper.web.domain.subscription.controller;
 
+import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.*;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecommendations;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.IsSubscribed;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthors;
@@ -34,6 +35,12 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         return ResponseDto.success("is Subscribed", isSubscribed);
     }
 
+    @GetMapping
+    public ResponseDto<IsSubscriber> isSubscriber(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails);
+        return ResponseDto.success("is Subscriber", isSubscriber);
+    }
+
     @GetMapping("/subscribed-authors")
     public ResponseDto<SubscribedAuthors> getSubscribedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails);
@@ -44,6 +51,12 @@ public class SubscriptionController implements SubscriptionControllerDocs {
     public ResponseDto<AuthorRecommendations> getRecommendedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors(userDetails);
         return ResponseDto.success("Recommended Authors Data", recommendedAuthors);
+    }
+
+    @DeleteMapping("/{authorId}")
+    public ResponseDto<Void> unsubscribe(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        subscriptionService.unsubscribe(userDetails, authorId);
+        return ResponseDto.success("Unsubscribed successfully");
     }
 
 }

@@ -7,6 +7,8 @@ import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.*;
 import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.subscription.repository.SubscriptionRepository;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,13 @@ public class SubscriptionService {
         User author = subscriptionHelper.getAuthor(authorId);
         boolean isSubscribed = subscriptionRepository.existsBySubscriberAndAuthor(subscriber, author);
         return new IsSubscribed(isSubscribed);
+    }
+
+    @Transactional(readOnly = true)
+    public IsSubscriber isSubscriber(UserDetailsImpl userDetails) {
+        Long userId = userDetails.user().getUserId();
+        boolean isSubscriber = subscriptionRepository.existsBySubscriber_UserId(userId);
+        return new IsSubscriber(isSubscriber);
     }
 
     @Transactional(readOnly = true)
@@ -68,5 +77,14 @@ public class SubscriptionService {
                 criticismRecommendations,
                 poetryRecommendations
         );
+    }
+
+    @Transactional
+    public void unsubscribe(UserDetailsImpl userDetails, Long authorId) {
+        User subscriber = subscriptionHelper.getSubscriber(userDetails);
+        User author = subscriptionHelper.getAuthor(authorId);
+        Subscription subscription = subscriptionRepository.findBySubscriberAndAuthor(subscriber, author)
+                .orElseThrow(() -> new ServiceException(ErrorCode.SUBSCRIPTION_NOT_FOUND));
+        subscriptionRepository.delete(subscription);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
@@ -19,4 +20,9 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Long countByAuthorId(Long authorId);
 
     List<Subscription> findAllBySubscriber_UserId(Long userId);
+
+    Optional<Subscription> findBySubscriberAndAuthor(User subscriber, User author);
+
+    boolean existsBySubscriber_UserId(Long userId);
+
 }

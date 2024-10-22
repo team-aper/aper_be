@@ -15,6 +15,10 @@ public class SubscriptionResponseDto {
             List<SubscribedAuthor> authors
     ){}
 
+    public record IsSubscriber(
+            boolean isSubscriber
+    ){}
+
     public record AuthorRecommendations(
             List<AuthorRecommendation> daily,
             List<AuthorRecommendation> romance,
