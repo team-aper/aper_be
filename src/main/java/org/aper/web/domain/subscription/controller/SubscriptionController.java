@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/subscribe")
+@RequestMapping("/subscription")
 public class SubscriptionController implements SubscriptionControllerDocs {
 
     private final SubscriptionService subscriptionService;
@@ -23,7 +23,7 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         this.subscriptionService = subscriptionService;
     }
 
-    @PostMapping("/{authorId}")
+    @PostMapping("/subscribe/{authorId}")
     public ResponseDto<Void> subscribe(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         subscriptionService.subscribe(userDetails, authorId);
         return ResponseDto.success("Subscribed successfully");
@@ -35,7 +35,7 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         return ResponseDto.success("is Subscribed", isSubscribed);
     }
 
-    @GetMapping
+    @GetMapping("/is-subscriber")
     public ResponseDto<IsSubscriber> isSubscriber(@AuthenticationPrincipal UserDetailsImpl userDetails){
         IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails);
         return ResponseDto.success("is Subscriber", isSubscriber);
@@ -53,7 +53,7 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         return ResponseDto.success("Recommended Authors Data", recommendedAuthors);
     }
 
-    @DeleteMapping("/{authorId}")
+    @DeleteMapping("/unsubscribe/{authorId}")
     public ResponseDto<Void> unsubscribe(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         subscriptionService.unsubscribe(userDetails, authorId);
         return ResponseDto.success("Unsubscribed successfully");
