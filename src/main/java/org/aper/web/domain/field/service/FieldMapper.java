@@ -5,10 +5,14 @@ import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,5 +76,43 @@ public class FieldMapper {
         }
 
         return description.length() > 250 ? description.substring(0, 250) + "..." : description;
+    }
+
+    public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList) {
+        List<HistoryDetailResponseDto> educationList = new ArrayList<>();
+        List<HistoryDetailResponseDto> awardList = new ArrayList<>();
+        List<HistoryDetailResponseDto> publicationList = new ArrayList<>();
+
+        userHistoryList.forEach(userHistory -> {
+            HistoryDetailResponseDto responseDto = new HistoryDetailResponseDto(
+                    userHistory.getId(),
+                    userHistory.getHistoryType().name(),
+                    userHistory.getDate(),
+                    userHistory.getEndDate(),
+                    userHistory.getStartDateType().name(),
+                    userHistory.getEndDateType().name(),
+                    userHistory.getDescription()
+            );
+
+            if (userHistory.getHistoryType() == HistoryTypeEnum.EDUCATION) {
+                educationList.add(responseDto);
+            }
+            if (userHistory.getHistoryType() == HistoryTypeEnum.AWARD) {
+                awardList.add(responseDto);
+            }
+            if (userHistory.getHistoryType() == HistoryTypeEnum.PUBLICATION) {
+                publicationList.add(responseDto);
+            }
+        });
+
+        return new HistoryResponseDto(
+                educationList,
+                awardList,
+                publicationList
+        );
+    }
+
+    public ClassDescriptionResponseDto classDescriptionToDto(User user) {
+        return new ClassDescriptionResponseDto(user.getClassDescription());
     }
 }

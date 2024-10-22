@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,9 @@ public class User {
     @Column
     private String penName;
 
+    @Column
+    private String contactEmail;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
@@ -41,6 +45,9 @@ public class User {
 
     @Column(name = "is_exposed", columnDefinition = "boolean default false")
     private boolean isExposed;
+
+    @Column
+    private String classDescription;
 
     @OneToMany(mappedBy = "user")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
@@ -52,6 +59,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Story> storyList;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<UserHistory> userHistories;
 
     public User() {
     }
@@ -93,5 +102,13 @@ public class User {
 
     public void updateDeleteAccount(DeleteAccount deleteAccount) {
         this.deleteAccount = deleteAccount;
+    }
+
+    public void updateContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public void updateClassDescription(String classDescription) {
+        this.classDescription = classDescription;
     }
 }

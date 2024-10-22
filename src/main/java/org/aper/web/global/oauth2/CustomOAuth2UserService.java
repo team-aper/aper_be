@@ -2,7 +2,7 @@ package org.aper.web.global.oauth2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.UserRoleEnum;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

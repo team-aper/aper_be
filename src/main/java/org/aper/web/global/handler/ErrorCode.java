@@ -44,8 +44,9 @@ public enum ErrorCode {
     INVALID_GENRE(HttpStatus.BAD_REQUEST,"S005", "유효하지 않은 장르입니다."),
     STORY_NOT_PUBLISHED(HttpStatus.FORBIDDEN,"S006", "공개되지 않은 이야기입니다."),
 
-    // AWS S3
-    S3_UPLOAD_ERROR_OCCURRED(HttpStatus.INTERNAL_SERVER_ERROR,"AWS001", "S3 업로드 중 에러가 발생했습니다."),
+    // Image
+    S3_UPLOAD_ERROR_OCCURRED(HttpStatus.INTERNAL_SERVER_ERROR,"I001", "S3 업로드 중 에러가 발생했습니다."),
+    BASE64_DECODE_FAILED(HttpStatus.BAD_REQUEST, "I002", "base64 이미지 디코딩에 실패했습니다."),
 
     // Elastic
     JSON_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"ES001", "JSON 변환 중 에러 발생"),
@@ -64,7 +65,16 @@ public enum ErrorCode {
     INVALID_DOMAIN(HttpStatus.BAD_REQUEST, "B003", "잘못된 도메인입니다."),
 
     // Chat
-    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다.");
+    TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다."),
+
+    // User History
+    HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
+    HISTORY_OWNER_MISMATCH(HttpStatus.BAD_REQUEST, "UH002", "해당 이력을 작성 할 수 있는 권한이 없습니다."),
+    INVALID_HISTORY(HttpStatus.BAD_REQUEST, "UH003", "존재하지 않는 종류의 이력 입니다."),
+    INVALID_ENDDATEVALUE(HttpStatus.BAD_REQUEST, "UH004", "존재하지 않는 종료 형태입니다."),
+    INVALID_STARTDATEVALUE(HttpStatus.BAD_REQUEST, "UH005", "존재하지 않는 시작 형태입니다.");
+
+
 
     private final String code;
     private final String message;
