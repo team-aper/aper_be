@@ -1,5 +1,6 @@
-package org.aper.web.domain.subscription.service;
+package org.aper.web.global.sse.service;
 
+import org.aper.web.global.sse.emitter.SseEmitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;

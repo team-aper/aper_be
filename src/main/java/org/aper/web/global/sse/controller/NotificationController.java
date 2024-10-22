@@ -1,6 +1,6 @@
-package org.aper.web.domain.subscription.controller;
+package org.aper.web.global.sse.controller;
 
-import org.aper.web.domain.subscription.service.SseEmitterService;
+import org.aper.web.global.sse.emitter.SseEmitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

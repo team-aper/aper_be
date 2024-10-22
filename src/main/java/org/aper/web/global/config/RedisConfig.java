@@ -1,6 +1,6 @@
 package org.aper.web.global.config;
 
-import org.aper.web.domain.subscription.service.RedisSubscriber;
+import org.aper.web.global.sse.service.RedisSubscriber;
 import org.aper.web.global.properties.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

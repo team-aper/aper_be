@@ -1,5 +1,6 @@
-package org.aper.web.domain.subscription.service;
+package org.aper.web.global.sse.emitter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
+@Slf4j
 public class SseEmitterService {
 
     private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
@@ -26,6 +28,7 @@ public class SseEmitterService {
         SseEmitter emitter = emitters.get(userId);
         if (emitter != null) {
             try {
+                log.info("Sending to user {}: {}", userId, hasNewEpisode);
                 emitter.send(SseEmitter.event().name("notification").data(hasNewEpisode));
             } catch (IOException e) {
                 emitters.remove(userId);
