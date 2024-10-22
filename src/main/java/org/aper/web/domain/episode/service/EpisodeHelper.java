@@ -73,12 +73,12 @@ public class EpisodeHelper {
     }
 
     public boolean isEpisodeRead(Long userId, Long episodeId) {
-        String key = readKeyPrefix + userId + ":" + episodeId;
+        String key = readKeyPrefix + ":" + userId + ":" + episodeId;
         return Boolean.TRUE.equals(redisTemplate.opsForValue().get(key));
     }
 
     public void markEpisodeAsRead(Long userId, Long episodeId) {
-        String key = readKeyPrefix + userId + ":" + episodeId;
+        String key = readKeyPrefix + ":" + userId + ":" + episodeId;
         redisTemplate.opsForValue().set(key, true, Duration.ofDays(30));
     }
 

@@ -73,7 +73,7 @@ public class SubscriptionHelper {
     }
 
     private boolean isEpisodeRead(Long userId, Long episodeId) {
-        String key = readKeyPrefix + userId + ":" + episodeId;
+        String key = readKeyPrefix + ":" + userId + ":" + episodeId;
         return Boolean.TRUE.equals(redisTemplate.opsForValue().get(key));
     }
 
