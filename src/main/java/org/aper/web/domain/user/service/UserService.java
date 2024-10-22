@@ -7,10 +7,11 @@ import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.UserRoleEnum;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,6 +71,9 @@ public class UserService {
     @Transactional
     public void changeEmail(User user, ChangeEmailDto changeEmailDto) {
         String newEmail = changeEmailDto.email();
+        if (userRepository.existsByEmail(newEmail)) {
+            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
+        }
         user.updateEmail(newEmail);
         userRepository.save((user));
     }
@@ -99,5 +103,17 @@ public class UserService {
             String fileKey = existFieldImage.split(".amazonaws.com/")[1];
             s3ImageService.deleteFile(fileKey);
         }
+    }
+
+    public void changeContactEmail(User user, ChangeEmailDto changeEmailDto) {
+        String newEmail = changeEmailDto.email();
+        user.updateContactEmail(newEmail);
+        userRepository.save((user));
+    }
+
+    public void changeClassDescription(User user, ClassDescriptionRequestDto requestDto) {
+        String classDescription = requestDto.description();
+        user.updateClassDescription(classDescription);
+        userRepository.save((user));
     }
 }

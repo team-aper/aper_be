@@ -8,7 +8,8 @@ public class FieldResponseDto {
     public record FieldHeaderResponseDto(
             String penName,
             String fieldImageUrl,
-            String description
+            String description,
+            String contactEmail
     ) {}
 
     public record HomeResponseDto(
