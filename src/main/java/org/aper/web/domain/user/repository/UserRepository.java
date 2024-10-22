@@ -35,9 +35,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +
-            "JOIN Subscription s ON u.userId = s.author.userId " +
-            "WHERE st.genre = :genre " +
+            "LEFT JOIN Subscription s ON u.userId = s.author.userId " +
+            "WHERE st.genre = :genre AND u.userId != :currentUserId " +
             "GROUP BY u " +
-            "ORDER BY COUNT(s.subscriber) DESC")
-    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre);
+            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN RAND() ELSE COUNT(s.subscriber) END DESC")
+    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId);
+
+
 }

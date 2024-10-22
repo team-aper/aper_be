@@ -12,7 +12,7 @@ import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
 import org.aper.web.domain.story.service.StoryHelper;
 import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.subscription.repository.SubscriptionRepository;
-import org.aper.web.domain.subscription.service.RedisPublisher;
+import org.aper.web.global.sse.service.RedisPublisher;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;

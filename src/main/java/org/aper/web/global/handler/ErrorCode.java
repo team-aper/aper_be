@@ -68,7 +68,8 @@ public enum ErrorCode {
 
     // Subscription
     SUBSCRIBER_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 유저입니다."),
-    AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다.");
+    AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다."),
+    PUBLISHING_NOT_FOUND(HttpStatus.NOT_FOUND, "S003", "구독 작가의 글이 존재하지 않습니다.");
 
     private final String code;
     private final String message;
