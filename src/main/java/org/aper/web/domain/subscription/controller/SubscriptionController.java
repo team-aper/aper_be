@@ -4,6 +4,7 @@ import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecomm
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.IsSubscribed;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthors;
 import org.aper.web.domain.subscription.service.SubscriptionService;
+import org.aper.web.global.docs.SubscriptionControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/subscribe")
-public class SubscriptionController {
+public class SubscriptionController implements SubscriptionControllerDocs {
 
     private final SubscriptionService subscriptionService;
 
@@ -30,7 +31,7 @@ public class SubscriptionController {
     @GetMapping("/is-subscribed/{authorId}")
     public ResponseDto<IsSubscribed> isSubscribed(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         IsSubscribed isSubscribed = subscriptionService.isSubscribed(userDetails, authorId);
-        return ResponseDto.success("is Subscribed data", isSubscribed);
+        return ResponseDto.success("is Subscribed", isSubscribed);
     }
 
     @GetMapping("/subscribed-authors")
@@ -40,8 +41,8 @@ public class SubscriptionController {
     }
 
     @GetMapping("/recommended-authors")
-    public ResponseDto<AuthorRecommendations> getRecommendedAuthors() {
-        AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors();
+    public ResponseDto<AuthorRecommendations> getRecommendedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors(userDetails);
         return ResponseDto.success("Recommended Authors Data", recommendedAuthors);
     }
 
