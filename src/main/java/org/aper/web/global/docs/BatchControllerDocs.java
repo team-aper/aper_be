@@ -54,7 +54,11 @@ public interface BatchControllerDocs {
             잘못된 요청입니다. ErrorCode 목록:
             - C002: 유효성 검사 실패 (Invalid input value),
             - B001: 잘못된 배치 요청 (Invalid batch request),
-            - B002: 잘못된 URL 형식 (Invalid URL format).""",
+            - B002: 잘못된 URL 형식 (Invalid URL format),
+            - UH002: 해당 이력을 작성 할 수 있는 권한이 없습니다,
+            - UH003: "존재하지 않는 종류의 이력 입니다,
+            - UH004: "존재하지 않는 종료 형태입니다,
+            - UH005: "존재하지 않는 시작 형태입니다.""",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "404", description = """
             리소스를 찾을 수 없습니다. ErrorCode 목록:
