@@ -9,6 +9,7 @@ import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,8 @@ public class EpisodeHelper {
     private final EpisodeRepository episodeRepository;
     private final RedisTemplate<String, Boolean> redisTemplate;
 
-    private static final String READ_KEY_PREFIX = "episode:read:";
+    @Value("${redis.read.key.prefix}")
+    private String readKeyPrefix;
 
     public Episode validateEpisodeExists(Long episodeId) {
         return episodeRepository.findByEpisodeAuthor(episodeId)
@@ -71,12 +73,12 @@ public class EpisodeHelper {
     }
 
     public boolean isEpisodeRead(Long userId, Long episodeId) {
-        String key = READ_KEY_PREFIX + userId + ":" + episodeId;
+        String key = readKeyPrefix + userId + ":" + episodeId;
         return Boolean.TRUE.equals(redisTemplate.opsForValue().get(key));
     }
 
     public void markEpisodeAsRead(Long userId, Long episodeId) {
-        String key = READ_KEY_PREFIX + userId + ":" + episodeId;
+        String key = readKeyPrefix + userId + ":" + episodeId;
         redisTemplate.opsForValue().set(key, true, Duration.ofDays(30));
     }
 
