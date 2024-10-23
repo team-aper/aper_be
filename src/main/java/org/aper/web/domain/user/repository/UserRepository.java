@@ -33,4 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
     List<User> findByIdListWithStories(List<Long> ids);
+
+    @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.userId != :exceptUserId")
+    Optional<User> findByIdExceptMe(Long userId, Long exceptUserId);
 }

@@ -2,6 +2,7 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.*;
 import org.aper.web.global.docs.UserControllerDocs;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
@@ -148,5 +149,15 @@ public class UserController implements UserControllerDocs {
     public ResponseDto<Void> deleteAccountScheduler() {
         deleteService.deleteAccountScheduler();
         return ResponseDto.success("계정 탈퇴 스케쥴러 작동 완료");
+    }
+
+
+    @PostMapping("/review")
+    public ResponseDto<CreatedReviewDto> createReview(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody @Valid CreateReviewRequestDto requestDto) {
+        User reviewer = userDetails.user();
+        CreatedReviewDto reviewData = userService.createReview(reviewer, requestDto);
+        return ResponseDto.success("리뷰작성에 성공하였습니다.", reviewData);
     }
 }

@@ -20,7 +20,7 @@ public class Review extends BaseSoftDeleteEntity {
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewDetail> reviewDetailList;
 
     @OneToOne

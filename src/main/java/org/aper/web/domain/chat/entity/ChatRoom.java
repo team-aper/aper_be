@@ -25,7 +25,7 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Review review;
 
@@ -37,5 +37,9 @@ public class ChatRoom {
 
     public void reject() {
         this.isRejected = true;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 }

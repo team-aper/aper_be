@@ -18,11 +18,6 @@ public class ReviewDetail {
     @Column(unique = true, updatable = false, nullable = false)
     protected Long id;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    protected LocalDateTime createdAt;
-
     @ManyToOne
     @JoinColumn(name = "review_id")
     private Review review;
