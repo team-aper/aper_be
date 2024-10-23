@@ -62,6 +62,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<UserHistory> userHistories;
 
+    @OneToMany(mappedBy = "reviewer", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Review> reviewsWritten;
+
+    @OneToMany(mappedBy = "reviewee", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Review> reviewsReceived;
+
     public User() {
     }
 

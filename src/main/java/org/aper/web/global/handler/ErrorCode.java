@@ -30,6 +30,7 @@ public enum ErrorCode {
     EMAIL_AUTH_FAILED(HttpStatus.BAD_REQUEST,"U004", "이메일 인증에 실패하였습니다."),
     PASSWORD_CHANGE_ERROR(HttpStatus.BAD_REQUEST,"U005", "패스워드 변경에 실패하였습니다."),
     INCORRECT_PASSWORD(HttpStatus.BAD_REQUEST,"U006", "비밀번호가 일치하지 않습니다."),
+    INVALID_REVIEW(HttpStatus.BAD_REQUEST, "UH007", "존재하지 종류의 리뷰 입니다."),
 
     // Episode
     EPISODE_NOT_FOUND(HttpStatus.NOT_FOUND,"E001", "존재 하지 않는 에피소드입니다."),

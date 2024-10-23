@@ -2,6 +2,7 @@ package org.aper.web.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.aper.web.domain.user.entity.Review;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "review_id")
+    private Review review;
 
     public ChatRoom(){
         this.startTime = LocalDateTime.now();
