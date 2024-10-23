@@ -1,13 +1,12 @@
 package org.aper.web.domain.user.repository;
 
-import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +27,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.userId FROM User u")
     List<Long> findAllUserId();
 
-    @Query("SELECT u FROM User u WHERE u.id IN (:ids)")
+    @Query("SELECT u FROM User u WHERE u.userId IN (:ids)")
     List<User> findByIdList(List<Long> ids);
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
     List<User> findByIdListWithStories(List<Long> ids);
+
+    @Query("SELECT u FROM User u " +
+            "JOIN u.storyList st " +
+            "LEFT JOIN Subscription s ON u.userId = s.author.userId " +
+            "WHERE st.genre = :genre AND u.userId != :currentUserId " +
+            "GROUP BY u " +
+            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN RAND() ELSE COUNT(s.subscriber) END DESC")
+    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId);
+
+
 }
