@@ -104,15 +104,15 @@ public class UserController implements UserControllerDocs {
 //        return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
 //    }
 
-    @Override
-    @PutMapping("/history")
-    public ResponseDto<Void> changeHistory(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody List<HistoryRequestDto> historyDtoList
-    ) {
-        userHistoryService.changeHistory(userDetails.user(), historyDtoList);
-        return ResponseDto.success("작가 이력 작성 완료.");
-    }
+//    @Override
+//    @PutMapping("/history")
+//    public ResponseDto<Void> changeHistory(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+//            @RequestBody List<HistoryRequestDto> historyDtoList
+//    ) {
+//        userHistoryService.changeHistory(userDetails.user(), historyDtoList);
+//        return ResponseDto.success("작가 이력 작성 완료.");
+//    }
 
 //    @Override
 //    @PutMapping("/contact/email")

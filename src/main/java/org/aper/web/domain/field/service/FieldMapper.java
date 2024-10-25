@@ -6,14 +6,17 @@ import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
 import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
+import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -112,7 +115,14 @@ public class FieldMapper {
         );
     }
 
-    public ClassDescriptionResponseDto classDescriptionToDto(User user) {
-        return new ClassDescriptionResponseDto(user.getClassDescription());
+    public ClassDescriptionResponseDto classDescriptionToDto(User user, Long totalClasses, List<ReviewDetail> reviewDetails) {
+        Map<ReviewTypeEnum, Long> reviewCountByType = reviewDetails.stream()
+                .collect(Collectors.groupingBy(ReviewDetail::getReviewType, Collectors.counting()));
+        return new ClassDescriptionResponseDto(
+                user.getClassDescription(),
+                totalClasses,
+                (long) reviewDetails.size(),
+                reviewCountByType
+        );
     }
 }

@@ -1,7 +1,11 @@
 package org.aper.web.domain.user.dto;
 
+import org.aper.web.domain.user.entity.ReviewDetail;
+import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
+
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 public class UserResponseDto {
 
@@ -26,10 +30,13 @@ public class UserResponseDto {
     ) {}
 
     public record ClassDescriptionResponseDto(
-            String classDescription
+            String classDescription,
+            Long totalClasses,
+            Long reviewers,
+            Map<ReviewTypeEnum, Long> reviewDetails
     ) {}
 
     public record CreatedReviewDto(
             Long reviewId
-    ){}
+    ) {}
 }

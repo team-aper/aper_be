@@ -4,6 +4,7 @@ import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,20 +31,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userId IN (:ids)")
     List<User> findByIdList(List<Long> ids);
 
-//    @Query("SELECT u FROM User u " +
-//            "LEFT JOIN FETCH u.storyList s " +
-//            "LEFT JOIN FETCH u.reviewsReceived r " +
-//            "LEFT JOIN FETCH u.subscribers s " +
-//            "WHERE u.userId IN :ids")
-//    List<User> findByIdListWithStories(List<Long> ids);
-
-    @Query("SELECT u.penName, u.fieldImage, u.description, u.userId, u.storyList, COUNT(r), COUNT(s) " +
+    @Query("SELECT DISTINCT u, " +
+            "  (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = u.userId) AS reviewCount, " +
+            "  (SELECT COUNT(s) FROM Subscription s WHERE s.subscriber.userId = u.userId) AS subscriberCount " +
             "FROM User u " +
-            "LEFT JOIN u.reviewsReceived r " +
-            "LEFT JOIN u.subscribers s " +
-            "WHERE u.userId IN :ids " +
-            "GROUP BY u.userId")
+            "LEFT JOIN FETCH u.storyList sl " +
+            "WHERE u.userId IN :ids")
     List<Object[]> findUserWithSubscriberAndReviewCounts(List<Long> ids);
+
+    @Query("SELECT " +
+            " (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = :authorId) AS reviewCount, " +
+            " (SELECT COUNT(cp) FROM ChatParticipant cp WHERE cp.user.userId = :authorId AND cp.isTutor = true) AS tutorChatCount " +
+            "FROM User u " +
+            "WHERE u.userId = :authorId")
+    List<Object[]> findUserIsTutorAndReviewers(Long authorId);
+
+
 
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +

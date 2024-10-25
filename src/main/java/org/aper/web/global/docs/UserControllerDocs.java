@@ -115,26 +115,26 @@ public interface UserControllerDocs {
 //    })
 //    ResponseDto<String> changeImage(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("fieldImageFile") MultipartFile fieldImageFile);
 
-    @Operation(summary = "작가 이력 생성, 수정 API",
-            description = "작가의 이력(학력, 수상, 출간)을 생성 및 수정 합니다.<br>" +
-                    "학력, 수상, 출간 각각 requestBody 담길 historyType으로 분류하여 처리하고 각각 EDUCATION, AWARD, PUBLICATION 으로 구분됩니다.<br>" +
-                    "requestBody의 historyId를 null로 보내주면 생성, null이 아니라 값이 존재한다면 수정으로 처리됩니다.<br>" +
-                    "수상, 출간 기록의 경우 requestBody의 endDate를 null로, 학력의 경우 값을 넣어 보내주면 됩니다.<br>" +
-                    "이력의 종류와 상관없이 리스트 형태로 요청과 응답이 이루어집니다.<br>" +
-                    "<h4> 종류와 상관없이 생성, 수정 모두 date, description은 필수 입력값입니다.<h4>" +
-                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> changeHistory(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody List<HistoryRequestDto> historyDtoList
-    );
+//    @Operation(summary = "작가 이력 생성, 수정 API",
+//            description = "작가의 이력(학력, 수상, 출간)을 생성 및 수정 합니다.<br>" +
+//                    "학력, 수상, 출간 각각 requestBody 담길 historyType으로 분류하여 처리하고 각각 EDUCATION, AWARD, PUBLICATION 으로 구분됩니다.<br>" +
+//                    "requestBody의 historyId를 null로 보내주면 생성, null이 아니라 값이 존재한다면 수정으로 처리됩니다.<br>" +
+//                    "수상, 출간 기록의 경우 requestBody의 endDate를 null로, 학력의 경우 값을 넣어 보내주면 됩니다.<br>" +
+//                    "이력의 종류와 상관없이 리스트 형태로 요청과 응답이 이루어집니다.<br>" +
+//                    "<h4> 종류와 상관없이 생성, 수정 모두 date, description은 필수 입력값입니다.<h4>" +
+//                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> changeHistory(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+//            @RequestBody List<HistoryRequestDto> historyDtoList
+//    );
 
 //    @Operation(summary = "컨택 메일 수정 API", description = "공백 없이 이메일 형식을 지켜서 컨택 이메일을 수정합니다." +
 //            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"

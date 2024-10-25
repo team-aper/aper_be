@@ -1,14 +1,18 @@
 package org.aper.web.domain.field.service;
 
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.chat.repository.ChatParticipantRepository;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.field.dto.FieldResponseDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.repository.StoryRepository;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto.ClassDescriptionResponseDto;
+import org.aper.web.domain.user.dto.UserResponseDto.HistoryResponseDto;
+import org.aper.web.domain.user.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.user.repository.ReviewDetailRepository;
 import org.aper.web.domain.user.repository.UserHistoryRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
@@ -26,6 +30,8 @@ public class FieldService {
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
+    private final ChatParticipantRepository chatParticipantRepository;
+    private final ReviewDetailRepository reviewDetailRepository;
     private final FieldMapper fieldMapper;
     private final FieldHelper fieldHelper;
 
@@ -69,6 +75,9 @@ public class FieldService {
     public ClassDescriptionResponseDto getClassDescription(Long authorId) {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        return fieldMapper.classDescriptionToDto(user);
+        Long totalClasses = chatParticipantRepository.countByUserUserIdAndIsTutorTrue(authorId);
+        List<ReviewDetail> reviews = reviewDetailRepository.findReviewDetailsByUserId(authorId);
+//        Object[] classAndReviews = userRepository.findUserIsTutorAndReviewers(authorId).get(0);
+        return fieldMapper.classDescriptionToDto(user, totalClasses, reviews);
     }
 }
