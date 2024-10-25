@@ -77,7 +77,6 @@ public class FieldService {
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         Long totalClasses = chatParticipantRepository.countByUserUserIdAndIsTutorTrue(authorId);
         List<ReviewDetail> reviews = reviewDetailRepository.findReviewDetailsByUserId(authorId);
-//        Object[] classAndReviews = userRepository.findUserIsTutorAndReviewers(authorId).get(0);
         return fieldMapper.classDescriptionToDto(user, totalClasses, reviews);
     }
 }
