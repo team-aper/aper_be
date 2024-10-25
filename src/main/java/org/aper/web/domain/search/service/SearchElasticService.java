@@ -46,7 +46,7 @@ public class SearchElasticService implements SearchServiceInterface{
         Pageable pageAble = PageRequest.of(page, size);
         List<ElasticSearchUserDocument> targetAuthors = userElasticSearchRepository.searchUsersWithQueryBuilders(penName, pageAble);
         List<Long> userIdList = elasticSearchMapper.UserDocumentListToLong(targetAuthors);
-        List<User> userList = userRepository.findByIdListWithStories(userIdList);
+        List<Object[]> userList = userRepository.findUserWithSubscriberAndReviewCounts(userIdList);
         List<AuthorListResponseDto> responseDto = searchMapper.UserListToAuthorListResponseDto(userList);
         return new SearchAuthorResponseDto(responseDto);
     }

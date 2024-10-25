@@ -12,15 +12,17 @@ import java.util.List;
 
 @Component
 public class SearchMapper {
-    public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<User> userList) {
+    public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<Object[]> userList) {
         return userList.stream()
                 .map(user ->
                         new AuthorListResponseDto(
-                                user.getPenName(),
-                                user.getFieldImage(),
-                                user.getDescription(),
-                                user.getUserId(),
-                                storyListToResponseDto(user.getStoryList())
+                                (String) user[0],               // penName
+                                (String) user[1],               // fieldImage
+                                (String) user[2],               // description
+                                (Long) user[3],                 // userId
+                                storyListToResponseDto((List<Story>) user[4]), // storyList
+                                (Long) user[5],                 // reviewers count
+                                (Long) user[6]                  // subscribers count
                         )
                 )
                 .toList();

@@ -30,8 +30,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userId IN (:ids)")
     List<User> findByIdList(List<Long> ids);
 
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.storyList s WHERE u.userId IN :ids")
-    List<User> findByIdListWithStories(List<Long> ids);
+//    @Query("SELECT u FROM User u " +
+//            "LEFT JOIN FETCH u.storyList s " +
+//            "LEFT JOIN FETCH u.reviewsReceived r " +
+//            "LEFT JOIN FETCH u.subscribers s " +
+//            "WHERE u.userId IN :ids")
+//    List<User> findByIdListWithStories(List<Long> ids);
+
+    @Query("SELECT u.penName, u.fieldImage, u.description, u.userId, u.storyList, COUNT(r), COUNT(s) " +
+            "FROM User u " +
+            "LEFT JOIN u.reviewsReceived r " +
+            "LEFT JOIN u.subscribers s " +
+            "WHERE u.userId IN :ids " +
+            "GROUP BY u.userId")
+    List<Object[]> findUserWithSubscriberAndReviewCounts(List<Long> ids);
 
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +
