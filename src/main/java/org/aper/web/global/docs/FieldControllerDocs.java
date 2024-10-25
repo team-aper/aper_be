@@ -62,7 +62,7 @@ public interface FieldControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId);
 
-    @Operation(summary = "작가의 1:1 수업 소개 get API", description = "토큰 필수 x, 작가의 1:1 수업 소개 내용을 요청 할 수 있는 API")
+    @Operation(summary = "작가의 1:1 수업 소개 get API", description = "토큰 필수 x, 작가의 1:1 수업 소개 내용을 요청 할 수 있는 API, 리뷰 타입별 수 리턴")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "작가 1:1 수업 소개 조회 성공", content = @Content(schema = @Schema(implementation = ClassDescriptionResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),

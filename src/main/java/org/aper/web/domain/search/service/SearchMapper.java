@@ -24,7 +24,7 @@ public class SearchMapper {
                     user.getFieldImage(),
                     user.getDescription(),
                     user.getUserId(),
-                    storyListToResponseDto(user.getStoryList()), // 첫 3개의 스토리만 포함
+                    storyListToResponseDto(user.getStoryList()),
                     reviewerCount,
                     subscriberCount
             ));
