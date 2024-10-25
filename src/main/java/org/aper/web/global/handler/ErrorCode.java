@@ -73,9 +73,13 @@ public enum ErrorCode {
     HISTORY_OWNER_MISMATCH(HttpStatus.BAD_REQUEST, "UH002", "해당 이력을 작성 할 수 있는 권한이 없습니다."),
     INVALID_HISTORY(HttpStatus.BAD_REQUEST, "UH003", "존재하지 않는 종류의 이력 입니다."),
     INVALID_ENDDATEVALUE(HttpStatus.BAD_REQUEST, "UH004", "존재하지 않는 종료 형태입니다."),
-    INVALID_STARTDATEVALUE(HttpStatus.BAD_REQUEST, "UH005", "존재하지 않는 시작 형태입니다.");
+    INVALID_STARTDATEVALUE(HttpStatus.BAD_REQUEST, "UH005", "존재하지 않는 시작 형태입니다."),
 
-
+    // Subscription
+    SUBSCRIBER_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 유저입니다."),
+    AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다."),
+    PUBLISHING_NOT_FOUND(HttpStatus.NOT_FOUND, "S003", "구독 작가의 글이 존재하지 않습니다."),
+    SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "해당하는 구독이 존재하지 않습니다.");
 
     private final String code;
     private final String message;
