@@ -68,19 +68,19 @@ public interface UserControllerDocs {
     })
     ResponseDto<Void> passwordChange(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody PasswordChangeDto passChangeDto);
 
-    @Operation(summary = "필명 수정 API",
-            description = "공백과 특수문자를 사용하지 않고 2~10글자 사이로 필명을 수정합니다.<br>" +
-                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "필명 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> changePenName(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid ChangePenNameDto changePenNameDto);
-
+//    @Operation(summary = "필명 수정 API",
+//            description = "공백과 특수문자를 사용하지 않고 2~10글자 사이로 필명을 수정합니다.<br>" +
+//                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "필명 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> changePenName(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid ChangePenNameDto changePenNameDto);
+//
     @Operation(summary = "이메일 수정 API", description = "공백 없이 이메일 형식을 지켜서 이메일을 수정합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "이메일 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -90,30 +90,30 @@ public interface UserControllerDocs {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<Void> changeEmail(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid ChangeEmailDto changeEmailDto);
-
-    @Operation(summary = "작가 소개글 수정 API", description = "사용자가 자신의 소개글을 수정합니다. " +
-                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "소개글 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> changeDescription(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ChangeDescriptionDto descriptionDto);
-
-    @Operation(summary = "작가 필드 이미지 수정 API", description = "작가의 프로필 이미지를 수정합니다. form-data 형식으로 이미지 파일을 전송해야 합니다." +
-            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다. (batch로 묶어서 요청 할 경우 base64 인코딩 필요)<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "필드 이미지 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<String> changeImage(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("fieldImageFile") MultipartFile fieldImageFile);
+//
+//    @Operation(summary = "작가 소개글 수정 API", description = "사용자가 자신의 소개글을 수정합니다. " +
+//                    "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "소개글 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> changeDescription(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ChangeDescriptionDto descriptionDto);
+//
+//    @Operation(summary = "작가 필드 이미지 수정 API", description = "작가의 프로필 이미지를 수정합니다. form-data 형식으로 이미지 파일을 전송해야 합니다." +
+//            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다. (batch로 묶어서 요청 할 경우 base64 인코딩 필요)<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "필드 이미지 수정 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<String> changeImage(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam("fieldImageFile") MultipartFile fieldImageFile);
 
     @Operation(summary = "작가 이력 생성, 수정 API",
             description = "작가의 이력(학력, 수상, 출간)을 생성 및 수정 합니다.<br>" +
@@ -136,35 +136,35 @@ public interface UserControllerDocs {
             @RequestBody List<HistoryRequestDto> historyDtoList
     );
 
-    @Operation(summary = "컨택 메일 수정 API", description = "공백 없이 이메일 형식을 지켜서 컨택 이메일을 수정합니다." +
-            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> changeContactEmail(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid ChangeEmailDto changeEmailDto
-    );
+//    @Operation(summary = "컨택 메일 수정 API", description = "공백 없이 이메일 형식을 지켜서 컨택 이메일을 수정합니다." +
+//            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> changeContactEmail(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+//            @RequestBody @Valid ChangeEmailDto changeEmailDto
+//    );
 
-    @Operation(summary = "1:1 수업 소개 수정 API", description = "2000자까지 입력 가능한 수업 소개 내용입니다." +
-            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> changeClassDescription(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody @Valid ClassDescriptionRequestDto requestDto
-    );
+//    @Operation(summary = "1:1 수업 소개 수정 API", description = "2000자까지 입력 가능한 수업 소개 내용입니다." +
+//            "<h4> batch로도 묶어서 진행할 수 있는 요청입니다.<h4>"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "작가 이력 작성 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+//                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> changeClassDescription(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+//            @RequestBody @Valid ClassDescriptionRequestDto requestDto
+//    );
 
     @Operation(summary = "계정 탈퇴 API", description = "계정 삭제 요청을 통해 계정 상태를 삭제 상태로 변경하고, 이후 일주일 후 작성한 모든 콘텐츠가 삭제됩니다.")
     @ApiResponses({
