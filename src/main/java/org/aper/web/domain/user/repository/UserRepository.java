@@ -41,5 +41,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN RAND() ELSE COUNT(s.subscriber) END DESC")
     List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId);
 
-
+    @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.userId != :exceptUserId")
+    Optional<User> findByIdExceptMe(Long userId, Long exceptUserId);
 }

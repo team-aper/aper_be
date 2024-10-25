@@ -1,6 +1,5 @@
 package org.aper.web.domain.user.dto;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -29,4 +28,8 @@ public class UserResponseDto {
     public record ClassDescriptionResponseDto(
             String classDescription
     ) {}
+
+    public record CreatedReviewDto(
+            Long reviewId
+    ){}
 }
