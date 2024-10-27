@@ -109,3 +109,10 @@ slack:
   webhook:
     url: ${slack.url}
   enabled: false
+
+security:
+  authorization-header: ${security.authorization-header}
+  authorization-key: ${security.authorization-key}
+  bearer-prefix: ${security.bearer-prefix}
+  access-token-expiration: ${security.access-token-expiration}
+  refresh-token-expiration: ${security.refresh-token-expiration}

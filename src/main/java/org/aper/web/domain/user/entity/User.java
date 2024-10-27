@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatParticipant;
 import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -67,6 +69,9 @@ public class User {
 
     @OneToMany(mappedBy = "reviewee", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Review> reviewsReceived;
+
+    @OneToMany(mappedBy = "subscriber", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Subscription> subscribers;
 
     public User() {
     }

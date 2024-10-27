@@ -74,4 +74,6 @@ public class FieldController implements FieldControllerDocs {
         ClassDescriptionResponseDto classDescription = fieldService.getClassDescription(authorId);
         return ResponseDto.success("1:1 수업 소개 정보", classDescription);
     }
+
+
 }
