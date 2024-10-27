@@ -22,6 +22,7 @@ spring:
         format_sql: true
         use_sql_comments: true
     show-sql: true
+
   mail:
     host: smtp.gmail.com # 서버 호스트
     port: 587 # 서버 포트
@@ -34,6 +35,9 @@ spring:
           timeout: 50000 # Socket Read Timeout 시간(ms)
           starttls:
             enable: true # StartTLS 활성화 여부
+          ssl:
+            trust: smtp.gmail.com
+
   data:
     redis:
       host: ${dev-redis.host}
