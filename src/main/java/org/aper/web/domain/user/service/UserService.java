@@ -164,4 +164,8 @@ public class UserService {
 
         return new CreatedReviewDto(review.getId());
     }
+
+    public Boolean emailCheck(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }

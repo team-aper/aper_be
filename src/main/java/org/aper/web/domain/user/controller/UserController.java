@@ -2,23 +2,22 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
+import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.*;
-import org.aper.web.global.docs.UserControllerDocs;
-import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.valid.UserValidationSequence;
+import org.aper.web.global.docs.UserControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/user")
 @Validated(UserValidationSequence.class)
 public class UserController implements UserControllerDocs {
 
@@ -55,6 +54,11 @@ public class UserController implements UserControllerDocs {
     public ResponseDto<Void> emailAuthCheck(@RequestBody @Valid EmailAuthDto emailAuthDto) {
         emailCertService.emailAuthCheck(emailAuthDto);
         return ResponseDto.success("이메일 인증에 성공하였습니다.");
+    }
+
+    @GetMapping("/email/check")
+    public ResponseDto<Boolean> emailCheck(@RequestParam String email) {
+        return ResponseDto.success("이메일 중복 체크 데이터", userService.emailCheck(email));
     }
 
     @PutMapping("/password")
