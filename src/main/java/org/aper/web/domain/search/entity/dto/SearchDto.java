@@ -11,11 +11,13 @@ public class SearchDto {
     public record StoryListResponseDto(
            Long storyId,
            String storyTitle,
-           Long authorId,
-           String storyGenre,
+           Long userId,
+           String genre,
            LocalDateTime publicDate,
            String episodeId,
-           String episodeFirstParagraph
+           String description,
+           String penName,
+           String fieldImage
     ) {}
 
     public record AuthorPenNameResponseDto(
