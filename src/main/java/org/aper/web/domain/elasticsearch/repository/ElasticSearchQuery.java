@@ -2,6 +2,7 @@ package org.aper.web.domain.elasticsearch.repository;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch.core.search.FieldCollapse;
 import org.aper.web.domain.elasticsearch.entity.document.CustomSourceFilter;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
@@ -81,11 +82,17 @@ public class ElasticSearchQuery {
         SourceFilter sourceFilter = new CustomSourceFilter(
                 new String[] {"episodeDescription"}
         );
+
+        FieldCollapse fieldCollapse = FieldCollapse.of(builder ->
+            builder.field("episodeId")
+        );
+
         return NativeQuery.builder()
                 .withQuery(query)
                 .withHighlightQuery(highlightQuery)  // 하이라이트 쿼리 추가
                 .withPageable(pageable)
                 .withSourceFilter(sourceFilter)
+                .withFieldCollapse(fieldCollapse)
                 .build();
     }
 
