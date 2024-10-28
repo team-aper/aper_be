@@ -26,6 +26,7 @@ public class TokenProvider {
     private final Key accessKey;
     private final Key refreshKey;
     private final TokenValidationService tokenValidationService;
+    private static final String BEARER_PREFIX = "Bearer ";
 
     public TokenProvider(RefreshTokenService tokenService, JwtProperties jwtProperties, TokenValidationService tokenValidationService, TokenProperties tokenProperties) {
         this.tokenService = tokenService;
@@ -44,7 +45,7 @@ public class TokenProvider {
     }
 
     public String generateAccessToken(String email, String role, String penName) {
-        return tokenProperties.getBearerPrefix() + generateToken(email, role, penName, tokenProperties.getAccessTokenExpiration(), accessKey);
+        return BEARER_PREFIX + generateToken(email, role, penName, tokenProperties.getAccessTokenExpiration(), accessKey);
     }
 
     public String generateRefreshToken(String email, String role, String penName) {
@@ -69,8 +70,8 @@ public class TokenProvider {
 
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(tokenProperties.getAuthorizationHeader());
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(tokenProperties.getBearerPrefix())) {
-            return bearerToken.substring(tokenProperties.getBearerPrefix().length());
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return null;
     }
