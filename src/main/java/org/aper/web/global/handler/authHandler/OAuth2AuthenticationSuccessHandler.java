@@ -56,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             errors.put("cause", "OAuth2 인증 중 사용자를 찾을 수 없습니다.");
             errors.put("provider", provider);
 
-            CustomResponseUtil.fail(response, ErrorCode.USER_NOT_FOUND, errors);
+            CustomResponseUtil.fail(response, ErrorCode.USER_NOT_FOUND);
             return;
         }
 
@@ -68,6 +68,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         data.put("refreshToken", tokens.getRefreshToken());
         data.put("provider", provider);
 
-        CustomResponseUtil.success(response, "OAuth2 인증이 성공적으로 처리되었습니다.", data, HttpStatus.OK);
+        CustomResponseUtil.success(response, "OAuth2 인증이 성공적으로 처리되었습니다.", HttpStatus.OK);
     }
 }

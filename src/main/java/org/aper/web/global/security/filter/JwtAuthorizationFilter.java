@@ -61,9 +61,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
             } catch (TokenException e) {
-                log.error(e.getMessage());
+                log.error("Token error: {}", e.getMessage());
                 SecurityContextHolder.clearContext();
-                CustomResponseUtil.fail(response, e.getMessage(), e.getStatus());
+                CustomResponseUtil.fail(response, e.getStatus(), e.getCode(), e.getMessage());
                 return;
             }
         }
