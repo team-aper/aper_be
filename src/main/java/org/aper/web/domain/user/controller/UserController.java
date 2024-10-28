@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
-import org.aper.web.domain.user.dto.UserResponseDto.SignupResponseDto;
+import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.*;
 import org.aper.web.domain.user.valid.UserValidationSequence;
@@ -25,23 +25,21 @@ public class UserController implements UserControllerDocs {
     private final EmailCertService emailCertService;
     private final PasswordService passwordService;
     private final DeleteService deleteService;
-    private final UserHistoryService userHistoryService;
 
     public UserController(UserService userService,
                           EmailCertService emailCertService,
                           PasswordService passwordService,
-                          DeleteService deleteService,
-                          UserHistoryService historyService) {
+                          DeleteService deleteService) {
         this.userService = userService;
         this.emailCertService = emailCertService;
         this.passwordService = passwordService;
         this.deleteService = deleteService;
-        this.userHistoryService = historyService;
     }
 
     @PostMapping("/signup")
-    public ResponseDto<SignupResponseDto> signup(@RequestBody @Valid SignupRequestDto requestDto) {
-        return ResponseDto.success("회원가입 성공", userService.signupUser(requestDto));
+    public ResponseDto<Void> signup(@RequestBody @Valid SignupRequestDto requestDto) {
+        userService.signupUser(requestDto);
+        return ResponseDto.success("회원가입 성공");
     }
 
     @PostMapping("/email/send")
@@ -57,7 +55,7 @@ public class UserController implements UserControllerDocs {
     }
 
     @GetMapping("/email/check")
-    public ResponseDto<Boolean> emailCheck(@RequestParam String email) {
+    public ResponseDto<IsDuplicated> emailCheck(@RequestParam String email) {
         return ResponseDto.success("이메일 중복 체크 데이터", userService.emailCheck(email));
     }
 
@@ -154,7 +152,6 @@ public class UserController implements UserControllerDocs {
         deleteService.deleteAccountScheduler();
         return ResponseDto.success("계정 탈퇴 스케쥴러 작동 완료");
     }
-
 
     @PostMapping("/review")
     public ResponseDto<CreatedReviewDto> createReview(
