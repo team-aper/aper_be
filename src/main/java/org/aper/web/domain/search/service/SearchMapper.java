@@ -55,7 +55,9 @@ public class SearchMapper {
                             story.getGenre().name(),
                             story.getPublicDate(),
                             episodeId.toString(),
-                            description
+                            description,
+                            user.getPenName(),
+                            user.getFieldImage()
                     );
                 })
                 .toList();
@@ -70,7 +72,9 @@ public class SearchMapper {
                             document.getStoryGenre(),
                             document.getEpisodePublicDate(),
                             document.getEpisodeId(),
-                            document.getEpisodeDescription()
+                            document.getEpisodeDescription(),
+                            document.getPenName(),
+                            document.getFieldImage()
                     )
                 )
                 .toList();

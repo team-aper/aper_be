@@ -15,7 +15,9 @@ public class SearchDto {
            String genre,
            LocalDateTime publicDate,
            String episodeId,
-           String description
+           String description,
+           String penName,
+           String fieldImage
     ) {}
 
     public record AuthorPenNameResponseDto(
