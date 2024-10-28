@@ -7,7 +7,8 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
+import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
 import org.aper.web.domain.user.entity.Review;
 import org.aper.web.domain.user.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
@@ -51,7 +52,7 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public SignupResponseDto signupUser(@Valid SignupRequestDto requestDto) {
+    public void signupUser(@Valid SignupRequestDto requestDto) {
         String penName = requestDto.penName();
         String email = requestDto.email();
         String password = passwordEncoder.encode(requestDto.password());
@@ -69,8 +70,6 @@ public class UserService {
 
         userRepository.save(user);
         producerService.sendCreate(user);
-
-        return new SignupResponseDto(penName);
     }
 
     @Transactional
@@ -99,15 +98,13 @@ public class UserService {
     }
 
     @Transactional
-    public String changeImage(User user, MultipartFile fieldImageFile) {
+    public void changeImage(User user, MultipartFile fieldImageFile) {
         String fileKey = s3ImageService.uploadFile(fieldImageFile);
         removeExistImage(user);
 
         String imageUrl = s3ImageService.getImageUrl(fileKey);
         user.updateFieldImage(imageUrl);
         userRepository.save(user);
-
-        return imageUrl;
     }
 
     private void removeExistImage(User user) {
@@ -165,7 +162,7 @@ public class UserService {
         return new CreatedReviewDto(review.getId());
     }
 
-    public Boolean emailCheck(String email) {
-        return userRepository.existsByEmail(email);
+    public IsDuplicated emailCheck(String email) {
+        return new IsDuplicated((userRepository.existsByEmail(email)));
     }
 }
