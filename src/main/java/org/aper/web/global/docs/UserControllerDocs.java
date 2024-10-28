@@ -57,7 +57,6 @@ public interface UserControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "중복되지 않은 이메일", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "U001 - 이미 가입된 이메일입니다,\n" +
                     "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
