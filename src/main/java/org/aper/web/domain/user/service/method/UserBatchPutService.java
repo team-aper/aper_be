@@ -58,7 +58,7 @@ public class UserBatchPutService<T> implements BatchPutService<T> {
 
     private void handleImageChange(List<T> operationDto, UserDetailsImpl userDetails) {
         ChangeBatchImageDto imageDto = objectMapper.convertValue(operationDto.get(0), ChangeBatchImageDto.class);
-        String imageUrl =  imageDto.imageBase64();
+        String imageUrl =  imageDto.image();
         if (!s3ImageService.isDefaultImage(imageUrl)) {
             imageUrl = s3ImageService.uploadImageAndGetUrl(imageUrl);
         }
