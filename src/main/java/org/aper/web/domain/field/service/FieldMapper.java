@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,36 +83,28 @@ public class FieldMapper {
     }
 
     public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList) {
-        List<HistoryDetailResponseDto> educationList = new ArrayList<>();
-        List<HistoryDetailResponseDto> awardList = new ArrayList<>();
-        List<HistoryDetailResponseDto> publicationList = new ArrayList<>();
+        Map<HistoryTypeEnum, List<HistoryDetailResponseDto>> historyMap = new HashMap<>();
+        historyMap.put(HistoryTypeEnum.EDUCATION, new ArrayList<>());
+        historyMap.put(HistoryTypeEnum.AWARD, new ArrayList<>());
+        historyMap.put(HistoryTypeEnum.PUBLICATION, new ArrayList<>());
 
         userHistoryList.forEach(userHistory -> {
             HistoryDetailResponseDto responseDto = new HistoryDetailResponseDto(
                     userHistory.getId(),
                     userHistory.getHistoryType().name(),
                     userHistory.getDate(),
-                    userHistory.getEndDate() != null ? userHistory.getEndDate() : null,
+                    userHistory.getEndDate(),
                     userHistory.getStartDateType() != null ? userHistory.getStartDateType().name() : null,
                     userHistory.getEndDateType() != null ? userHistory.getEndDateType().name() : null,
                     userHistory.getDescription()
             );
-
-            if (userHistory.getHistoryType() == HistoryTypeEnum.EDUCATION) {
-                educationList.add(responseDto);
-            }
-            if (userHistory.getHistoryType() == HistoryTypeEnum.AWARD) {
-                awardList.add(responseDto);
-            }
-            if (userHistory.getHistoryType() == HistoryTypeEnum.PUBLICATION) {
-                publicationList.add(responseDto);
-            }
+            historyMap.get(userHistory.getHistoryType()).add(responseDto);
         });
 
         return new HistoryResponseDto(
-                educationList,
-                awardList,
-                publicationList
+                historyMap.get(HistoryTypeEnum.EDUCATION),
+                historyMap.get(HistoryTypeEnum.AWARD),
+                historyMap.get(HistoryTypeEnum.PUBLICATION)
         );
     }
 
