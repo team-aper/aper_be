@@ -13,7 +13,6 @@ public class TokenProperties {
 
     private String authorizationHeader;
     private String authorizationKey;
-    private String bearerPrefix;
     private long accessTokenExpiration;
     private long refreshTokenExpiration;
 }

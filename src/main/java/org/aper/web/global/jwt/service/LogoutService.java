@@ -30,7 +30,7 @@ public class LogoutService implements LogoutHandler {
         String accessTokenValue = tokenProvider.getJwtFromHeader(request);
 
         if (accessTokenValue.isEmpty()) {
-            CustomResponseUtil.fail(response, ErrorCode.ACCESS_TOKEN_IS_NULL.getMessage(), HttpStatus.BAD_REQUEST);
+            CustomResponseUtil.fail(response, ErrorCode.ACCESS_TOKEN_IS_NULL);
         }
 
         String email = tokenProvider.getUserInfoFromAccessToken(accessTokenValue).getSubject();
