@@ -113,6 +113,6 @@ public class AuthService {
     @Transactional(readOnly = true)
     public UserInfo getUserInfo(LoginRequestDto loginRequestDto) {
         User user = userService.findUser(loginRequestDto.email());
-        return new UserInfo(user.getEmail(), user.getPenName(), user.getFieldImage());
+        return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
     }
 }
