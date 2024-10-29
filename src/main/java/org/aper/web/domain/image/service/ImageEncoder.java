@@ -21,9 +21,8 @@ public class ImageEncoder {
 
             String fileName = UUID.randomUUID() + ".jpg";
             return new Base64DecodedMultipartFile(decodedBytes, fileName);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             throw new ServiceException(ErrorCode.BASE64_DECODE_FAILED);
         }
     }
-
 }

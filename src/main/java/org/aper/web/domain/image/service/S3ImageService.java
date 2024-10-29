@@ -16,6 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class S3ImageService {
+    private final ImageEncoder imageEncoder;
     @Value("${aws.s3.image.bucket}")
     private String bucket;
 
@@ -24,7 +25,7 @@ public class S3ImageService {
 
     private final AmazonS3 s3Client;
 
-    public String uploadFile(MultipartFile file) {
+    private String uploadFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         String currentTime = String.valueOf(System.currentTimeMillis());
 
@@ -39,11 +40,21 @@ public class S3ImageService {
         }
     }
 
-    public String getImageUrl(String fileKey) {
+    private String getImageUrl(String fileKey) {
         return s3Client.getUrl(bucket, fileKey).toString();
     }
 
     public void deleteFile(String fileKey) {
         s3Client.deleteObject(bucket, fileKey);
+    }
+
+    public boolean isDefaultImage(String imageUrl) {
+        return imageUrl != null && imageUrl.startsWith("/images");
+    }
+
+    public String uploadImageAndGetUrl(String imageBase64) {
+        MultipartFile multipartFile = imageEncoder.Base64ToMultipartFile(imageBase64);
+        String fileKey = uploadFile(multipartFile);
+        return getImageUrl(fileKey);
     }
 }

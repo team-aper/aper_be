@@ -63,8 +63,8 @@ public class UserRequestDto {
     ){}
 
     public record ChangeBatchImageDto(
-            @NotBlank(message = "base64로 변환된 이미지를 입력해주세요.", groups = NotBlankGroup.class)
-            String imageBase64
+            @NotBlank(message = "수정할 이미지 url 혹은 인코딩 된 base64를 입력해주세요.", groups = NotBlankGroup.class)
+            String image
     ){}
 
     public record ChangeEmailDto(
