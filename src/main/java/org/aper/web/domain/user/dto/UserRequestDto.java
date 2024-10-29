@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
@@ -90,10 +91,10 @@ public class UserRequestDto {
             String startDateType,
 
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth date,
 
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth endDate,
             String description
     ){}
