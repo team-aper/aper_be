@@ -98,11 +98,11 @@ public class UserService {
     }
 
     @Transactional
-    public void changeImage(User user, MultipartFile fieldImageFile) {
-        String fileKey = s3ImageService.uploadFile(fieldImageFile);
-        removeExistImage(user);
-
-        String imageUrl = s3ImageService.getImageUrl(fileKey);
+    public void changeImage(User user, String imageUrl) {
+//        String fileKey = s3ImageService.uploadFile(fieldImageFile);
+//        removeExistImage(user);
+//
+//        String imageUrl = s3ImageService.getImageUrl(fileKey);
         user.updateFieldImage(imageUrl);
         userRepository.save(user);
     }

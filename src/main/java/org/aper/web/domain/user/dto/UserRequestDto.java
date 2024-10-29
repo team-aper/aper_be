@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
@@ -62,8 +63,8 @@ public class UserRequestDto {
     ){}
 
     public record ChangeBatchImageDto(
-            @NotBlank(message = "base64로 변환된 이미지를 입력해주세요.", groups = NotBlankGroup.class)
-            String imageBase64
+            @NotBlank(message = "수정할 이미지 url 혹은 인코딩 된 base64를 입력해주세요.", groups = NotBlankGroup.class)
+            String image
     ){}
 
     public record ChangeEmailDto(
@@ -90,10 +91,10 @@ public class UserRequestDto {
             String startDateType,
 
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth date,
 
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth endDate,
             String description
     ){}
