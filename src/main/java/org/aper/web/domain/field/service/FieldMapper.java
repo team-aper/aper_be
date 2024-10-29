@@ -91,9 +91,9 @@ public class FieldMapper {
                     userHistory.getId(),
                     userHistory.getHistoryType().name(),
                     userHistory.getDate(),
-                    userHistory.getEndDate(),
-                    userHistory.getStartDateType().name(),
-                    userHistory.getEndDateType().name(),
+                    userHistory.getEndDate() != null ? userHistory.getEndDate() : null,
+                    userHistory.getStartDateType() != null ? userHistory.getStartDateType().name() : null,
+                    userHistory.getEndDateType() != null ? userHistory.getEndDateType().name() : null,
                     userHistory.getDescription()
             );
 
