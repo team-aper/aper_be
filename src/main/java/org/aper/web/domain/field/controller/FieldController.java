@@ -36,7 +36,7 @@ public class FieldController implements FieldControllerDocs {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
-        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(null, authorId, page, size);
+        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(userDetails, authorId, page, size);
         return ResponseDto.success("작가 필드 홈 데이터", fieldHomeData);
     }
 
