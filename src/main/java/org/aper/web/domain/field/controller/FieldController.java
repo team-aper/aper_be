@@ -12,10 +12,7 @@ import org.aper.web.global.docs.FieldControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/field")
@@ -35,7 +32,10 @@ public class FieldController implements FieldControllerDocs {
     @GetMapping("/home/{authorId}") //작가가 작성한 에피소드를 최신순으로 보내줌
     public ResponseDto<HomeResponseDto> getFieldHomeData(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long authorId) {
+            @PathVariable Long authorId,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size
+    ) {
         HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(userDetails, authorId);
         return ResponseDto.success("작가 필드 홈 데이터", fieldHomeData);
     }
@@ -44,7 +44,10 @@ public class FieldController implements FieldControllerDocs {
     @GetMapping("/stories/{authorId}")  //작가가 생성한 이야기를 최신순으로 보내줌
     public ResponseDto<StoriesResponseDto> getStoriesData(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long authorId) {
+            @PathVariable Long authorId,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size
+    ) {
         StoriesResponseDto fieldStoriesData = fieldService.getStoriesData(userDetails, authorId);
         return ResponseDto.success("작가 필드 이야기 별 목록 데이터", fieldStoriesData);
     }
