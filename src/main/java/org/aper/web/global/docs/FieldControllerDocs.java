@@ -29,7 +29,10 @@ public interface FieldControllerDocs {
     })
     ResponseDto<FieldHeaderResponseDto> getAuthorInfo(@PathVariable Long authorId);
 
-    @Operation(summary = "필드 홈 get API", description = "토큰 필수 x, 본인의 필드일 경우 모든 에피소드를 보여줌")
+    @Operation(summary = "필드 홈 get API",
+            description = "토큰 필수 x, 본인의 필드일 경우 모든 에피소드를 보여줌 <br>" +
+                    "페이지네이션 page, size 필수 입력 X, 각각 기본값 0, 10"
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "필드 홈 데이터 조회 성공", content = @Content(schema = @Schema(implementation = HomeResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
@@ -42,7 +45,10 @@ public interface FieldControllerDocs {
             @RequestParam int size
     );
 
-    @Operation(summary = "이야기 별 목록 get API", description = "토큰 필수 x, 본인의 필드일 경우 모든 스토리를 보여줌")
+    @Operation(summary = "이야기 별 목록 get API",
+            description = "토큰 필수 x, 본인의 필드일 경우 모든 스토리를 보여줌 <br>" +
+                    "페이지네이션 page, size 필수 입력 X, 각각 기본값 0, 10"
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "이야기 목록 조회 성공", content = @Content(schema = @Schema(implementation = StoriesResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),

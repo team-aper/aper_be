@@ -18,6 +18,9 @@ import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,23 +44,25 @@ public class FieldService {
         return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription(), user.getContactEmail());
     }
 
-    public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId) {
+    public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId, int page, int size) {
+        Pageable pageAble = PageRequest.of(page, size);
         boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
-        List<Episode> episodeList = isMyField
-                ? episodeRepository.findAllByUserId(authorId)
-                : episodeRepository.findAllByEpisodeOnlyPublished(authorId);
+        Page<Episode> episodeList = isMyField
+                ? episodeRepository.findAllByUserIdWithPageAble(authorId, pageAble)
+                : episodeRepository.findAllByEpisodeOnlyPublishedWithPageAble(authorId, pageAble);
 
-        List<HomeDetailsResponseDto> detailsList = fieldMapper.toHomeDetailsResponseDtoList(episodeList);
+        List<HomeDetailsResponseDto> detailsList = fieldMapper.toHomeDetailsResponseDtoList(episodeList.getContent());
         return new HomeResponseDto(isMyField, detailsList);
     }
 
-    public StoriesResponseDto getStoriesData(UserDetailsImpl userDetails, Long authorId) {
+    public StoriesResponseDto getStoriesData(UserDetailsImpl userDetails, Long authorId, int page, int size) {
+        Pageable pageAble = PageRequest.of(page, size);
         boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
-        List<Story> storyList = isMyField
-                ? storyRepository.findAllByStories(authorId)
-                : storyRepository.findAllByStoriesOnlyPublished(authorId);
+        Page<Story> storyList = isMyField
+                ? storyRepository.findAllByStoriesWithPageAble(authorId, pageAble)
+                : storyRepository.findAllByStoriesOnlyPublishedWithPageAble(authorId, pageAble);
 
-        List<StoriesDetailsResponseDto> storiesList = fieldMapper.toStoriesDetailsResponseDtoList(storyList);
+        List<StoriesDetailsResponseDto> storiesList = fieldMapper.toStoriesDetailsResponseDtoList(storyList.getContent());
         return new StoriesResponseDto(isMyField, storiesList);
     }
 

@@ -36,7 +36,7 @@ public class FieldController implements FieldControllerDocs {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
-        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(userDetails, authorId);
+        HomeResponseDto fieldHomeData = fieldService.getFieldHomeData(null, authorId, page, size);
         return ResponseDto.success("작가 필드 홈 데이터", fieldHomeData);
     }
 
@@ -48,7 +48,7 @@ public class FieldController implements FieldControllerDocs {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
-        StoriesResponseDto fieldStoriesData = fieldService.getStoriesData(userDetails, authorId);
+        StoriesResponseDto fieldStoriesData = fieldService.getStoriesData(userDetails, authorId, page, size);
         return ResponseDto.success("작가 필드 이야기 별 목록 데이터", fieldStoriesData);
     }
 
