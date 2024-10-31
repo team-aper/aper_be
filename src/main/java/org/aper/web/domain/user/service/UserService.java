@@ -7,6 +7,7 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
 import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
 import org.aper.web.domain.user.entity.Review;
@@ -18,6 +19,7 @@ import org.aper.web.domain.user.repository.ReviewRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,19 +35,22 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
     private final KafkaUserProducerService producerService;
+    private final UserMapper userMapper;
 
     public UserService(UserRepository userRepository,
                        ChatRoomRepository chatRoomRepository,
                        ReviewRepository reviewRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
-                       KafkaUserProducerService producerService) {
+                       KafkaUserProducerService producerService,
+                       UserMapper userMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.reviewRepository = reviewRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
         this.producerService = producerService;
+        this.userMapper = userMapper;
     }
 
     public User findUser(String email){
@@ -164,5 +169,11 @@ public class UserService {
 
     public IsDuplicated emailCheck(String email) {
         return new IsDuplicated((userRepository.existsByEmail(email)));
+    }
+
+    public UserResponseDto.UserInfo getUserInfo(UserDetailsImpl userDetails) {
+        User user = userRepository.findByIdWithHistory(userDetails.user().getUserId())
+                .orElseThrow(()-> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.userToUserInfo(user);
     }
 }

@@ -8,6 +8,15 @@ import java.util.Map;
 
 public class UserResponseDto {
 
+    public record UserInfo(
+            String penName,
+            String fieldImage,
+            String contactMail,
+            String description,
+            HistoryResponseDto historyList,
+            String classDescription
+    ) {}
+
     public record HistoryResponseDto(
             List<HistoryDetailResponseDto> educationResponseDtoList,
             List<HistoryDetailResponseDto> awardResponseDtoList,
