@@ -137,12 +137,21 @@ public class UserController implements UserControllerDocs {
 //    }
 
     @Override
+    @PostMapping("/verify")
+    public ResponseDto<Void> verifyPassword(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody PasswordVerifyDto password
+    ) {
+        passwordService.verifyPassword(userDetails.user().getPassword(), password.password());
+        return ResponseDto.success("비밀번호가 일치합니다.");
+    }
+
+    @Override
     @DeleteMapping("/account")
     public ResponseDto<Void> deleteAccount(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody DeletePasswordDto deletePasswordDto
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        deleteService.deleteAccount(userDetails.user(), deletePasswordDto);
+        deleteService.deleteAccount(userDetails.user());
         return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
     }
 
