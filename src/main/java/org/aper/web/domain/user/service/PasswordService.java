@@ -34,4 +34,10 @@ public class PasswordService {
         updateUser.updatePassword(passwordEncoder.encode(passChangeDto.newPassword()));
         log.info(passChangeDto.newPassword());
     }
+
+    public void verifyPassword(String originPassword, String password) {
+        if(!passwordEncoder.matches(password, originPassword)) {
+            throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
+        }
+    }
 }

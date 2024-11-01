@@ -3,8 +3,7 @@ package org.aper.web.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
-import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
+import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.*;
 import org.aper.web.domain.user.valid.UserValidationSequence;
@@ -137,12 +136,21 @@ public class UserController implements UserControllerDocs {
 //    }
 
     @Override
+    @PostMapping("/verify")
+    public ResponseDto<Void> verifyPassword(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody PasswordVerifyDto password
+    ) {
+        passwordService.verifyPassword(userDetails.user().getPassword(), password.password());
+        return ResponseDto.success("비밀번호가 일치합니다.");
+    }
+
+    @Override
     @DeleteMapping("/account")
     public ResponseDto<Void> deleteAccount(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody DeletePasswordDto deletePasswordDto
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        deleteService.deleteAccount(userDetails.user(), deletePasswordDto);
+        deleteService.deleteAccount(userDetails.user());
         return ResponseDto.success("계정 탈퇴에 성공하였습니다.");
     }
 
@@ -160,5 +168,13 @@ public class UserController implements UserControllerDocs {
         User reviewer = userDetails.user();
         CreatedReviewDto reviewData = userService.createReview(reviewer, requestDto);
         return ResponseDto.success("리뷰작성에 성공하였습니다.", reviewData);
+    }
+
+    @GetMapping("/info")
+    public ResponseDto<UserInfo> getUserInfo(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        UserInfo userInfo = userService.getUserInfo(userDetails);
+        return ResponseDto.success("작가 정보.", userInfo);
     }
 }

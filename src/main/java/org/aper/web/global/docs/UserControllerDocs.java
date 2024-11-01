@@ -13,6 +13,7 @@ import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -173,6 +174,20 @@ public interface UserControllerDocs {
 //            @RequestBody @Valid ClassDescriptionRequestDto requestDto
 //    );
 
+    @Operation(summary = "비밀번호 확인 API", description = "입력한 비밀번호가 일치한지 확인합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "비밀번호 확인 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
+                    "U006 - 비밀번호가 일치하지 않습니다,\n" +
+                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<Void> verifyPassword(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody PasswordVerifyDto password
+    );
+
     @Operation(summary = "계정 탈퇴 API", description = "계정 삭제 요청을 통해 계정 상태를 삭제 상태로 변경하고, 이후 일주일 후 작성한 모든 콘텐츠가 삭제됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "계정 탈퇴 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -182,7 +197,7 @@ public interface UserControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<Void> deleteAccount(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody DeletePasswordDto deletePasswordDto);
+    ResponseDto<Void> deleteAccount(@AuthenticationPrincipal UserDetailsImpl userDetails);
 
     @Operation(summary = "계정 탈퇴 싱크 맞추기 개발용 API 테스트", description = "계정 탈퇴 스케쥴러 실행하는 개발용 테스트 API")
     @ApiResponses({

@@ -78,11 +78,6 @@ public class UserRequestDto {
             String description
     ){}
 
-    public record DeletePasswordDto(
-            @NotBlank(message = "비밀번호를 입력해 주세요.", groups = NotBlankGroup.class)
-            String password
-    ){}
-
     public record HistoryRequestDto(
             Long historyId,
             @NotBlank(message = "이력의 종류를 입력해 주세요.", groups = NotBlankGroup.class)
@@ -112,5 +107,10 @@ public class UserRequestDto {
             List<ReviewTypeEnum> reviewTypes,
             @NotNull(message = "chatRoomId is null")
             Long chatRoomId
+    ) {}
+
+    public record PasswordVerifyDto(
+            @NotNull(message = "비밀번호를 입력해주세요.")
+            String password
     ) {}
 }

@@ -4,13 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
-import org.aper.web.domain.user.dto.UserRequestDto.DeletePasswordDto;
 import org.aper.web.domain.user.entity.DeleteAccount;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.DeleteAccountRepository;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.handler.ErrorCode;
-import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +24,7 @@ public class DeleteService {
     private final KafkaUserProducerService producerService;
 
     @Transactional
-    public void deleteAccount(User user, DeletePasswordDto deletePasswordDto) {
-        if(!passwordEncoder.matches(deletePasswordDto.password(), user.getPassword())) {
-            throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
-        }
+    public void deleteAccount(User user) {
         DeleteAccount account = new DeleteAccount(user);
         user.updateDeleteAccount(account);
 

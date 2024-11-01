@@ -32,6 +32,19 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
     @Query("SELECT e FROM Episode e " +
             "JOIN e.story s " +
             "JOIN s.user u " +
+            "WHERE u.userId = :authorId")
+    Page<Episode> findAllByUserIdWithPageAble(Long authorId, Pageable pageable);
+
+    @Query("SELECT e FROM Episode e " +
+            "JOIN e.story s " +
+            "JOIN s.user u " +
+            "WHERE u.userId = :authorId AND e.onDisplay = true AND s.onDisplay = true"
+    )
+    Page<Episode> findAllByEpisodeOnlyPublishedWithPageAble(Long authorId, Pageable pageable);
+
+    @Query("SELECT e FROM Episode e " +
+            "JOIN e.story s " +
+            "JOIN s.user u " +
             "WHERE e.id = :episodeId"
     )
     Optional<Episode> findByEpisodeAuthor(Long episodeId);
