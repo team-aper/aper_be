@@ -9,13 +9,10 @@ import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
-import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,14 +39,13 @@ public class FieldMapper {
     }
 
     public StoriesDetailsResponseDto toStoriesDetailsResponseDto(Story story) {
-
         LocalDateTime date = story.isOnDisplay() ? story.getPublicDate() : story.getCreatedAt();
-
         return new StoriesDetailsResponseDto(
                 story.getId(),
                 story.getTitle(),
                 story.getRoutine().name(),
                 story.getGenre().name(),
+                story.getLineStyle().name(),
                 date,
                 story.isOnDisplay()
         );
@@ -82,12 +78,12 @@ public class FieldMapper {
         return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 
-    public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList, boolean isMyField) {
-        List<HistoryDetailResponseDto> historyDetails = userHistoryToDetailsResponse(userHistoryList);
+    public HistoryResponseDto toHistoryResponseDto(List<UserHistory> userHistoryList, boolean isMyField) {
+        List<HistoryDetailResponseDto> historyDetails = toDetailsResponse(userHistoryList);
         return new HistoryResponseDto(isMyField, historyDetails);
     }
 
-    public List<HistoryDetailResponseDto> userHistoryToDetailsResponse(List<UserHistory> userHistoryList) {
+    public List<HistoryDetailResponseDto> toDetailsResponse(List<UserHistory> userHistoryList) {
         return userHistoryList.stream()
                 .map(userHistory -> new HistoryDetailResponseDto(
                         userHistory.getId(),

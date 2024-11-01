@@ -39,6 +39,7 @@ public class FieldResponseDto {
             String storyTitle,
             String routine,
             String genre,
+            String lineStyle,
             LocalDateTime date,
             boolean isPublished
     ) {}
