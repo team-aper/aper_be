@@ -26,7 +26,8 @@ public class FieldResponseDto {
             String genre,
             LocalDateTime date,
             String text,
-            boolean isPublished
+            boolean episodePublished,
+            boolean storyPublished
     ) {}
 
     public record StoriesResponseDto(

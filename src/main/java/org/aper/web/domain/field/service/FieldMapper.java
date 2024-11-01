@@ -34,7 +34,8 @@ public class FieldMapper {
                 episode.getStory().getGenre().name(),
                 date,
                 text,
-                episode.isOnDisplay()
+                episode.isOnDisplay(),
+                episode.getStory().isOnDisplay()
         );
     }
 
