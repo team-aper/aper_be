@@ -11,11 +11,13 @@ public class SearchDto {
     public record StoryListResponseDto(
            Long storyId,
            String storyTitle,
-           Long authorId,
-           String storyGenre,
+           Long userId,
+           String genre,
            LocalDateTime publicDate,
            String episodeId,
-           String episodeFirstParagraph
+           String description,
+           String penName,
+           String fieldImage
     ) {}
 
     public record AuthorPenNameResponseDto(
@@ -35,7 +37,9 @@ public class SearchDto {
             String fieldImageUrl,
             String description,
             Long authorId,
-            List<AuthorStoryListResponseDto> storyList
+            List<AuthorStoryListResponseDto> storyList,
+            Long reviewers,
+            Long subscribers
     ) {}
 
     public record AuthorStoryListResponseDto(

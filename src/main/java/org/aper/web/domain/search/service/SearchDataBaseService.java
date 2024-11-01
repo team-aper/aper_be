@@ -46,8 +46,6 @@ public class SearchDataBaseService implements SearchServiceInterface {
 
     @Override
     public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName) {
-        Pageable pageAble = PageRequest.of(page, size);
-        List<User> targetAuthors = userRepository.findAllByPenNameContaining(pageAble, penName).getContent();
-        return new SearchAuthorResponseDto(searchMapper.UserListToAuthorListResponseDto(targetAuthors));
+        return null;
     }
 }

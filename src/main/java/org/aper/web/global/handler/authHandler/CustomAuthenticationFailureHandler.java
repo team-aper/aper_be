@@ -9,23 +9,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 @Slf4j
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException {
-        log.error("인증 실패: {}", exception.getMessage());
-
-        Map<String, String> errors = new HashMap<>();
-        errors.put("code", ErrorCode.AUTHENTICATION_FAILED.getCode());
-        errors.put("message", exception.getMessage());
-
-        CustomResponseUtil.fail(response, ErrorCode.AUTHENTICATION_FAILED, errors);
+                                        AuthenticationException exception) {
+        log.error("인증 실패 - 코드: {}, 메시지: {}", ErrorCode.AUTHENTICATION_FAILED.getCode(), exception.getMessage());
+        CustomResponseUtil.fail(response, ErrorCode.AUTHENTICATION_FAILED);
     }
 }

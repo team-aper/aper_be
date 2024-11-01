@@ -7,7 +7,9 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto;
+import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
+import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
 import org.aper.web.domain.user.entity.Review;
 import org.aper.web.domain.user.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
@@ -17,6 +19,7 @@ import org.aper.web.domain.user.repository.ReviewRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,26 +35,29 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
     private final KafkaUserProducerService producerService;
+    private final UserMapper userMapper;
 
     public UserService(UserRepository userRepository,
                        ChatRoomRepository chatRoomRepository,
                        ReviewRepository reviewRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
-                       KafkaUserProducerService producerService) {
+                       KafkaUserProducerService producerService,
+                       UserMapper userMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.reviewRepository = reviewRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
         this.producerService = producerService;
+        this.userMapper = userMapper;
     }
 
     public User findUser(String email){
         return userRepository.findByEmail(email).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public SignupResponseDto signupUser(@Valid SignupRequestDto requestDto) {
+    public void signupUser(@Valid SignupRequestDto requestDto) {
         String penName = requestDto.penName();
         String email = requestDto.email();
         String password = passwordEncoder.encode(requestDto.password());
@@ -69,8 +75,6 @@ public class UserService {
 
         userRepository.save(user);
         producerService.sendCreate(user);
-
-        return new SignupResponseDto(penName);
     }
 
     @Transactional
@@ -99,15 +103,13 @@ public class UserService {
     }
 
     @Transactional
-    public String changeImage(User user, MultipartFile fieldImageFile) {
-        String fileKey = s3ImageService.uploadFile(fieldImageFile);
-        removeExistImage(user);
-
-        String imageUrl = s3ImageService.getImageUrl(fileKey);
+    public void changeImage(User user, String imageUrl) {
+//        String fileKey = s3ImageService.uploadFile(fieldImageFile);
+//        removeExistImage(user);
+//
+//        String imageUrl = s3ImageService.getImageUrl(fileKey);
         user.updateFieldImage(imageUrl);
         userRepository.save(user);
-
-        return imageUrl;
     }
 
     private void removeExistImage(User user) {
@@ -163,5 +165,15 @@ public class UserService {
         chatRoomRepository.save(chatRoom);
 
         return new CreatedReviewDto(review.getId());
+    }
+
+    public IsDuplicated emailCheck(String email) {
+        return new IsDuplicated((userRepository.existsByEmail(email)));
+    }
+
+    public UserResponseDto.UserInfo getUserInfo(UserDetailsImpl userDetails) {
+        User user = userRepository.findByIdWithHistory(userDetails.user().getUserId())
+                .orElseThrow(()-> new ServiceException(ErrorCode.USER_NOT_FOUND));
+        return userMapper.userToUserInfo(user);
     }
 }

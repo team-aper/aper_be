@@ -1,5 +1,6 @@
 package org.aper.web.domain.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
@@ -62,8 +63,8 @@ public class UserRequestDto {
     ){}
 
     public record ChangeBatchImageDto(
-            @NotBlank(message = "base64로 변환된 이미지를 입력해주세요.", groups = NotBlankGroup.class)
-            String imageBase64
+            @NotBlank(message = "수정할 이미지 url 혹은 인코딩 된 base64를 입력해주세요.", groups = NotBlankGroup.class)
+            String image
     ){}
 
     public record ChangeEmailDto(
@@ -77,11 +78,6 @@ public class UserRequestDto {
             String description
     ){}
 
-    public record DeletePasswordDto(
-            @NotBlank(message = "비밀번호를 입력해 주세요.", groups = NotBlankGroup.class)
-            String password
-    ){}
-
     public record HistoryRequestDto(
             Long historyId,
             @NotBlank(message = "이력의 종류를 입력해 주세요.", groups = NotBlankGroup.class)
@@ -90,10 +86,10 @@ public class UserRequestDto {
             String startDateType,
 
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth date,
 
-            @DateTimeFormat(pattern = "yyyy-MM")
+            @JsonFormat(pattern = "yyyy.MM")
             YearMonth endDate,
             String description
     ){}
@@ -111,5 +107,10 @@ public class UserRequestDto {
             List<ReviewTypeEnum> reviewTypes,
             @NotNull(message = "chatRoomId is null")
             Long chatRoomId
+    ) {}
+
+    public record PasswordVerifyDto(
+            @NotNull(message = "비밀번호를 입력해주세요.")
+            String password
     ) {}
 }

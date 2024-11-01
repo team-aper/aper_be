@@ -3,11 +3,12 @@ package org.aper.web.global.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.global.dto.ErrorResponseDto;
+import org.aper.web.global.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
@@ -17,73 +18,40 @@ public class CustomResponseUtil {
 
     public static void success(HttpServletResponse response, String message, HttpStatus status) {
         log.info("CustomResponseUtil.success called with message: {}, status: {}", message, status);
-        responseWithMessage(response, message, status, null, null);
-    }
-
-    public static void success(HttpServletResponse response, String message, Map<String, Object> data, HttpStatus status) {
-        log.info("CustomResponseUtil.success called with message: {}, data: {}, status: {}", message, data, status);
-        responseWithMessage(response, message, status, data, null);
-    }
-
-    public static void fail(HttpServletResponse response, String message, HttpStatus status) {
-        log.info("CustomResponseUtil.fail called with message: {}, status: {}", message, status);
-        responseWithMessage(response, message, status, null, null);
+        ResponseDto<Void> successResponse = ResponseDto.success(message);
+        writeResponse(response, successResponse, status);
     }
 
     public static void fail(HttpServletResponse response, ErrorCode errorCode) {
-        log.info("CustomResponseUtil.fail called with message: {}, errorCode: {}", errorCode.getMessage(), errorCode.getCode());
-        responseWithMessage(response, errorCode.getMessage(), errorCode.getStatus(), null, errorCode.getCode());
+        getInfo(errorCode.getCode(), errorCode.getMessage());
+        ErrorResponseDto errorResponse = new ErrorResponseDto(errorCode.getStatus().value(), errorCode.getCode(), errorCode.getMessage());
+        writeResponse(response, errorResponse, errorCode.getStatus());
     }
 
-    public static void fail(HttpServletResponse response, String message, HttpStatus status, String code) {
-        log.info("CustomResponseUtil.fail called with message: {}, status: {}, code: {}", message, status, code);
-        responseWithMessage(response, message, status, null, code);
+    public static void fail(HttpServletResponse response, HttpStatus status, String code, String message) {
+        getInfo(code, message);
+        ErrorResponseDto errorResponse = new ErrorResponseDto(status.value(), code, message);
+        writeResponse(response, errorResponse, status);
     }
 
-    public static void fail(HttpServletResponse response, ErrorCode errorCode, Map<String, String> errors) {
-        log.info("CustomResponseUtil.fail called with message: {}, errors: {}, status: {}", errorCode.getMessage(), errors, errorCode.getCode());
-        responseWithErrorMessage(response, errorCode.getMessage(), errorCode.getStatus(), errors);
+    public static String extractMessages(Map<String, String> errorMap) {
+        return String.join(", ", errorMap.values());
     }
 
-    private static void responseWithMessage(HttpServletResponse response, String message, HttpStatus status, Object jsonData, String code) {
+    private static void getInfo(String code, String message) {
+        log.info("CustomResponseUtil.fail called with code: {}, message: {}", code, message);
+    }
+
+    private static void writeResponse(HttpServletResponse response, Object responseDto, HttpStatus status) {
         response.setStatus(status.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         try (PrintWriter writer = response.getWriter()) {
-            Map<String, Object> responseMap = new LinkedHashMap<>();
-            responseMap.put("status", status.value());
-            if (code != null) {
-                responseMap.put("code", code);
-            }
-            if (jsonData != null) {
-                responseMap.put("data", jsonData);
-            }
-            responseMap.put("message", message);
-
-            String jsonResponse = objectMapper.writeValueAsString(responseMap);
+            String jsonResponse = objectMapper.writeValueAsString(responseDto);
             writer.write(jsonResponse);
         } catch (IOException e) {
             log.error("Error writing response", e);
         }
     }
-
-    private static void responseWithErrorMessage(HttpServletResponse response, String message, HttpStatus status, Map<String, String> errors) {
-        response.setStatus(status.value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        try (PrintWriter writer = response.getWriter()) {
-            Map<String, Object> responseMap = new LinkedHashMap<>();
-            responseMap.put("status", status.value());
-            responseMap.put("data", errors);
-            responseMap.put("message", message);
-
-            String jsonResponse = objectMapper.writeValueAsString(responseMap);
-            writer.write(jsonResponse);
-        } catch (IOException e) {
-            log.error("Error writing response", e);
-        }
-    }
-
 }

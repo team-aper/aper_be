@@ -16,6 +16,7 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Field", description = "작가의 필드에서 필요한 API")
 public interface FieldControllerDocs {
@@ -28,21 +29,37 @@ public interface FieldControllerDocs {
     })
     ResponseDto<FieldHeaderResponseDto> getAuthorInfo(@PathVariable Long authorId);
 
-    @Operation(summary = "필드 홈 get API", description = "토큰 필수 x, 본인의 필드일 경우 모든 에피소드를 보여줌")
+    @Operation(summary = "필드 홈 get API",
+            description = "토큰 필수 x, 본인의 필드일 경우 모든 에피소드를 보여줌 <br>" +
+                    "페이지네이션 page, size 필수 입력 X, 각각 기본값 0, 10"
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "필드 홈 데이터 조회 성공", content = @Content(schema = @Schema(implementation = HomeResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<HomeResponseDto> getFieldHomeData(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long authorId);
+    ResponseDto<HomeResponseDto> getFieldHomeData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId,
+            @RequestParam int page,
+            @RequestParam int size
+    );
 
-    @Operation(summary = "이야기 별 목록 get API", description = "토큰 필수 x, 본인의 필드일 경우 모든 스토리를 보여줌")
+    @Operation(summary = "이야기 별 목록 get API",
+            description = "토큰 필수 x, 본인의 필드일 경우 모든 스토리를 보여줌 <br>" +
+                    "페이지네이션 page, size 필수 입력 X, 각각 기본값 0, 10"
+    )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "이야기 목록 조회 성공", content = @Content(schema = @Schema(implementation = StoriesResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<StoriesResponseDto> getStoriesData(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long authorId);
+    ResponseDto<StoriesResponseDto> getStoriesData(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long authorId,
+            @RequestParam int page,
+            @RequestParam int size
+    );
 
     @Operation(summary = "작가 정보 get API", description = "토큰 필수 x")
     @ApiResponses({
@@ -62,7 +79,7 @@ public interface FieldControllerDocs {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId);
 
-    @Operation(summary = "작가의 1:1 수업 소개 get API", description = "토큰 필수 x, 작가의 1:1 수업 소개 내용을 요청 할 수 있는 API")
+    @Operation(summary = "작가의 1:1 수업 소개 get API", description = "토큰 필수 x, 작가의 1:1 수업 소개 내용을 요청 할 수 있는 API, 리뷰 타입별 수 리턴")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "작가 1:1 수업 소개 조회 성공", content = @Content(schema = @Schema(implementation = ClassDescriptionResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),

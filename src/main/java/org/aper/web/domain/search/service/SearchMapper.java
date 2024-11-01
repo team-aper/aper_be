@@ -7,23 +7,29 @@ import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class SearchMapper {
-    public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<User> userList) {
-        return userList.stream()
-                .map(user ->
-                        new AuthorListResponseDto(
-                                user.getPenName(),
-                                user.getFieldImage(),
-                                user.getDescription(),
-                                user.getUserId(),
-                                storyListToResponseDto(user.getStoryList())
-                        )
-                )
-                .toList();
+    public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<Object[]> userList) {
+        Map<Long, AuthorListResponseDto> uniqueUsers = new LinkedHashMap<>();
+
+        userList.forEach(record -> {
+            User user = (User) record[0];
+            Long reviewerCount = (Long) record[1];
+            Long subscriberCount = (Long) record[2];
+
+            uniqueUsers.computeIfAbsent(user.getUserId(), userId -> new AuthorListResponseDto(
+                    user.getPenName(),
+                    user.getFieldImage(),
+                    user.getDescription(),
+                    user.getUserId(),
+                    storyListToResponseDto(user.getStoryList()),
+                    reviewerCount,
+                    subscriberCount
+            ));
+        });
+        return new ArrayList<>(uniqueUsers.values());
     }
 
     private List<AuthorStoryListResponseDto> storyListToResponseDto(List<Story> storyList) {
@@ -49,7 +55,9 @@ public class SearchMapper {
                             story.getGenre().name(),
                             story.getPublicDate(),
                             episodeId.toString(),
-                            description
+                            description,
+                            user.getPenName(),
+                            user.getFieldImage()
                     );
                 })
                 .toList();
@@ -64,7 +72,9 @@ public class SearchMapper {
                             document.getStoryGenre(),
                             document.getEpisodePublicDate(),
                             document.getEpisodeId(),
-                            document.getEpisodeDescription()
+                            document.getEpisodeDescription(),
+                            document.getPenName(),
+                            document.getFieldImage()
                     )
                 )
                 .toList();
