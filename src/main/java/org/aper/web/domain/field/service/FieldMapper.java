@@ -82,30 +82,22 @@ public class FieldMapper {
         return description.length() > 250 ? description.substring(0, 250) + "..." : description;
     }
 
-    public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList) {
-        Map<HistoryTypeEnum, List<HistoryDetailResponseDto>> historyMap = new HashMap<>();
-        historyMap.put(HistoryTypeEnum.EDUCATION, new ArrayList<>());
-        historyMap.put(HistoryTypeEnum.AWARD, new ArrayList<>());
-        historyMap.put(HistoryTypeEnum.PUBLICATION, new ArrayList<>());
+    public HistoryResponseDto userHistoryToDto(List<UserHistory> userHistoryList, boolean isMyField) {
+        List<HistoryDetailResponseDto> historyDetails = userHistoryToDetailsResponse(userHistoryList);
+        return new HistoryResponseDto(isMyField, historyDetails);
+    }
 
-        userHistoryList.forEach(userHistory -> {
-            HistoryDetailResponseDto responseDto = new HistoryDetailResponseDto(
-                    userHistory.getId(),
-                    userHistory.getHistoryType().name(),
-                    userHistory.getDate(),
-                    userHistory.getEndDate(),
-                    userHistory.getStartDateType() != null ? userHistory.getStartDateType().name() : null,
-                    userHistory.getEndDateType() != null ? userHistory.getEndDateType().name() : null,
-                    userHistory.getDescription()
-            );
-            historyMap.get(userHistory.getHistoryType()).add(responseDto);
-        });
-
-        return new HistoryResponseDto(
-                historyMap.get(HistoryTypeEnum.EDUCATION),
-                historyMap.get(HistoryTypeEnum.AWARD),
-                historyMap.get(HistoryTypeEnum.PUBLICATION)
-        );
+    public List<HistoryDetailResponseDto> userHistoryToDetailsResponse(List<UserHistory> userHistoryList) {
+        return userHistoryList.stream()
+                .map(userHistory -> new HistoryDetailResponseDto(
+                        userHistory.getId(),
+                        userHistory.getHistoryType().name(),
+                        userHistory.getDate(),
+                        userHistory.getEndDate(),
+                        userHistory.getStartDateType() != null ? userHistory.getStartDateType().name() : null,
+                        userHistory.getEndDateType() != null ? userHistory.getEndDateType().name() : null,
+                        userHistory.getDescription()
+                )).toList();
     }
 
     public ClassDescriptionResponseDto classDescriptionToDto(User user, Long totalClasses, List<ReviewDetail> reviewDetails) {

@@ -72,9 +72,10 @@ public class FieldService {
         return fieldMapper.toDetailsResponseDto(user);
     }
 
-    public HistoryResponseDto getHistory(Long authorId) {
+    public HistoryResponseDto getHistory(Long authorId, UserDetailsImpl userDetails) {
+        boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
         List<UserHistory> historyList = userHistoryRepository.findAllByUserUserId(authorId);
-        return fieldMapper.userHistoryToDto(historyList);
+        return fieldMapper.userHistoryToDto(historyList, isMyField);
     }
 
     public ClassDescriptionResponseDto getClassDescription(Long authorId) {
