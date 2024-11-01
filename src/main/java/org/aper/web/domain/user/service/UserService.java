@@ -138,10 +138,10 @@ public class UserService {
         List<ReviewTypeEnum> reviewTypes = requestDto.reviewTypes();
 
         User reviewee = userRepository.findByIdExceptMe(revieweeId, reviewerId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 유저입니다.")
+                new ServiceException(ErrorCode.USER_NOT_FOUND)
         );
         ChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
-                new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND)
         );
 
         Review review = Review.builder()
