@@ -192,7 +192,7 @@ public interface UserControllerDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "계정 탈퇴 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "U006 - 비밀번호가 일치하지 않습니다,\n" +
+                    "A001 - 인증에 실패하였습니다,\n" +
                     "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
