@@ -74,7 +74,7 @@ public class FieldController implements FieldControllerDocs {
     public ResponseDto<ClassDescriptionResponseDto> getClassDescription(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long authorId) {
-        ClassDescriptionResponseDto classDescription = fieldService.getClassDescription(authorId);
+        ClassDescriptionResponseDto classDescription = fieldService.getClassDescription(authorId, userDetails);
         return ResponseDto.success("1:1 수업 소개 정보", classDescription);
     }
 

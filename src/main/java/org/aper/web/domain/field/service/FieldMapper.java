@@ -97,10 +97,16 @@ public class FieldMapper {
                 )).toList();
     }
 
-    public ClassDescriptionResponseDto classDescriptionToDto(User user, Long totalClasses, List<ReviewDetail> reviewDetails) {
+    public ClassDescriptionResponseDto classDescriptionToDto(
+            User user,
+            Long totalClasses,
+            List<ReviewDetail> reviewDetails,
+            boolean isMyField
+            ) {
         Map<ReviewTypeEnum, Long> reviewCountByType = reviewDetails.stream()
                 .collect(Collectors.groupingBy(ReviewDetail::getReviewType, Collectors.counting()));
         return new ClassDescriptionResponseDto(
+                isMyField,
                 user.getClassDescription(),
                 totalClasses,
                 (long) reviewDetails.size(),

@@ -33,6 +33,7 @@ public class UserResponseDto {
     ) {}
 
     public record ClassDescriptionResponseDto(
+            boolean isMyField,
             String classDescription,
             Long totalClasses,
             Long reviewers,
