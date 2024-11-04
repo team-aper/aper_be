@@ -9,7 +9,8 @@ public class FieldResponseDto {
             String penName,
             String fieldImageUrl,
             String description,
-            String contactEmail
+            String contactEmail,
+            boolean isSubscribed
     ) {}
 
     public record HomeResponseDto(
