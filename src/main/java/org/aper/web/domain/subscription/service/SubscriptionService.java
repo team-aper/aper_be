@@ -10,9 +10,6 @@ import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,24 +48,22 @@ public class SubscriptionService {
     @Transactional(readOnly = true)
     public SubscribedAuthors getSubscribedAuthors(UserDetailsImpl userDetails, int page, int size) {
         Long subscriberId = userDetails.user().getUserId();
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Subscription> subscriptionsPage = subscriptionRepository.findAllBySubscriber_UserId(subscriberId, pageable);
-        List<SubscribedAuthor> subscribedAuthors = subscriptionHelper.getSubscribedAuthors(subscriptionsPage.getContent(), subscriberId);
+        List<SubscribedAuthor> subscribedAuthors = subscriptionHelper.getSubscribedAuthorsSinceSubscription(subscriberId, page, size);
         return new SubscribedAuthors(subscribedAuthors);
     }
 
     @Transactional(readOnly = true)
-    public AuthorRecommendations getRecommendedAuthors(UserDetailsImpl userDetails, int page, int size) {
+    public AuthorRecommendations getRecommendedAuthors(UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        List<AuthorRecommendation> dailyRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.DAILY, userId, page, size);
-        List<AuthorRecommendation> romanceRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.ROMANCE, userId, page, size);
-        List<AuthorRecommendation> horrorRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.HORROR, userId, page, size);
-        List<AuthorRecommendation> sfRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.SF, userId, page, size);
-        List<AuthorRecommendation> queerRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.QUEER, userId, page, size);
-        List<AuthorRecommendation> societyRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.SOCIETY, userId, page, size);
-        List<AuthorRecommendation> artRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.ART, userId, page, size);
-        List<AuthorRecommendation> criticismRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.CRITICISM, userId, page, size);
-        List<AuthorRecommendation> poetryRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.POETRY, userId, page, size);
+        List<AuthorRecommendation> dailyRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.DAILY, userId);
+        List<AuthorRecommendation> romanceRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.ROMANCE, userId);
+        List<AuthorRecommendation> horrorRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.HORROR, userId);
+        List<AuthorRecommendation> sfRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.SF, userId);
+        List<AuthorRecommendation> queerRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.QUEER, userId);
+        List<AuthorRecommendation> societyRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.SOCIETY, userId);
+        List<AuthorRecommendation> artRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.ART, userId);
+        List<AuthorRecommendation> criticismRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.CRITICISM, userId);
+        List<AuthorRecommendation> poetryRecommendations = subscriptionHelper.getTopAuthorsByGenre(StoryGenreEnum.POETRY, userId);
 
         return new AuthorRecommendations(
                 dailyRecommendations,

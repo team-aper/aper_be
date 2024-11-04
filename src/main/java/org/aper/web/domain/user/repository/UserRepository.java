@@ -45,15 +45,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE u.userId = :authorId")
     List<Object[]> findUserIsTutorAndReviewers(Long authorId);
 
-
-
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +
             "LEFT JOIN Subscription s ON u.userId = s.author.userId " +
             "WHERE st.genre = :genre AND u.userId != :currentUserId " +
             "GROUP BY u " +
-            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN 0 ELSE COUNT(s.subscriber) END DESC")
-    Page<User> findByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId, Pageable pageable);
+            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN RAND() ELSE COUNT(s.subscriber) END DESC")
+    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId);
 
     @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.userId != :exceptUserId")
     Optional<User> findByIdExceptMe(Long userId, Long exceptUserId);

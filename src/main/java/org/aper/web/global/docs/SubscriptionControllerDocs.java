@@ -73,9 +73,7 @@ public interface SubscriptionControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<AuthorRecommendations> getRecommendedAuthors(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "4") int size
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 
     @Operation(summary = "작가 구독 해제", description = "지정된 작가에 대한 구독을 해제합니다.")
