@@ -42,14 +42,22 @@ public class SubscriptionController implements SubscriptionControllerDocs {
     }
 
     @GetMapping("/subscribed-authors")
-    public ResponseDto<SubscribedAuthors> getSubscribedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails);
+    public ResponseDto<SubscribedAuthors> getSubscribedAuthors(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails, page, size);
         return ResponseDto.success("Subscribed Authors Data", subscribedAuthors);
     }
 
     @GetMapping("/recommended-authors")
-    public ResponseDto<AuthorRecommendations> getRecommendedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors(userDetails);
+    public ResponseDto<AuthorRecommendations> getRecommendedAuthors(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size
+    ) {
+        AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors(userDetails, page, size);
         return ResponseDto.success("Recommended Authors Data", recommendedAuthors);
     }
 

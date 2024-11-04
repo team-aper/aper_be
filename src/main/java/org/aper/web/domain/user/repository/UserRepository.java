@@ -4,7 +4,6 @@ import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -53,8 +52,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LEFT JOIN Subscription s ON u.userId = s.author.userId " +
             "WHERE st.genre = :genre AND u.userId != :currentUserId " +
             "GROUP BY u " +
-            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN RAND() ELSE COUNT(s.subscriber) END DESC")
-    List<User> findTop4ByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId);
+            "ORDER BY CASE WHEN COUNT(s.subscriber) = 0 THEN 0 ELSE COUNT(s.subscriber) END DESC")
+    Page<User> findByGenreOrderBySubscriberCountDesc(StoryGenreEnum genre, Long currentUserId, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.userId != :exceptUserId")
     Optional<User> findByIdExceptMe(Long userId, Long exceptUserId);

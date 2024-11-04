@@ -14,6 +14,9 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -67,9 +70,10 @@ public class SubscriptionHelper {
                 .collect(Collectors.toList());
     }
 
-    public List<AuthorRecommendation> getTopAuthorsByGenre(StoryGenreEnum genre, Long userId) {
-        List<User> topAuthors = userRepository.findTop4ByGenreOrderBySubscriberCountDesc(genre, userId);
-        return subscriptionMapper.toAuthorRecommendations(topAuthors, genre);
+    public List<AuthorRecommendation> getTopAuthorsByGenre(StoryGenreEnum genre, Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> topAuthorsPage = userRepository.findByGenreOrderBySubscriberCountDesc(genre, userId, pageable);
+        return subscriptionMapper.toAuthorRecommendations(topAuthorsPage.getContent(), genre);
     }
 
     private boolean isEpisodeRead(Long userId, Long episodeId) {

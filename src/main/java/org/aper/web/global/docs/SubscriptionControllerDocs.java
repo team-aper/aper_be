@@ -16,6 +16,7 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Subscription", description = "작가 구독 관련 API 목록")
 public interface SubscriptionControllerDocs {
@@ -61,7 +62,9 @@ public interface SubscriptionControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<SubscribedAuthors> getSubscribedAuthors(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     );
 
     @Operation(summary = "추천 작가 목록 조회", description = "장르별로 추천 작가 목록을 반환합니다.")
@@ -70,7 +73,9 @@ public interface SubscriptionControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<AuthorRecommendations> getRecommendedAuthors(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size
     );
 
     @Operation(summary = "작가 구독 해제", description = "지정된 작가에 대한 구독을 해제합니다.")
