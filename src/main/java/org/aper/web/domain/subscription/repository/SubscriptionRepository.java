@@ -23,6 +23,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     Optional<Subscription> findBySubscriberAndAuthor(User subscriber, User author);
 
+    Optional<Subscription> findByAuthorUserIdAndSubscriberUserId(Long authorId, Long subscriberId);
+
     boolean existsBySubscriber_UserId(Long userId);
 
 }
