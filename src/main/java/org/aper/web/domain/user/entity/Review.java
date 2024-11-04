@@ -3,6 +3,7 @@ package org.aper.web.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Review extends BaseSoftDeleteEntity {
     @ManyToOne
     @JoinColumn(name = "reviewee_id")

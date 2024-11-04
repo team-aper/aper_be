@@ -1,17 +1,15 @@
 package org.aper.web.domain.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "review_detail")
+@NoArgsConstructor
 public class ReviewDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
