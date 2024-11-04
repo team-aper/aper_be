@@ -27,7 +27,10 @@ public interface FieldControllerDocs {
             @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음 (ErrorCode: U002 - 등록되지 않은 회원입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<FieldHeaderResponseDto> getAuthorInfo(@PathVariable Long authorId);
+    ResponseDto<FieldHeaderResponseDto> getAuthorInfo(
+            @PathVariable Long authorId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
 
     @Operation(summary = "필드 홈 get API",
             description = "토큰 필수 x, 본인의 필드일 경우 모든 에피소드를 보여줌 <br>" +
