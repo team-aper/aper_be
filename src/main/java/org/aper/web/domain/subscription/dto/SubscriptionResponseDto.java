@@ -40,7 +40,7 @@ public class SubscriptionResponseDto {
             String storyTitle,
             String genre,
             LocalDate publicDate,
-            String episodeId,
+            Long episodeId,
             String episodeTitle,
             String description,
             boolean isRead
