@@ -32,8 +32,8 @@ public class SubscriptionResponseDto {
     ){}
 
     public record SubscribedAuthor(
-            String authorPenName,
-            String fieldImageUrl,
+            String penName,
+            String fieldImage,
             Long authorId,
             Long chapter,
             Long storyId,
@@ -48,7 +48,7 @@ public class SubscriptionResponseDto {
 
     public record AuthorRecommendation(
             String penName,
-            String fieldImageUrl,
+            String fieldImage,
             String description,
             Long authorId,
             List<GetRecommendedStory> storyList,
