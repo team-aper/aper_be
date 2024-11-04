@@ -38,10 +38,16 @@ public class FieldService {
     private final FieldMapper fieldMapper;
     private final FieldHelper fieldHelper;
 
-    public FieldHeaderResponseDto getAuthorInfo(Long authorId) {
+    public FieldHeaderResponseDto getAuthorInfo(UserDetailsImpl userDetails, Long authorId) {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        return new FieldHeaderResponseDto(user.getPenName(), user.getFieldImage(), user.getDescription(), user.getContactEmail());
+        boolean isSubscribed = fieldHelper.isSubscribed(authorId, userDetails);
+        return new FieldHeaderResponseDto(
+                user.getPenName(),
+                user.getFieldImage(),
+                user.getDescription(),
+                user.getContactEmail(),
+                isSubscribed);
     }
 
     public HomeResponseDto getFieldHomeData(UserDetailsImpl userDetails, Long authorId, int page, int size) {
