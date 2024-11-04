@@ -13,14 +13,13 @@ public class UserResponseDto {
             String fieldImage,
             String contactMail,
             String description,
-            HistoryResponseDto historyList,
+            List<HistoryDetailResponseDto> historyResponseDtoList,
             String classDescription
     ) {}
 
     public record HistoryResponseDto(
-            List<HistoryDetailResponseDto> educationResponseDtoList,
-            List<HistoryDetailResponseDto> awardResponseDtoList,
-            List<HistoryDetailResponseDto> publicationResponseList
+            boolean isMyField,
+            List<HistoryDetailResponseDto> historyResponseDtoList
     ) {}
 
     public record HistoryDetailResponseDto(
@@ -34,6 +33,7 @@ public class UserResponseDto {
     ) {}
 
     public record ClassDescriptionResponseDto(
+            boolean isMyField,
             String classDescription,
             Long totalClasses,
             Long reviewers,

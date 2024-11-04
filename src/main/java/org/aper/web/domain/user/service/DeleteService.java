@@ -36,13 +36,15 @@ public class DeleteService {
     @Transactional
     public void deleteAccountScheduler() {
         LocalDateTime period = LocalDateTime.now().minusWeeks(1);
-        List<DeleteAccount> deleteAccounts = deleteAccountRepository.findAllToDelete(period);
+        List<User> deleteAccounts = deleteAccountRepository.findAllToDelete(period).stream()
+                .map(DeleteAccount::getUser)
+                .toList();
 
         if(deleteAccounts.isEmpty()) {
             return;
         }
 
-        deleteAccountRepository.deleteAll(deleteAccounts);
+        userRepository.deleteAll(deleteAccounts);
     }
 }
 

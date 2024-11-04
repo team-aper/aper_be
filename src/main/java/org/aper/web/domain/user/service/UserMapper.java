@@ -16,7 +16,7 @@ public class UserMapper {
                 user.getFieldImage(),
                 user.getContactEmail(),
                 user.getDescription(),
-                fieldMapper.userHistoryToDto(user.getUserHistories()),
+                fieldMapper.toDetailsResponse(user.getUserHistories()),
                 user.getClassDescription()
         );
     }

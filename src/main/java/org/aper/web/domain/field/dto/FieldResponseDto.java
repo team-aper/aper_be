@@ -25,8 +25,9 @@ public class FieldResponseDto {
             Long chapter,
             String genre,
             LocalDateTime date,
-            String text,
-            boolean isPublished
+            String description,
+            boolean episodePublicated,
+            boolean storyPublicated
     ) {}
 
     public record StoriesResponseDto(
@@ -39,8 +40,9 @@ public class FieldResponseDto {
             String storyTitle,
             String routine,
             String genre,
+            String lineStyle,
             LocalDateTime date,
-            boolean isPublished
+            boolean storyPublicated
     ) {}
 
     public record DetailsResponseDto(

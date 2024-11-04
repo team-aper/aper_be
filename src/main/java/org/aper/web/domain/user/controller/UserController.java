@@ -65,16 +65,6 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("비밀번호 변경에 성공하였습니다.");
     }
 
-//    @Override
-//    @PutMapping("/penname")
-//    public ResponseDto<Void> changePenName(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody @Valid ChangePenNameDto changePenNameDto
-//    ) {
-//        userService.ChangePenName(userDetails.user(), changePenNameDto);
-//        return ResponseDto.success("필명 변경에 성공하였습니다.");
-//    }
-
     @Override
     @PutMapping("/email")
     public ResponseDto<Void> changeEmail(
@@ -84,56 +74,6 @@ public class UserController implements UserControllerDocs {
         userService.changeEmail(userDetails.user(), changeEmailDto);
         return ResponseDto.success("이메일 변경에 성공하였습니다.");
     }
-
-//    @Override
-//    @PutMapping("/description")
-//    public ResponseDto<Void> changeDescription(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody ChangeDescriptionDto descriptionDto
-//    ) {
-//        userService.changeDescription(userDetails.user(), descriptionDto);
-//        return ResponseDto.success("작가의 말 변경에 성공하였습니다.");
-//    }
-
-//    @Override
-//    @PutMapping("/image")
-//    public ResponseDto<String> changeImage(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestParam("fieldImageFile") MultipartFile fieldImageFile
-//    ) {
-//        String imageUrl = userService.changeImage(userDetails.user(), fieldImageFile);
-//        return ResponseDto.success("필드 이미지 업로드 완료", imageUrl);
-//    }
-
-//    @Override
-//    @PutMapping("/history")
-//    public ResponseDto<Void> changeHistory(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody List<HistoryRequestDto> historyDtoList
-//    ) {
-//        userHistoryService.changeHistory(userDetails.user(), historyDtoList);
-//        return ResponseDto.success("작가 이력 작성 완료.");
-//    }
-
-//    @Override
-//    @PutMapping("/contact/email")
-//    public ResponseDto<Void> changeContactEmail(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody @Valid ChangeEmailDto changeEmailDto
-//    ) {
-//        userService.changeContactEmail(userDetails.user(), changeEmailDto);
-//        return ResponseDto.success("컨택 이메일 작성에 성공하였습니다.");
-//    }
-
-//    @Override
-//    @PutMapping("/class/description")
-//    public ResponseDto<Void> changeClassDescription(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
-//            @RequestBody @Valid ClassDescriptionRequestDto requestDto
-//    ) {
-//        userService.changeClassDescription(userDetails.user(), requestDto);
-//        return ResponseDto.success("1:1 수업 소개 변경에 성공하였습니다.");
-//    }
 
     @Override
     @PostMapping("/verify")
@@ -170,6 +110,7 @@ public class UserController implements UserControllerDocs {
         return ResponseDto.success("리뷰작성에 성공하였습니다.", reviewData);
     }
 
+    @Override
     @GetMapping("/info")
     public ResponseDto<UserInfo> getUserInfo(
             @AuthenticationPrincipal UserDetailsImpl userDetails

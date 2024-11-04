@@ -72,16 +72,18 @@ public class FieldService {
         return fieldMapper.toDetailsResponseDto(user);
     }
 
-    public HistoryResponseDto getHistory(Long authorId) {
+    public HistoryResponseDto getHistory(Long authorId, UserDetailsImpl userDetails) {
+        boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
         List<UserHistory> historyList = userHistoryRepository.findAllByUserUserId(authorId);
-        return fieldMapper.userHistoryToDto(historyList);
+        return fieldMapper.toHistoryResponseDto(historyList, isMyField);
     }
 
-    public ClassDescriptionResponseDto getClassDescription(Long authorId) {
+    public ClassDescriptionResponseDto getClassDescription(Long authorId, UserDetailsImpl userDetails) {
+        boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         Long totalClasses = chatParticipantRepository.countByUserUserIdAndIsTutorTrue(authorId);
         List<ReviewDetail> reviews = reviewDetailRepository.findReviewDetailsByUserId(authorId);
-        return fieldMapper.classDescriptionToDto(user, totalClasses, reviews);
+        return fieldMapper.classDescriptionToDto(user, totalClasses, reviews, isMyField);
     }
 }
