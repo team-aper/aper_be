@@ -10,28 +10,23 @@ import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
 import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
-import org.aper.web.domain.user.entity.Review;
-import org.aper.web.domain.user.entity.ReviewDetail;
+import org.aper.web.domain.review.entity.Review;
+import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
 import org.aper.web.domain.user.entity.constant.UserRoleEnum;
-import org.aper.web.domain.user.repository.ReviewRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final ReviewRepository reviewRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
     private final KafkaUserProducerService producerService;
@@ -39,14 +34,12 @@ public class UserService {
 
     public UserService(UserRepository userRepository,
                        ChatRoomRepository chatRoomRepository,
-                       ReviewRepository reviewRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
                        KafkaUserProducerService producerService,
                        UserMapper userMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
-        this.reviewRepository = reviewRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
         this.producerService = producerService;
@@ -130,45 +123,6 @@ public class UserService {
         String classDescription = requestDto.description();
         user.updateClassDescription(classDescription);
         userRepository.save((user));
-    }
-
-    @Transactional
-    public CreatedReviewDto createReview(User reviewer, CreateReviewRequestDto requestDto) {
-        Long reviewerId = reviewer.getUserId();
-        String reviewerPenName = reviewer.getPenName();
-        Long revieweeId = requestDto.revieweeId();
-        Long chatRoomId = requestDto.chatRoomId();
-        List<ReviewTypeEnum> reviewTypes = requestDto.reviewTypes();
-
-        User reviewee = userRepository.findByIdExceptMe(revieweeId, reviewerId).orElseThrow(() ->
-                new ServiceException(ErrorCode.USER_NOT_FOUND)
-        );
-        ChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
-                new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND)
-        );
-        String revieweePenName = reviewee.getPenName();
-
-        Review review = Review.builder()
-                .revieweePenName(revieweePenName)
-                .reviewerPenName(reviewerPenName)
-                .reviewee(reviewee)
-                .reviewer(reviewer)
-                .chatRoom(chatRoom)
-                .build();
-
-        for (ReviewTypeEnum reviewType : reviewTypes) {
-            ReviewDetail reviewDetail = ReviewDetail.builder()
-                    .reviewType(reviewType)
-                    .review(review)
-                    .build();
-            review.getReviewDetailList().add(reviewDetail);
-        }
-        reviewRepository.save((review));
-
-        chatRoom.setReview(review);
-        chatRoomRepository.save(chatRoom);
-
-        return new CreatedReviewDto(review.getId());
     }
 
     public IsDuplicated emailCheck(String email) {

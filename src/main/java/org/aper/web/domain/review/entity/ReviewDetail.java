@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.entity;
+package org.aper.web.domain.review.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

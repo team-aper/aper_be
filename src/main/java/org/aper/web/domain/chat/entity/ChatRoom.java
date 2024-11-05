@@ -2,7 +2,7 @@ package org.aper.web.domain.chat.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.aper.web.domain.user.entity.Review;
+import org.aper.web.domain.review.entity.Review;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

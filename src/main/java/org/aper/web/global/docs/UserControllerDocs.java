@@ -120,19 +120,6 @@ public interface UserControllerDocs {
     })
     ResponseDto<Void> deleteAccountScheduler();
 
-    @Operation(summary = "리뷰작성 API", description = "리뷰작성을 위한 API입니다. 작성자id, 리뷰타입, 채팅방id 등을 입력하여 요청을 보냅니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "리뷰작성에 성공하였습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "잘못된 요청 (ErrorCode 목록: \n" +
-                    "U002 - 등록되지 않은 회원입니다.,\n" +
-                    "CH002 - 존재하지 않는 채팅방입니다.)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<CreatedReviewDto> createReview(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody @Valid CreateReviewRequestDto requestDto);
-
     @Operation(summary = "작가 정보 GET API", description = "작가의 정보를 GET 하는 API 입니다. 작가 정보(필명, 이미지, 작가의 말, 컨택 메일, 이력, 1:1수업 소개글)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "작가 정보", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
