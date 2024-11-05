@@ -1,10 +1,11 @@
-package org.aper.web.domain.user.entity;
+package org.aper.web.domain.review.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.entity.BaseSoftDeleteEntity;
 
 import java.util.ArrayList;

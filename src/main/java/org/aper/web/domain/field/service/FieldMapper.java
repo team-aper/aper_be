@@ -6,7 +6,7 @@ import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
-import org.aper.web.domain.user.entity.ReviewDetail;
+import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;

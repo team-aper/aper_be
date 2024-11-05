@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatParticipant;
+import org.aper.web.domain.review.entity.Review;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.user.entity.constant.UserRoleEnum;
