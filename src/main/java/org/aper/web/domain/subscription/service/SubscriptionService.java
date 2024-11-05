@@ -31,25 +31,9 @@ public class SubscriptionService {
     }
 
     @Transactional(readOnly = true)
-    public IsSubscribed isSubscribed(UserDetailsImpl userDetails, Long authorId) {
-        User subscriber = subscriptionHelper.getSubscriber(userDetails);
-        User author = subscriptionHelper.getAuthor(authorId);
-        boolean isSubscribed = subscriptionRepository.existsBySubscriberAndAuthor(subscriber, author);
-        return new IsSubscribed(isSubscribed);
-    }
-
-    @Transactional(readOnly = true)
-    public IsSubscriber isSubscriber(UserDetailsImpl userDetails) {
-        Long userId = userDetails.user().getUserId();
-        boolean isSubscriber = subscriptionRepository.existsBySubscriber_UserId(userId);
-        return new IsSubscriber(isSubscriber);
-    }
-
-    @Transactional(readOnly = true)
-    public SubscribedAuthors getSubscribedAuthors(UserDetailsImpl userDetails) {
+    public SubscribedAuthors getSubscribedAuthors(UserDetailsImpl userDetails, int page, int size) {
         Long subscriberId = userDetails.user().getUserId();
-        List<Subscription> subscriptions = subscriptionRepository.findAllBySubscriber_UserId(subscriberId);
-        List<SubscribedAuthor> subscribedAuthors = subscriptionHelper.getSubscribedAuthors(subscriptions, subscriberId);
+        List<SubscribedAuthor> subscribedAuthors = subscriptionHelper.getSubscribedAuthorsSinceSubscription(subscriberId, page, size);
         return new SubscribedAuthors(subscribedAuthors);
     }
 

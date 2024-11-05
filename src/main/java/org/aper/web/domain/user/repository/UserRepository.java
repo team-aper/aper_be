@@ -4,7 +4,6 @@ import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -45,8 +44,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM User u " +
             "WHERE u.userId = :authorId")
     List<Object[]> findUserIsTutorAndReviewers(Long authorId);
-
-
 
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +

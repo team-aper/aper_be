@@ -32,15 +32,15 @@ public class SubscriptionResponseDto {
     ){}
 
     public record SubscribedAuthor(
-            String authorPenName,
-            String fieldImageUrl,
+            String penName,
+            String fieldImage,
             Long authorId,
             Long chapter,
             Long storyId,
             String storyTitle,
             String genre,
             LocalDate publicDate,
-            String episodeId,
+            Long episodeId,
             String episodeTitle,
             String description,
             boolean isRead
@@ -48,7 +48,7 @@ public class SubscriptionResponseDto {
 
     public record AuthorRecommendation(
             String penName,
-            String fieldImageUrl,
+            String fieldImage,
             String description,
             Long authorId,
             List<GetRecommendedStory> storyList,

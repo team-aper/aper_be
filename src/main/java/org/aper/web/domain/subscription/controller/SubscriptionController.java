@@ -29,26 +29,20 @@ public class SubscriptionController implements SubscriptionControllerDocs {
         return ResponseDto.success("Subscribed successfully");
     }
 
-    @GetMapping("/is-subscribed/{authorId}")
-    public ResponseDto<IsSubscribed> isSubscribed(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        IsSubscribed isSubscribed = subscriptionService.isSubscribed(userDetails, authorId);
-        return ResponseDto.success("is Subscribed", isSubscribed);
-    }
-
-    @GetMapping("/is-subscriber")
-    public ResponseDto<IsSubscriber> isSubscriber(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails);
-        return ResponseDto.success("is Subscriber", isSubscriber);
-    }
-
     @GetMapping("/subscribed-authors")
-    public ResponseDto<SubscribedAuthors> getSubscribedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails);
+    public ResponseDto<SubscribedAuthors> getSubscribedAuthors(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails, page, size);
         return ResponseDto.success("Subscribed Authors Data", subscribedAuthors);
     }
 
     @GetMapping("/recommended-authors")
-    public ResponseDto<AuthorRecommendations> getRecommendedAuthors(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseDto<AuthorRecommendations> getRecommendedAuthors(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         AuthorRecommendations recommendedAuthors = subscriptionService.getRecommendedAuthors(userDetails);
         return ResponseDto.success("Recommended Authors Data", recommendedAuthors);
     }

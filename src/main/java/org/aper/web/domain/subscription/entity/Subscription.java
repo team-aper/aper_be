@@ -5,16 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.global.entity.BaseEntity;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "subscriptions")
 @Getter
 @NoArgsConstructor
-public class Subscription {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Subscription extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "subscriber_id", referencedColumnName = "userId")
@@ -28,5 +27,6 @@ public class Subscription {
     public Subscription(User subscriber, User author) {
         this.subscriber = subscriber;
         this.author = author;
+        this.createdAt = LocalDateTime.now();
     }
 }

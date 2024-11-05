@@ -84,4 +84,13 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
 
     @Query("SELECT e FROM Episode e WHERE e.id IN (:episodeIds)")
     List<Episode> findByIdList(List<Long> episodeIds);
+
+    @Query("SELECT e FROM Episode e " +
+            "JOIN e.story s " +
+            "JOIN Subscription sub ON s.user.userId = sub.author.userId " +
+            "WHERE sub.subscriber.userId = :subscriberId " +
+            "AND e.onDisplay = true " +
+            "AND e.publicDate > sub.createdAt " +
+            "ORDER BY e.publicDate DESC")
+    Page<Episode> findLatestEpisodesBySubscriberSinceSubscription(@Param("subscriberId") Long subscriberId, Pageable pageable);
 }

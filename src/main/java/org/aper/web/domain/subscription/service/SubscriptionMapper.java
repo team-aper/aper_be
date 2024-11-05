@@ -30,7 +30,7 @@ public class SubscriptionMapper {
                 latestStory.getTitle(),
                 latestStory.getGenre().toString(),
                 latestEpisode.getPublicDate().toLocalDate(),
-                latestEpisode.getId().toString(),
+                latestEpisode.getId(),
                 latestEpisode.getTitle(),
                 latestEpisode.getDescription(),
                 isRead
