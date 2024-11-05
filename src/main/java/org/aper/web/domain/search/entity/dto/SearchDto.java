@@ -39,7 +39,8 @@ public class SearchDto {
             Long authorId,
             List<AuthorStoryListResponseDto> storyList,
             Long reviewers,
-            Long subscribers
+            Long subscribers,
+            boolean isSubscribed
     ) {}
 
     public record AuthorStoryListResponseDto(

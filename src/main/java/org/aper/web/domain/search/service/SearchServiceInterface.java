@@ -2,6 +2,7 @@ package org.aper.web.domain.search.service;
 
 import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.global.security.UserDetailsImpl;
 
 public interface SearchServiceInterface {
     SearchStoryResponseDto getSearchStory(
@@ -18,6 +19,7 @@ public interface SearchServiceInterface {
     SearchAuthorResponseDto getSearchAuthor(
             int page,
             int size,
-            String penName
+            String penName,
+            UserDetailsImpl userDetails
     );
 }

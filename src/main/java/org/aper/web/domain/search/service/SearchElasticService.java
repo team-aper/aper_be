@@ -11,8 +11,8 @@ import org.aper.web.domain.search.entity.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchPenNameResponseDto;
 import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,11 +42,12 @@ public class SearchElasticService implements SearchServiceInterface{
     }
 
     @Override
-    public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName) {
+    public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName, UserDetailsImpl userDetails) {
         Pageable pageAble = PageRequest.of(page, size);
+        Long userId = userDetails == null ? null : userDetails.user().getUserId();
         List<ElasticSearchUserDocument> targetAuthors = userElasticSearchRepository.searchUsersWithQueryBuilders(penName, pageAble);
         List<Long> userIdList = elasticSearchMapper.UserDocumentListToLong(targetAuthors);
-        List<Object[]> userList = userRepository.findUserWithSubscriberAndReviewCounts(userIdList);
+        List<Object[]> userList = userRepository.findUserWithSubscriberAndReviewCounts(userIdList, userId);
         List<AuthorListResponseDto> responseDto = searchMapper.UserListToAuthorListResponseDto(userList);
         return new SearchAuthorResponseDto(responseDto);
     }

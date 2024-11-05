@@ -8,6 +8,7 @@ import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -45,7 +46,7 @@ public class SearchDataBaseService implements SearchServiceInterface {
     }
 
     @Override
-    public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName) {
+    public SearchAuthorResponseDto getSearchAuthor(int page, int size, String penName, UserDetailsImpl userDetails) {
         return null;
     }
 }
