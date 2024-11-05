@@ -1,23 +1,29 @@
 package org.aper.web.domain.search.service;
 
+import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
+import org.aper.web.domain.field.service.FieldHelper;
 import org.aper.web.domain.search.entity.dto.SearchDto.*;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class SearchMapper {
+    private final FieldHelper fieldHelper;
     public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<Object[]> userList) {
         Map<Long, AuthorListResponseDto> uniqueUsers = new LinkedHashMap<>();
 
         userList.forEach(record -> {
             User user = (User) record[0];
-            Long reviewerCount = (Long) record[1];
-            Long subscriberCount = (Long) record[2];
+            boolean isSubscribed = (boolean) record[1];
+            Long reviewerCount = (Long) record[2];
+            Long subscriberCount = (Long) record[3];
 
             uniqueUsers.computeIfAbsent(user.getUserId(), userId -> new AuthorListResponseDto(
                     user.getPenName(),
@@ -26,7 +32,8 @@ public class SearchMapper {
                     user.getUserId(),
                     storyListToResponseDto(user.getStoryList()),
                     reviewerCount,
-                    subscriberCount
+                    subscriberCount,
+                    isSubscribed
             ));
         });
         return new ArrayList<>(uniqueUsers.values());

@@ -7,6 +7,8 @@ import org.aper.web.domain.search.service.SearchElasticService;
 import org.aper.web.global.docs.SearchControllerDocs;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ResponseDto;
+import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,11 +44,12 @@ public class SearchController implements SearchControllerDocs {
     @Override
     @GetMapping("/author")
     public ResponseDto<SearchAuthorResponseDto> getSearchAuthor(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam String penName
     ) {
-        SearchAuthorResponseDto authorResponseDto = searchService.getSearchAuthor(page, size, penName);
+        SearchAuthorResponseDto authorResponseDto = searchService.getSearchAuthor(page, size, penName, userDetails);
         return ResponseDto.success("작가 검색 결과", authorResponseDto);
     }
 
