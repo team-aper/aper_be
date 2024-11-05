@@ -135,6 +135,7 @@ public class UserService {
     @Transactional
     public CreatedReviewDto createReview(User reviewer, CreateReviewRequestDto requestDto) {
         Long reviewerId = reviewer.getUserId();
+        String reviewerPenName = reviewer.getPenName();
         Long revieweeId = requestDto.revieweeId();
         Long chatRoomId = requestDto.chatRoomId();
         List<ReviewTypeEnum> reviewTypes = requestDto.reviewTypes();
@@ -145,8 +146,11 @@ public class UserService {
         ChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
                 new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND)
         );
+        String revieweePenName = reviewee.getPenName();
 
         Review review = Review.builder()
+                .revieweePenName(revieweePenName)
+                .reviewerPenName(reviewerPenName)
                 .reviewee(reviewee)
                 .reviewer(reviewer)
                 .chatRoom(chatRoom)

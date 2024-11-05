@@ -14,6 +14,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Review extends BaseSoftDeleteEntity {
+    @Column
+    private String revieweePenName;
+
+    @Column
+    private String reviewerPenName;
+
     @ManyToOne
     @JoinColumn(name = "reviewee_id")
     private User reviewee;
@@ -30,7 +36,9 @@ public class Review extends BaseSoftDeleteEntity {
     private ChatRoom chatRoom;
 
     @Builder
-    public Review(User reviewee, User reviewer, ChatRoom chatRoom) {
+    public Review( String revieweePenName, String reviewerPenName, User reviewee, User reviewer, ChatRoom chatRoom) {
+        this.revieweePenName = revieweePenName;
+        this.reviewerPenName = reviewerPenName;
         this.reviewee = reviewee;
         this.reviewer = reviewer;
         this.chatRoom = chatRoom;
