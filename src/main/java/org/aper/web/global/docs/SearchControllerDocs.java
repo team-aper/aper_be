@@ -12,6 +12,8 @@ import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
+import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "검색 API")
@@ -69,6 +71,7 @@ public interface SearchControllerDocs {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<SearchAuthorResponseDto> getSearchAuthor(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
             @RequestParam String penName

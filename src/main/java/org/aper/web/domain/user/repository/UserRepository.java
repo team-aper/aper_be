@@ -31,12 +31,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByIdList(List<Long> ids);
 
     @Query("SELECT DISTINCT u, " +
+            "CASE WHEN EXISTS (SELECT s FROM Subscription s " +
+            "                 WHERE s.author.userId = u.userId " +
+            "                 AND s.subscriber.userId = :userId) " +
+            "     THEN true ELSE false END AS isAuthor, " +
             "  (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = u.userId) AS reviewCount, " +
             "  (SELECT COUNT(s) FROM Subscription s WHERE s.subscriber.userId = u.userId) AS subscriberCount " +
             "FROM User u " +
             "LEFT JOIN FETCH u.storyList sl " +
             "WHERE u.userId IN :ids")
-    List<Object[]> findUserWithSubscriberAndReviewCounts(List<Long> ids);
+    List<Object[]> findUserWithSubscriberAndReviewCounts(List<Long> ids, Long userId);
 
     @Query("SELECT " +
             " (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = :authorId) AS reviewCount, " +
