@@ -33,6 +33,7 @@ public interface SubscriptionControllerDocs {
     @Operation(summary = "구독한 작가 목록 조회", description = "사용자가 구독한 작가 목록을 반환합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "구독한 작가 목록 조회 성공", content = @Content(schema = @Schema(implementation = SubscribedAuthors.class))),
+            @ApiResponse(responseCode = "307", description = "구독한 작가가 없을시 307번 redirect", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자 정보 찾을 수 없음 (ErrorCode: SUBSCRIBER_NOT_FOUND)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
