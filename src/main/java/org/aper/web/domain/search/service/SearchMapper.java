@@ -1,21 +1,19 @@
 package org.aper.web.domain.search.service;
 
-import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
-import org.aper.web.domain.field.service.FieldHelper;
-import org.aper.web.domain.search.entity.dto.SearchDto.*;
+import org.aper.web.domain.search.entity.dto.SearchDto.AuthorListResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.AuthorPenNameResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.AuthorStoryListResponseDto;
+import org.aper.web.domain.search.entity.dto.SearchDto.StoryListResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
-import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-@RequiredArgsConstructor
 public class SearchMapper {
-    private final FieldHelper fieldHelper;
     public List<AuthorListResponseDto> UserListToAuthorListResponseDto(List<Object[]> userList) {
         Map<Long, AuthorListResponseDto> uniqueUsers = new LinkedHashMap<>();
 
