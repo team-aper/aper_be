@@ -33,6 +33,11 @@ public class SubscriptionService {
     @Transactional(readOnly = true)
     public SubscribedAuthors getSubscribedAuthors(UserDetailsImpl userDetails, int page, int size) {
         Long subscriberId = userDetails.user().getUserId();
+
+        if (!subscriptionHelper.hasSubscriptions(subscriberId)) {
+            return null;
+        }
+
         List<SubscribedAuthor> subscribedAuthors = subscriptionHelper.getSubscribedAuthorsSinceSubscription(subscriberId, page, size);
         return new SubscribedAuthors(subscribedAuthors);
     }

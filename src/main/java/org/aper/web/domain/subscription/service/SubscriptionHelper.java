@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecommendation;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthor;
+import org.aper.web.domain.subscription.repository.SubscriptionRepository;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
@@ -29,9 +29,9 @@ public class SubscriptionHelper {
 
     private final UserRepository userRepository;
     private final SubscriptionMapper subscriptionMapper;
-    private final StoryRepository storyRepository;
     private final RedisTemplate<String, Boolean> redisTemplate;
     private final EpisodeRepository episodeRepository;
+    private final SubscriptionRepository subscriptionRepository;
 
     @Value("${redis.read.key.prefix}")
     private String readKeyPrefix;
@@ -39,6 +39,10 @@ public class SubscriptionHelper {
     public User getSubscriber(UserDetailsImpl userDetails) {
         return userRepository.findById(userDetails.user().getUserId())
                 .orElseThrow(() -> new ServiceException(ErrorCode.SUBSCRIBER_NOT_FOUND));
+    }
+
+    public boolean hasSubscriptions(Long userId) {
+        return subscriptionRepository.existsBySubscriber_UserId(userId);
     }
 
     public User getAuthor(Long authorId) {

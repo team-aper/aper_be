@@ -1,8 +1,6 @@
 package org.aper.web.domain.subscription.controller;
 
-import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.*;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecommendations;
-import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.IsSubscribed;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthors;
 import org.aper.web.domain.subscription.service.SubscriptionService;
 import org.aper.web.global.docs.SubscriptionControllerDocs;
@@ -36,6 +34,11 @@ public class SubscriptionController implements SubscriptionControllerDocs {
             @RequestParam(defaultValue = "10") int size
     ) {
         SubscribedAuthors subscribedAuthors = subscriptionService.getSubscribedAuthors(userDetails, page, size);
+
+        if (subscribedAuthors == null) {
+            return ResponseDto.redirect(307, "No subscriptions found");
+        }
+
         return ResponseDto.success("Subscribed Authors Data", subscribedAuthors);
     }
 
