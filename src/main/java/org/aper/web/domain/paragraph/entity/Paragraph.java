@@ -14,6 +14,7 @@ public class Paragraph {
     @Id
     private String uuid;
 
+    @Lob
     @Column(nullable = false)
     private String content;
 
