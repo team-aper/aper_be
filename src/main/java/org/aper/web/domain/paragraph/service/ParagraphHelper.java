@@ -20,7 +20,7 @@ public class ParagraphHelper {
     private final ParagraphRepository paragraphRepository;
 
     public Episode validateEpisode(Long episodeId, UserDetailsImpl userDetails, boolean checkOwnership) {
-        Episode episode = episodeRepository.findById(episodeId)
+        Episode episode = episodeRepository.findByIdWithParagraphs(episodeId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.EPISODE_NOT_FOUND));
 
         if (checkOwnership && !episode.getStory().getUser().getUserId().equals(userDetails.user().getUserId())) {
@@ -54,7 +54,9 @@ public class ParagraphHelper {
         return paragraph.length() > 250 ? paragraph.substring(0, 250) + "..." : paragraph + "...";
     }
 
-    public void updateEpisodeDescription(Episode episode) {
+    public void updateEpisodeDescription(Long episodeId) {
+        Episode episode = episodeRepository.findByIdWithParagraphs(episodeId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.EPISODE_NOT_FOUND));
         List<Paragraph> paragraphs = episode.getParagraphs();
 
         Paragraph firstParagraph = paragraphs.stream()
