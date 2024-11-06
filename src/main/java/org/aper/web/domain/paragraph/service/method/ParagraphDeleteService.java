@@ -1,5 +1,7 @@
 package org.aper.web.domain.paragraph.service.method;
 
+import org.aper.web.global.properties.BatchProperties;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
@@ -23,13 +25,17 @@ public class ParagraphDeleteService implements BatchDeleteService<ItemPayload> {
 
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
+    private final BatchProperties batchProperties;
+    private final EntityManager entityManager;
 
     @Override
     public void handleDeletedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids, Long episodeId) {
 
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();
+        int batchSize = batchProperties.getBatchSize();
 
-        for (ItemPayload itemPayload : itemPayloads) {
+        for (int i = 0; i < itemPayloads.size(); i++) {
+            ItemPayload itemPayload = itemPayloads.get(i);
             Paragraph paragraphToDelete = paragraphRepository.findByUuid(itemPayload.id())
                     .orElseThrow(() -> new ServiceException(ErrorCode.PARAGRAPH_NOT_FOUND));
 
@@ -42,11 +48,22 @@ public class ParagraphDeleteService implements BatchDeleteService<ItemPayload> {
             paragraphRepository.delete(paragraphToDelete);
             deletedUuids.add(itemPayload.id());
             log.info("Deleted paragraph with id: {}", itemPayload.id());
-        }
-        paragraphRepository.flush();
 
-        paragraphRepository.saveAll(paragraphsToUpdate);
-        paragraphRepository.flush();
-        log.info("Updated paragraphs after deletion: {}", paragraphsToUpdate.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
+            if ((i + 1) % batchSize == 0) {
+                entityManager.flush();
+                entityManager.clear();
+                paragraphsToUpdate.clear();
+            }
+        }
+
+        entityManager.flush();
+        entityManager.clear();
+
+        if (!paragraphsToUpdate.isEmpty()) {
+            paragraphRepository.saveAll(paragraphsToUpdate);
+            entityManager.flush();
+            entityManager.clear();
+            log.info("Updated paragraphs after deletion: {}", paragraphsToUpdate.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
+        }
     }
 }
