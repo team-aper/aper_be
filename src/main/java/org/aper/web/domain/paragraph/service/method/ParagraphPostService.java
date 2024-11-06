@@ -1,11 +1,10 @@
 package org.aper.web.domain.paragraph.service.method;
 
-import org.aper.web.global.properties.BatchProperties;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
 import org.aper.web.domain.paragraph.entity.Paragraph;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,20 +25,18 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
 
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
-    private final EpisodeRepository episodeRepository;
-    private final BatchProperties batchProperties;
-    private final EntityManager entityManager;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public boolean handleAddedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids, Long episodeId) {
+    public boolean handleAddedOperation(List<ItemPayload> itemPayloads, Episode episode) {
         List<Paragraph> paragraphsToAdd = new ArrayList<>();
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();
         boolean firstParagraphAdded = false;
-        Episode episode = episodeRepository.getReferenceById(episodeId);
-        int batchSize = batchProperties.getBatchSize();
 
-        for (int i = 0; i < itemPayloads.size(); i++) {
-            ItemPayload itemPayload = itemPayloads.get(i);
+
+        for (ItemPayload itemPayload : itemPayloads) {
 
             if (paragraphRepository.findByUuid(itemPayload.id()).isPresent()) {
                 throw new ServiceException(ErrorCode.PARAGRAPH_ALREADY_EXISTS);
@@ -59,20 +55,18 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
             if (itemPayload.prev() == null) {
                 firstParagraphAdded = true;
             }
-
-            if ((i + 1) % batchSize == 0) {
-                paragraphRepository.saveAll(paragraphsToAdd);
-                entityManager.flush();
-                entityManager.clear();
-                paragraphsToAdd.clear();
-            }
         }
 
-        if (!paragraphsToAdd.isEmpty()) {
-            paragraphRepository.saveAll(paragraphsToAdd);
-            entityManager.flush();
-            entityManager.clear();
+        paragraphRepository.saveAll(paragraphsToAdd);
+        entityManager.flush();
+
+        for (ItemPayload itemPayload : itemPayloads) {
+            paragraphHelper.updatePreviousParagraph(itemPayload.prev(), itemPayload.id(), paragraphsToUpdate);
         }
+
+        paragraphRepository.saveAll(paragraphsToUpdate);
+        entityManager.flush();
+        entityManager.clear();
 
         log.info("Created and updated paragraphs: {}", paragraphsToAdd.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
         return firstParagraphAdded;
