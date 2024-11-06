@@ -63,7 +63,7 @@ public class ParagraphService implements BatchService<ItemPayload> {
                     }
                     break;
                 case "POST":
-                    if (paragraphPostService.handleAddedOperation(operation.body(), deletedUuids, episodeId)) {
+                    if (paragraphPostService.handleAddedOperation(operation.body(),episode)) {
                         firstParagraphUpdated = true;
                     }
                     break;
@@ -74,7 +74,7 @@ public class ParagraphService implements BatchService<ItemPayload> {
             iterator.remove();
 
             if (firstParagraphUpdated) {
-                paragraphHelper.updateEpisodeDescription(episode);
+                paragraphHelper.updateEpisodeDescription(episodeId);
             }
         }
     }
