@@ -27,7 +27,6 @@ public class UserBatchPutService<T> implements BatchPutService<T> {
     private final UserService userService;
     private final UserHistoryService userHistoryService;
     private final ObjectMapper objectMapper;
-    private final ImageEncoder imageEncoder;
     private final S3ImageService s3ImageService;
 
     private final Map<String, BiConsumer<List<T>, UserDetailsImpl>> batchHandlers = new HashMap<>();
