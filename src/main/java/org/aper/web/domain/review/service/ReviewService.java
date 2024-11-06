@@ -1,53 +1,31 @@
 package org.aper.web.domain.review.service;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
-import org.aper.web.domain.image.service.S3ImageService;
-import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.review.entity.Review;
 import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.review.repository.ReviewRepository;
-import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserRequestDto.CreateReviewRequestDto;
 import org.aper.web.domain.user.dto.UserResponseDto.CreatedReviewDto;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.domain.user.service.UserMapper;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewService {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ReviewRepository reviewRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final S3ImageService s3ImageService;
-    private final KafkaUserProducerService producerService;
-    private final UserMapper userMapper;
-
-    public ReviewService(UserRepository userRepository,
-                         ChatRoomRepository chatRoomRepository,
-                         ReviewRepository reviewRepository,
-                         PasswordEncoder passwordEncoder,
-                         S3ImageService s3ImageService,
-                         KafkaUserProducerService producerService,
-                         UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.chatRoomRepository = chatRoomRepository;
-        this.reviewRepository = reviewRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.s3ImageService = s3ImageService;
-        this.producerService = producerService;
-        this.userMapper = userMapper;
-    }
-
+    
     @Transactional
     public CreatedReviewDto createReview(User reviewer, CreateReviewRequestDto requestDto) {
         Long reviewerId = reviewer.getUserId();
