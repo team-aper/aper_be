@@ -17,7 +17,7 @@ spring:
     properties:
       hibernate:
         jdbc:
-          batch_size: 100
+          batch_size: 50
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         use_sql_comments: true
