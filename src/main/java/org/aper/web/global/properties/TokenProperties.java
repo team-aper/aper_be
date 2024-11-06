@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "security")
 public class TokenProperties {
-
     private String authorizationHeader;
     private String authorizationKey;
     private long accessTokenExpiration;
