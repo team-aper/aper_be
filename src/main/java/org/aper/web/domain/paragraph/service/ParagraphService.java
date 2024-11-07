@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
 import org.aper.web.domain.paragraph.service.method.ParagraphDeleteService;
 import org.aper.web.domain.paragraph.service.method.ParagraphPostService;
@@ -31,7 +30,6 @@ public class ParagraphService implements BatchService<ItemPayload> {
     private final ParagraphPostService paragraphPostService;
     private final ParagraphDeleteService paragraphDeleteService;
     private final ParagraphHelper paragraphHelper;
-    private final EpisodeRepository episodeRepository;
 
     @Override
     @Transactional
@@ -65,7 +63,7 @@ public class ParagraphService implements BatchService<ItemPayload> {
                     }
                     break;
                 case "POST":
-                    if (paragraphPostService.handleAddedOperation(operation.body(), deletedUuids, episodeId)) {
+                    if (paragraphPostService.handleAddedOperation(operation.body(),episode)) {
                         firstParagraphUpdated = true;
                     }
                     break;
@@ -76,7 +74,7 @@ public class ParagraphService implements BatchService<ItemPayload> {
             iterator.remove();
 
             if (firstParagraphUpdated) {
-                paragraphHelper.updateEpisodeDescription(episode);
+                paragraphHelper.updateEpisodeDescription(episodeId);
             }
         }
     }

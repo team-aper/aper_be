@@ -1,8 +1,9 @@
 package org.aper.web.global.batch.service.method;
 
+import org.aper.web.domain.episode.entity.Episode;
+
 import java.util.List;
-import java.util.Set;
 
 public interface BatchPostService<T> {
-    boolean handleAddedOperation(List<T> itemPayloads, Set<String> deletedUuids, Long domainId);
+    boolean handleAddedOperation(List<T> itemPayloads, Episode domain);
 }

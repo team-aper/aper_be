@@ -1,9 +1,10 @@
 package org.aper.web.domain.paragraph.service.method;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
 import org.aper.web.domain.paragraph.entity.Paragraph;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,14 +25,16 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
 
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
-    private final EpisodeRepository episodeRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public boolean handleAddedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids, Long episodeId) {
+    public boolean handleAddedOperation(List<ItemPayload> itemPayloads, Episode episode) {
         List<Paragraph> paragraphsToAdd = new ArrayList<>();
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();
         boolean firstParagraphAdded = false;
-        Episode episode = episodeRepository.getReferenceById(episodeId);
+
 
         for (ItemPayload itemPayload : itemPayloads) {
 
@@ -54,14 +56,17 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
                 firstParagraphAdded = true;
             }
         }
+
         paragraphRepository.saveAll(paragraphsToAdd);
+        entityManager.flush();
 
         for (ItemPayload itemPayload : itemPayloads) {
             paragraphHelper.updatePreviousParagraph(itemPayload.prev(), itemPayload.id(), paragraphsToUpdate);
         }
 
         paragraphRepository.saveAll(paragraphsToUpdate);
-        paragraphRepository.flush();
+        entityManager.flush();
+        entityManager.clear();
 
         log.info("Created and updated paragraphs: {}", paragraphsToAdd.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
         return firstParagraphAdded;

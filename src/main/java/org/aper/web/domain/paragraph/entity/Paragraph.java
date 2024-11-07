@@ -14,7 +14,8 @@ public class Paragraph {
     @Id
     private String uuid;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
     private String previousUuid;

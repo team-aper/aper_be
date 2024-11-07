@@ -22,6 +22,9 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "WHERE u.userId = :authorId")
     List<Episode> findAllByUserId(Long authorId);
 
+    @Query("SELECT e FROM Episode e LEFT JOIN FETCH e.paragraphs WHERE e.id = :id")
+    Optional<Episode> findByIdWithParagraphs(@Param("id") Long id);
+
     @Query("SELECT e FROM Episode e " +
             "JOIN e.story s " +
             "JOIN s.user u " +

@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "security")
-public class TokenProperties {
-    private String authorizationHeader;
-    private String authorizationKey;
-    private long accessTokenExpiration;
-    private long refreshTokenExpiration;
+@ConfigurationProperties(prefix = "spring.jpa.properties.hibernate.jdbc")
+public class BatchProperties {
+    private int batchSize;
 }
