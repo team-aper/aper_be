@@ -1,8 +1,5 @@
 package org.aper.web.domain.main.dto;
 
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,8 +26,8 @@ public class MainResponseDto {
             LocalDateTime publicDate,
             Long storyId,
             String storyTitle,
-            StoryGenreEnum genre,
-            StoryLineStyleEnum lineStyle,
+            String genre,
+            String lineStyle,
             Long userId,
             String penName,
             String fieldImage
@@ -49,8 +46,8 @@ public class MainResponseDto {
             Long episodeId,
             LocalDateTime publicDate,
             Long storyId,
-            StoryGenreEnum genre,
-            StoryLineStyleEnum lineStyle,
+            String genre,
+            String lineStyle,
             String storyTitle,
             String penName
     ) {}
