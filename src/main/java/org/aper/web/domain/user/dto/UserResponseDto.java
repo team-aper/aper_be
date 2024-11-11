@@ -47,4 +47,11 @@ public class UserResponseDto {
     public record IsDuplicated(
             boolean isDuplicated
     ) {}
+
+    public record TutorAvailable (
+            String penName,
+            String fieldImage,
+            String description
+
+    ) {}
 }

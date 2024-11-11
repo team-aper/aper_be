@@ -63,4 +63,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u " +
             "JOIN FETCH u.userHistories h")
     Optional<User> findByIdWithHistory(Long id);
+
+
+    @Query("SELECT DISTINCT u, " +
+            "CASE WHEN EXISTS (SELECT s FROM Subscription s " +
+            "                 WHERE s.author.userId = u.userId) " +
+            "     THEN true ELSE false END AS isAuthor, " +
+            "  (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = u.userId) AS reviewCount, " +
+            "  (SELECT COUNT(s) FROM Subscription s WHERE s.subscriber.userId = u.userId) AS subscriberCount " +
+            "FROM User u " +
+            "LEFT JOIN FETCH u.storyList sl " +
+            "WHERE u.requestTutor = true")
+    List<Object[]> findByRequestTutorIsTrue();
 }

@@ -26,6 +26,7 @@ public class AuthenticatedMatchers {
     public static final String[] flexiblePathArray = {
             "/field/**",
             "/story/**",
-            "/episode/**"
+            "/episode/**",
+            "/user/tutors"
     };
 }

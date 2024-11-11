@@ -5,20 +5,21 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
+import org.aper.web.domain.search.entity.dto.SearchDto;
+import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -29,19 +30,21 @@ public class UserService {
     private final S3ImageService s3ImageService;
     private final KafkaUserProducerService producerService;
     private final UserMapper userMapper;
+    private final SearchMapper searchMapper;
 
     public UserService(UserRepository userRepository,
                        ChatRoomRepository chatRoomRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
                        KafkaUserProducerService producerService,
-                       UserMapper userMapper) {
+                       UserMapper userMapper, SearchMapper searchMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
         this.producerService = producerService;
         this.userMapper = userMapper;
+        this.searchMapper = searchMapper;
     }
 
     public User findUser(String email){
@@ -136,5 +139,11 @@ public class UserService {
     public void requestTutoring(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         user.setRequestTutor(Boolean.TRUE);
+    }
+
+    public SearchDto.SearchAuthorResponseDto getRequestedTutor() {
+        List<Object[]> requestedTutors = userRepository.findByRequestTutorIsTrue();
+        List<SearchDto.AuthorListResponseDto> responseDto = searchMapper.UserListToAuthorListResponseDto(requestedTutors);
+        return new SearchDto.SearchAuthorResponseDto(responseDto);
     }
 }
