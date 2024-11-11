@@ -34,8 +34,7 @@ public class SwaggerConfig {
                         .bearerFormat("Bearer"));
 
         Server httpsServer = new Server()
-                //.url("https://api.aper.cc")
-                .url("http://localhost:8080")
+                .url("https://api.aper.cc")
                 .description("HTTPS 서버");
 
         return new OpenAPI()
