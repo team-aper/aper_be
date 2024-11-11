@@ -2,7 +2,9 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.aper.web.domain.search.entity.dto.SearchDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
+import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.service.*;
 import org.aper.web.domain.user.valid.UserValidationSequence;
@@ -12,6 +14,8 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -107,5 +111,18 @@ public class UserController implements UserControllerDocs {
     ) {
         UserInfo userInfo = userService.getUserInfo(userDetails);
         return ResponseDto.success("작가 정보.", userInfo);
+    }
+
+    @PostMapping("/tutor")
+    public ResponseDto<Void> requestTutoring(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        userService.requestTutoring(userDetails.user().getUserId());
+        return ResponseDto.success("1:1 수업 작가 요청을 완료하였습니다.");
+    }
+
+    @GetMapping("/tutors")
+    public ResponseDto<SearchDto.SearchAuthorResponseDto> getRequestedTutor() {
+        return ResponseDto.success("Tutor를 희망한 작가 리스트", userService.getRequestedTutor());
     }
 }

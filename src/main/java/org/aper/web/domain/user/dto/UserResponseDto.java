@@ -47,4 +47,5 @@ public class UserResponseDto {
     public record IsDuplicated(
             boolean isDuplicated
     ) {}
+
 }
