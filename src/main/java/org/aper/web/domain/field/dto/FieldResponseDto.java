@@ -25,6 +25,7 @@ public class FieldResponseDto {
             String episodeTitle,
             Long chapter,
             String genre,
+            String storyLineStyle,
             LocalDateTime date,
             String description,
             boolean episodePublicated,
