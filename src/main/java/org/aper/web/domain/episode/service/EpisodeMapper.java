@@ -73,10 +73,11 @@ public class EpisodeMapper {
                 episode.getId(),
                 episode.getStory().getUser().getUserId(),
                 episode.getStory().getId(),
-                episode.getTitle(),
                 episode.getStory().getTitle(),
+                episode.getTitle(),
                 episode.getChapter(),
                 episode.getStory().getGenre().name(),
+                episode.getStory().getLineStyle().name(),
                 date,
                 episode.isOnDisplay()
         );
