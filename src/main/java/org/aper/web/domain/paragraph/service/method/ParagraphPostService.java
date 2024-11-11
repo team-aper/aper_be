@@ -45,6 +45,7 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
             Paragraph newParagraph = Paragraph.builder()
                     .uuid(itemPayload.id())
                     .content(itemPayload.content())
+                    .textAlign(itemPayload.textAlign())
                     .previousUuid(itemPayload.prev())
                     .nextUuid(itemPayload.next())
                     .episode(episode)
