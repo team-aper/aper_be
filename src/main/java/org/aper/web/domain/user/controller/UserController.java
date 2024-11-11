@@ -108,4 +108,13 @@ public class UserController implements UserControllerDocs {
         UserInfo userInfo = userService.getUserInfo(userDetails);
         return ResponseDto.success("작가 정보.", userInfo);
     }
+
+    @PostMapping("/tutor")
+    public ResponseDto<Void> requestTutoring(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        userService.requestTutoring(userDetails.user().getUserId());
+        return ResponseDto.success("1:1 수업 작가 요청을 완료하였습니다.");
+    }
+
 }

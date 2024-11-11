@@ -46,6 +46,9 @@ public class User {
     @Column
     private Long point;
 
+    @Column
+    private Boolean requestTutor;
+
     @Column(name = "is_exposed", columnDefinition = "boolean default false")
     private boolean isExposed;
 
@@ -86,6 +89,7 @@ public class User {
         this.description = "안녕하세요, " + penName + "입니다.";
         this.fieldImage = "https://aper-image-bucket.s3.ap-northeast-2.amazonaws.com/fieldimage/craig-manners-BNgxioIWM0Y-unsplash.png";
         this.point = 0L;
+        this.requestTutor = Boolean.FALSE;
     }
 
     public void updatePoint(Long point) {
@@ -123,4 +127,6 @@ public class User {
     public void updateClassDescription(String classDescription) {
         this.classDescription = classDescription;
     }
+
+    public void setRequestTutor(Boolean aTrue) {this.requestTutor = aTrue; }
 }
