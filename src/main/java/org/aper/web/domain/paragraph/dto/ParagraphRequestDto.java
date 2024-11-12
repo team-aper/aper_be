@@ -11,6 +11,8 @@ public class ParagraphRequestDto {
             @NotBlank(message = "UUID is required.")
             String id,
 
+            String textAlign,
+
             String prev,
 
             String next

@@ -26,6 +26,7 @@ public class EpisodeResponseDto {
             String episodeTitle,
             Long chapter,
             String genre,
+            String lineStyle,
             LocalDateTime date,
             boolean isPublished
     ){}

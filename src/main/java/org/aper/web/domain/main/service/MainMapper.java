@@ -19,7 +19,8 @@ public class MainMapper {
                 episode.getPublicDate(),
                 episode.getStory().getId(),
                 episode.getStory().getTitle(),
-                episode.getStory().getGenre(),
+                episode.getStory().getGenre().name(),
+                episode.getStory().getLineStyle().name(),
                 episode.getStory().getUser().getUserId(),
                 episode.getStory().getUser().getPenName(),
                 episode.getStory().getUser().getFieldImage()
@@ -42,7 +43,8 @@ public class MainMapper {
                 curation.getEpisode().getId(),
                 curation.getEpisode().getPublicDate(),
                 curation.getEpisode().getStory().getId(),
-                curation.getEpisode().getStory().getGenre(),
+                curation.getEpisode().getStory().getGenre().name(),
+                curation.getEpisode().getStory().getLineStyle().name(),
                 curation.getEpisode().getStory().getTitle(),
                 curation.getEpisode().getStory().getUser().getPenName()
         );

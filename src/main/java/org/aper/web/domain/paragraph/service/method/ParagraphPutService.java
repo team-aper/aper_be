@@ -42,6 +42,7 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
             }
 
             paragraph.updateContent(itemPayload.content());
+            paragraph.updateTextAlign(itemPayload.textAlign());
             paragraph.updatePreviousUuid(itemPayload.prev());
             paragraph.updateNextUuid(itemPayload.next());
 

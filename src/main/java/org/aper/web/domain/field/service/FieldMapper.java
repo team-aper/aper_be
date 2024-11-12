@@ -32,6 +32,7 @@ public class FieldMapper {
                 episode.getTitle(),
                 episode.getChapter(),
                 episode.getStory().getGenre().name(),
+                episode.getStory().getLineStyle().name(),
                 date,
                 text,
                 episode.isOnDisplay(),
