@@ -35,7 +35,7 @@ public class StoryMapper {
 
     public GetStoryDto createGetStoryDtoWithPublishedEpisodes(Story story) {
 
-        List<CreatedEpisodeDto> publishedEpisodes = episodeDtoCreateService.getPublishedEpisodesWithDDay(story.getUser().getUserId());
+        List<CreatedEpisodeDto> publishedEpisodes = episodeDtoCreateService.getPublishedEpisodesWithDDay(story.getId());
 
         return new GetStoryDto(
                 story.getTitle(),
