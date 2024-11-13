@@ -51,30 +51,26 @@ public class StoryDataSeederService {
 
                 storyRepository.save(story);
                 createEpisodesForStory(story, routineEnum, faker);
-                log.info("Creating story: {} for genre: {}", i, genre);
-                log.info("Generating episodes for story ID: {}", story.getId());
             }
         }
     }
 
     private void createEpisodesForStory(Story story, StoryRoutineEnum routineEnum, Faker faker) {
-        log.info("Start generating episodes for Story ID: {}, Routine: {}", story.getId(), routineEnum.name());
 
         // `StoryRoutineEnum`을 사용해 에피소드 생성
         List<Episode> episodes = routineEnum.createEpisodes(story);
-        log.info("createEpisodes returned {} episodes for Story ID: {}", episodes.size(), story.getId());
 
         if (episodes.isEmpty()) {
             log.warn("No episodes were generated for Story ID: {} with Routine: {}", story.getId(), routineEnum.name());
             return;
         }
 
-        // **타이틀 업데이트 및 문단 추가**
+        // 타이틀 업데이트 및 문단 추가
         for (int i = 0; i < episodes.size(); i++) {
             Episode episode = episodes.get(i);
 
             // 타이틀 업데이트
-            String title = faker.book().title() + " - Episode " + (i + 1);
+            String title = faker.book().title();
             episode.updateTitle(title);
 
             // 문단 추가
@@ -82,25 +78,15 @@ public class StoryDataSeederService {
 
             // onDisplay 업데이트
             episode.updateOnDisplay();
-
-            log.info("Updated Episode {} with Title: {}, Paragraphs: {}", i + 1, title, episode.getParagraphs().size());
         }
-
-        log.info("Generated {} episodes for Story ID: {}", episodes.size(), story.getId());
 
         // 저장
         episodeRepository.saveAll(episodes);
-
-        // 저장 후 확인
-        List<Episode> savedEpisodes = episodeRepository.findByStoryOrderByChapterAsc(story);
-        log.info("Saved {} episodes in DB for Story ID: {}", savedEpisodes.size(), story.getId());
 
         // Story 업데이트
         story.addEpisodes(episodes);
         story.updateOnDisplay();
         storyRepository.save(story);
-
-        log.info("Finished generating episodes for Story ID: {}", story.getId());
     }
 
     private void addParagraphsToEpisode(Episode episode, Faker faker) {
@@ -133,7 +119,6 @@ public class StoryDataSeederService {
             episode.getParagraphs().add(paragraph); // 문단 추가
         }
     }
-
 
     @Transactional
     public void generateSubscriptions(List<User> users, Faker faker) {

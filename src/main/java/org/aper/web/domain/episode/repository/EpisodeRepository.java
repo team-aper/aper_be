@@ -1,7 +1,6 @@
 package org.aper.web.domain.episode.repository;
 
 import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -95,8 +94,6 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "AND e.publicDate > sub.createdAt " +
             "ORDER BY e.publicDate DESC")
     Page<Episode> findLatestEpisodesBySubscriberSinceSubscription(@Param("subscriberId") Long subscriberId, Pageable pageable);
-
-    List<Episode> findByStoryOrderByChapterAsc(Story story);
 
     List<Episode> findByOnDisplayTrueAndStoryOnDisplayTrue();
 }
