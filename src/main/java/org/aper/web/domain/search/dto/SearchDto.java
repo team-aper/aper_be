@@ -1,4 +1,4 @@
-package org.aper.web.domain.search.entity.dto;
+package org.aper.web.domain.search.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -2,10 +2,10 @@ package org.aper.web.domain.search.service;
 
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorListResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorPenNameResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorStoryListResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.StoryListResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.AuthorPenNameResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.AuthorStoryListResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.StoryListResponseDto;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
