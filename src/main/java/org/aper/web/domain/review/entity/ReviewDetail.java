@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
+import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 
 @Entity
 @Getter

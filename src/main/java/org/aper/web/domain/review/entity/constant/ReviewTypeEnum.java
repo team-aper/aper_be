@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.entity.constant;
+package org.aper.web.domain.review.entity.constant;
 
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
