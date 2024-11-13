@@ -82,9 +82,9 @@ public class User {
 
     @Builder
     public User(String penName, String password, String email, UserRoleEnum role) {
+        this.email = email;
         this.penName = penName;
         this.password = password;
-        this.email = email;
         this.role = role;
         this.description = "안녕하세요, " + penName + "입니다.";
         this.fieldImage = "https://aper-image-bucket.s3.ap-northeast-2.amazonaws.com/fieldimage/craig-manners-BNgxioIWM0Y-unsplash.png";
