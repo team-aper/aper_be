@@ -1,6 +1,6 @@
 package org.aper.web.domain.user.dto;
 
-import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
+import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -38,10 +38,6 @@ public class UserResponseDto {
             Long totalClasses,
             Long reviewers,
             Map<ReviewTypeEnum, Long> reviewDetails
-    ) {}
-
-    public record CreatedReviewDto(
-            Long reviewId
     ) {}
 
     public record IsDuplicated(
