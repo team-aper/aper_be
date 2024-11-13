@@ -18,7 +18,7 @@ public class Paragraph {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String content;
 
-    private String textAlign;
+    private TextAlignEnum textAlign;
 
     private String previousUuid;
     private String nextUuid;
@@ -28,9 +28,10 @@ public class Paragraph {
     private Episode episode;
 
     @Builder
-    public Paragraph(String uuid, String content, String textAlign, String previousUuid, String nextUuid, Episode episode) {
+    public Paragraph(String uuid, String content, TextAlignEnum textAlign, String previousUuid, String nextUuid, Episode episode) {
         this.uuid = uuid;
         this.content = content;
+        this.textAlign = textAlign;
         this.previousUuid = previousUuid;
         this.nextUuid = nextUuid;
         this.episode = episode;
@@ -48,5 +49,9 @@ public class Paragraph {
         this.nextUuid = nextUuid;
     }
 
-    public void updateTextAlign(String textAlign) { this.textAlign = textAlign; }
+    public void updateTextAlign(TextAlignEnum textAlign) { this.textAlign = textAlign; }
+
+    public void assignEpisode(Episode episode) {
+        this.episode = episode;
+    }
 }

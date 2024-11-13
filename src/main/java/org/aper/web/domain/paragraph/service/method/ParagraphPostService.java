@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
 import org.aper.web.domain.paragraph.entity.Paragraph;
+import org.aper.web.domain.paragraph.entity.TextAlignEnum;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.domain.paragraph.service.ParagraphHelper;
 import org.aper.web.global.batch.service.method.BatchPostService;
@@ -45,7 +46,7 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
             Paragraph newParagraph = Paragraph.builder()
                     .uuid(itemPayload.id())
                     .content(itemPayload.content())
-                    .textAlign(itemPayload.textAlign())
+                    .textAlign(TextAlignEnum.fromString(itemPayload.textAlign()))
                     .previousUuid(itemPayload.prev())
                     .nextUuid(itemPayload.next())
                     .episode(episode)
