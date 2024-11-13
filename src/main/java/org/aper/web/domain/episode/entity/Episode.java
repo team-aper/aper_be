@@ -50,7 +50,12 @@ public class Episode extends BaseSoftDeleteEntity {
         this.title = title;
         this.description = description;
         this.story = story;
-        this.paragraphs = paragraphs;
+        if (paragraphs != null) {
+            this.paragraphs = paragraphs;
+            for (Paragraph paragraph : paragraphs) {
+                paragraph.assignEpisode(this);
+            }
+        }
     }
 
     public void updateOnDisplay() {
@@ -67,4 +72,5 @@ public class Episode extends BaseSoftDeleteEntity {
     public void updateDescription(String truncatedParagraph) {
         this.description = truncatedParagraph;
     }
+
 }
