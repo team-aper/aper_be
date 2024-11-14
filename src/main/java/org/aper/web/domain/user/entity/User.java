@@ -50,7 +50,7 @@ public class User {
     private Boolean requestTutor;
 
     @Column(name = "is_exposed", columnDefinition = "boolean default false")
-    private boolean isExposed;
+    private Boolean isExposed;
 
     @Column
     private String classDescription;
@@ -58,8 +58,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private DeleteAccount deleteAccount;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
