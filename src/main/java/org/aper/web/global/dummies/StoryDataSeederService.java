@@ -74,7 +74,7 @@ public class StoryDataSeederService {
             episode.updateTitle(title);
 
             // 문단 추가
-            addParagraphsToEpisode(episode, faker);
+            addParagraphsToEpisode(episode);
 
             // onDisplay 업데이트
             episode.updateOnDisplay();
@@ -89,35 +89,57 @@ public class StoryDataSeederService {
         storyRepository.save(story);
     }
 
-    private void addParagraphsToEpisode(Episode episode, Faker faker) {
+    private void addParagraphsToEpisode(Episode episode) {
         String previousUuid = null;
 
-        for (int i = 0; i < 5; i++) {
-            String uuid = UUID.randomUUID().toString();
-            String content = faker.lorem().paragraph();
-
-            // 문단 생성
-            Paragraph paragraph = Paragraph.builder()
-                    .uuid(uuid)
-                    .content(content)
-                    .textAlign(TextAlignEnum.fromString("LEFT")) // 기본 정렬
-                    .previousUuid(previousUuid)
-                    .episode(episode)
-                    .build();
-
-            if (i == 0) {
-                episode.updateDescription(content); // 첫 번째 문단을 설명(description)으로 설정
+        // 시 장르인 경우, DUMMY_POEMS를 기반으로 16개 문단 추가
+        if (episode.getStory().getGenre() == StoryGenreEnum.POETRY) {
+            for (int i = 0; i < 16; i++) {
+                String uuid = UUID.randomUUID().toString();
+                String content = ParagraphDummyData.getRandomPoetry(); // 시 문단 가져오기
+                previousUuid = getString(episode, previousUuid, i, uuid, content);
             }
+        } else {
+            // 시 장르가 아닌 경우, 랜덤하게 8개 문단 추가
+            for (int i = 0; i < 8; i++) {
+                String uuid = UUID.randomUUID().toString();
+                String content;
+                // 장르에 따라 다른 문단 소스를 선택
+                if (episode.getStory().getGenre() == StoryGenreEnum.DAILY) {
+                    content =  ParagraphDummyData.getSequentialParagraph1(i); // 일상 장르
+                } else if (episode.getStory().getGenre() == StoryGenreEnum.SOCIETY) {
+                    content = ParagraphDummyData.getSequentialParagraph2(i);
+                } else {
+                    content = ParagraphDummyData.getRandomParagraph(); // 기본 랜덤 문단
+                }
 
-            if (previousUuid != null) {
-                episode.getParagraphs()
-                        .get(episode.getParagraphs().size() - 1)
-                        .updateNextUuid(uuid); // 이전 문단의 nextUuid 업데이트
+                previousUuid = getString(episode, previousUuid, i, uuid, content);
             }
-
-            previousUuid = uuid;
-            episode.getParagraphs().add(paragraph); // 문단 추가
         }
+    }
+
+    private String getString(Episode episode, String previousUuid, int i, String uuid, String content) {
+        Paragraph paragraph = Paragraph.builder()
+                .uuid(uuid)
+                .content(content)
+                .textAlign(TextAlignEnum.LEFT) // 기본 정렬
+                .previousUuid(previousUuid)
+                .episode(episode)
+                .build();
+
+        if (i == 0) {
+            episode.updateDescription(content); // 첫 번째 문단을 설명(description)으로 설정
+        }
+
+        if (previousUuid != null) {
+            episode.getParagraphs()
+                    .get(episode.getParagraphs().size() - 1)
+                    .updateNextUuid(uuid); // 이전 문단의 nextUuid 업데이트
+        }
+
+        previousUuid = uuid;
+        episode.getParagraphs().add(paragraph); // 문단 추가
+        return previousUuid;
     }
 
     @Transactional
@@ -134,12 +156,46 @@ public class StoryDataSeederService {
     @Transactional
     public void generateCurations() {
         List<Episode> eligibleEpisodes = episodeRepository.findByOnDisplayTrueAndStoryOnDisplayTrue();
-        Collections.shuffle(eligibleEpisodes);
 
-        List<Episode> selectedEpisodesForCuration = eligibleEpisodes.subList(0, Math.min(3, eligibleEpisodes.size()));
-        selectedEpisodesForCuration.forEach(episode -> {
-            Curation curation = Curation.builder().episode(episode).build();
-            curationRepository.save(curation);
-        });
+        // 장르별로 에피소드 필터링
+        Episode societyEpisode = getRandomEpisodeForGenre(eligibleEpisodes, StoryGenreEnum.SOCIETY);
+        Episode dailyEpisode = getRandomEpisodeForGenre(eligibleEpisodes, StoryGenreEnum.DAILY);
+        Episode poetryEpisode = getRandomEpisodeForGenre(eligibleEpisodes, StoryGenreEnum.QUEER);
+
+        // 큐레이션 생성
+        if (societyEpisode != null) {
+            createCuration(societyEpisode);
+        }
+        if (dailyEpisode != null) {
+            createCuration(dailyEpisode);
+        }
+        if (poetryEpisode != null) {
+            createCuration(poetryEpisode);
+        }
+
     }
+
+    // 특정 장르의 랜덤 에피소드 선택
+    private Episode getRandomEpisodeForGenre(List<Episode> episodes, StoryGenreEnum genre) {
+        List<Episode> filteredEpisodes = new java.util.ArrayList<>(episodes.stream()
+                .filter(episode -> episode.getStory().getGenre() == genre)
+                .toList());
+
+        if (filteredEpisodes.isEmpty()) {
+            log.warn("No eligible episodes found for genre: {}", genre.name());
+            return null;
+        }
+
+        Collections.shuffle(filteredEpisodes); // 랜덤 정렬
+        return filteredEpisodes.get(0); // 첫 번째 에피소드 반환
+    }
+
+    // 큐레이션 생성 메서드
+    private void createCuration(Episode episode) {
+        Curation curation = Curation.builder()
+                .episode(episode)
+                .build();
+        curationRepository.save(curation);
+    }
+
 }
