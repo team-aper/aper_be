@@ -28,23 +28,36 @@ public class UserDataSeederService {
     private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
     private final PasswordEncoder passwordEncoder;
-    private final Faker faker = new Faker();
+    Faker faker = new Faker();
+
 
     @Transactional
     public List<User> generateDummyUsers(int userCount) {
         List<User> users = new ArrayList<>();
         Random random = new Random();
         for (int i = 0; i < userCount; i++) {
+            String koreanName = KoreanNameGenerator.generateKoreanName();
             String email = faker.internet().emailAddress();
             User user = User.builder()
                     .email(email)
                     .password(passwordEncoder.encode("Test123!"))
                     .role(UserRoleEnum.USER)
-                    .penName(faker.name().lastName())
+                    .penName(koreanName)
                     .build();
+
+            if (i <= 11) {
+                user.updateFieldImage("/images/im" + (i + 1) + ".jpg");
+            }
+            if (i > 11){
+                user.updateFieldImage("/images/im" + 100 + ".jpg");
+            }
 
             if (random.nextBoolean()) { // true or false 랜덤 결정
                 user.updateContactEmail(email);
+            }
+
+            if (i < 6){
+                user.isExposed();
             }
 
             users.add(user);

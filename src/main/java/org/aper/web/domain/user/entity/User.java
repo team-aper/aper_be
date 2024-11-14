@@ -87,7 +87,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.description = "안녕하세요, " + penName + "입니다.";
-        this.fieldImage = "https://aper-image-bucket.s3.ap-northeast-2.amazonaws.com/fieldimage/craig-manners-BNgxioIWM0Y-unsplash.png";
+        this.fieldImage = "/images/im1.jpg";
         this.point = 0L;
         this.requestTutor = Boolean.FALSE;
     }
@@ -126,6 +126,10 @@ public class User {
 
     public void updateClassDescription(String classDescription) {
         this.classDescription = classDescription;
+    }
+
+    public void isExposed() {
+        this.isExposed = true;
     }
 
     public void setRequestTutor(Boolean aTrue) {this.requestTutor = aTrue; }

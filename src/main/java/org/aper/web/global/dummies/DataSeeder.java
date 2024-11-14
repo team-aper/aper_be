@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Profile("dev")
+@Profile("local")
 @RequiredArgsConstructor
 @Slf4j
 public class DataSeeder implements CommandLineRunner {
@@ -20,7 +20,7 @@ public class DataSeeder implements CommandLineRunner {
     private final UserDataSeederService userDataSeederService;
     private final StoryDataSeederService storyDataSeederService;
     private final UserRepository userRepository;
-    private final Faker faker = new Faker();
+    Faker faker = new Faker(new java.util.Locale("ko"));
 
     private static final String[] GENRES = {"ART", "CRITICISM", "DAILY", "HORROR", "POETRY", "QUEER", "ROMANCE", "SF", "SOCIETY"};
     private static final String[] ROUTINES = {"FREE", "SHORT", "LONG", "POETRY"};
@@ -37,7 +37,7 @@ public class DataSeeder implements CommandLineRunner {
         log.info("DataSeeder is running...");
 
         // 1. Generate dummy Users
-        List<User> users = userDataSeederService.generateDummyUsers(10);
+        List<User> users = userDataSeederService.generateDummyUsers(20);
 
         // 2. Generate User Histories
         userDataSeederService.generateUserHistories(users);
