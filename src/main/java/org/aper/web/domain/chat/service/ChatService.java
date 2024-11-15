@@ -36,8 +36,9 @@ public class ChatService {
 
     @Transactional
     public void createChat(Long userId, Long tutorId) {
-        // 결제 횟수가 남아있는지 확인하는 코드도 추가 되어야 함.
-
+        if (isCreatedChat(userId, tutorId)) {
+            throw new ServiceException(ErrorCode.CHAT_ALREADY_PARTICIPATING);
+        }
         ChatRoom chatRoom = new ChatRoom();
 
         User user = findByIdAndCheckPresent(userId, false);
@@ -46,19 +47,15 @@ public class ChatService {
         ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
         ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
 
-        // tutor에게 알림 보내야 함.
-
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(userChatParticipant);
         chatParticipantRepository.save(tutorChatParticipant);
     }
 
-    @Transactional
-    public boolean isCreatedChat(Long userId, Long tutorId) {
+    private boolean isCreatedChat(Long userId, Long tutorId) {
         String tag = tutorId + "-" + userId;
         viewRepository.updateChatRoomParticipantsView();
         List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
-
         return !existingChatRoom.isEmpty();
     }
 

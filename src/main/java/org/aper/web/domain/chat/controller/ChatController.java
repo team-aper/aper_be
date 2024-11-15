@@ -25,9 +25,6 @@ public class ChatController implements ChatControllerDocs {
             @PathVariable Long tutorId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        if (chatService.isCreatedChat(userId, tutorId)) {
-            return ResponseDto.fail("이미 생성된 채팅방 입니다.");
-        }
         chatService.createChat(userId, tutorId);
         return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
     }
