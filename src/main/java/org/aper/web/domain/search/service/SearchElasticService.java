@@ -6,10 +6,10 @@ import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocume
 import org.aper.web.domain.elasticsearch.repository.EpisodesElasticSearchRepository;
 import org.aper.web.domain.elasticsearch.repository.UserElasticSearchRepository;
 import org.aper.web.domain.elasticsearch.service.ElasticSearchMapper;
-import org.aper.web.domain.search.entity.dto.SearchDto.AuthorListResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.SearchAuthorResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.SearchPenNameResponseDto;
-import org.aper.web.domain.search.entity.dto.SearchDto.SearchStoryResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.SearchPenNameResponseDto;
+import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.security.UserDetailsImpl;

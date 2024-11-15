@@ -33,6 +33,7 @@ dependencies {
 
     //aws
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     //iamport
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 
@@ -44,8 +45,6 @@ dependencies {
 
     //smtp
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
-    implementation 'com.sun.mail:javax.mail:1.6.2'
 
     //oauth2
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -55,6 +54,9 @@ dependencies {
     compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    // dummies
+    implementation 'net.datafaker:datafaker:2.2.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'

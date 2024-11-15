@@ -7,13 +7,9 @@ import org.aper.web.global.entity.BaseSoftDeleteEntity;
 @Entity
 @Getter
 public class DeleteAccount extends BaseSoftDeleteEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
 
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private User user;
 
     public DeleteAccount(User user) {

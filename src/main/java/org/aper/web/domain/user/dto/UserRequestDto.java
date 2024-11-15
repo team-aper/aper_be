@@ -3,12 +3,9 @@ package org.aper.web.domain.user.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
-import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
 import org.aper.web.domain.user.valid.UserValidationGroup.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.YearMonth;
-import java.util.List;
 
 public class UserRequestDto {
 
@@ -98,15 +95,6 @@ public class UserRequestDto {
             @NotBlank(message = "수업 소개를 입력해주세요.", groups = NotBlankGroup.class)
             @Size(max = 2000, message = "수업 소개는 최대 2000자까지 입력할 수 있습니다.")
             String description
-    ) {}
-
-    public record CreateReviewRequestDto(
-            @NotNull(message = "revieweeId is null")
-            Long revieweeId,
-            @NotEmpty(message = "reviewTypes is null or empty")
-            List<ReviewTypeEnum> reviewTypes,
-            @NotNull(message = "chatRoomId is null")
-            Long chatRoomId
     ) {}
 
     public record PasswordVerifyDto(

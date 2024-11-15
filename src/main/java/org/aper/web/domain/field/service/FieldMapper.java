@@ -9,7 +9,7 @@ import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.entity.UserHistory;
-import org.aper.web.domain.user.entity.constant.ReviewTypeEnum;
+import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

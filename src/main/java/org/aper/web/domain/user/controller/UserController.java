@@ -2,9 +2,8 @@ package org.aper.web.domain.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.search.entity.dto.SearchDto;
+import org.aper.web.domain.search.dto.SearchDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.service.*;
 import org.aper.web.domain.user.valid.UserValidationSequence;
@@ -14,8 +13,6 @@ import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController

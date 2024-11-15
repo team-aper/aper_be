@@ -58,7 +58,7 @@ public class EpisodeHelper {
             sortedParagraphs.add(new Paragraphs(
                     current.getUuid(),
                     current.getContent(),
-                    current.getTextAlign(),
+                    current.getTextAlign().name(),
                     current.getPreviousUuid(),
                     current.getNextUuid()
             ));

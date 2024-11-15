@@ -37,10 +37,10 @@ public class EpisodeMapper {
     }
 
     @Transactional(readOnly = true)
-    public List<CreatedEpisodeDto> getPublishedEpisodesWithDDay(Long userId) {
-        List<Episode> episodes = episodeRepository.findAllByEpisodeOnlyPublished(userId);
+    public List<CreatedEpisodeDto> getPublishedEpisodesWithDDay(Long storyId) {
+        List<Episode> episodes = episodeRepository.findAllByStoryOnlyPublished(storyId);
 
-        if (episodes.isEmpty()){
+        if (episodes.isEmpty()) {
             return Collections.emptyList();
         }
 
