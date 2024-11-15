@@ -1,17 +1,21 @@
 package org.aper.web.domain.curation.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.global.entity.BaseEntity;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Table(name = "curations")
+@NoArgsConstructor
 public class Curation extends BaseEntity {
-    @NotBlank(message = "field title is blank")
+    @NotBlank(message = "content is blank")
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -19,6 +23,10 @@ public class Curation extends BaseEntity {
     @JoinColumn(name = "episode_id")
     private Episode episode;
 
-    public Curation() {
+    @Builder
+    public Curation(Episode episode) {
+        this.content = episode.getDescription();
+        this.episode = episode;
+        this.createdAt = LocalDateTime.now();
     }
 }

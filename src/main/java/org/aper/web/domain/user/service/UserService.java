@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
-import org.aper.web.domain.search.entity.dto.SearchDto;
+import org.aper.web.domain.search.dto.SearchDto;
 import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto;

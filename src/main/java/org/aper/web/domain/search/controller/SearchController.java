@@ -2,7 +2,7 @@ package org.aper.web.domain.search.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.service.ElasticSyncService;
-import org.aper.web.domain.search.entity.dto.SearchDto.*;
+import org.aper.web.domain.search.dto.SearchDto.*;
 import org.aper.web.domain.search.service.SearchElasticService;
 import org.aper.web.global.docs.SearchControllerDocs;
 import org.aper.web.domain.story.entity.constant.StoryGenreEnum;

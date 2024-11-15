@@ -27,10 +27,8 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
 
     @Query("SELECT e FROM Episode e " +
             "JOIN e.story s " +
-            "JOIN s.user u " +
-            "WHERE u.userId = :authorId AND e.onDisplay = true AND s.onDisplay = true"
-    )
-    List<Episode> findAllByEpisodeOnlyPublished(Long authorId);
+            "WHERE s.id = :storyId AND e.onDisplay = true AND s.onDisplay = true")
+    List<Episode> findAllByStoryOnlyPublished(@Param("storyId") Long storyId);
 
     @Query("SELECT e FROM Episode e " +
             "JOIN e.story s " +
@@ -96,4 +94,6 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
             "AND e.publicDate > sub.createdAt " +
             "ORDER BY e.publicDate DESC")
     Page<Episode> findLatestEpisodesBySubscriberSinceSubscription(@Param("subscriberId") Long subscriberId, Pageable pageable);
+
+    List<Episode> findByOnDisplayTrueAndStoryOnDisplayTrue();
 }

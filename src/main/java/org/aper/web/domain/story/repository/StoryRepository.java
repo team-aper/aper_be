@@ -40,9 +40,9 @@ public interface StoryRepository extends JpaRepository<Story, Long>, JpaSpecific
     Page<Story> findAllByStoriesOnlyPublishedWithPageAble(Long authorId, Pageable pageable);
 
     @Query("SELECT s FROM Story s " +
+            "LEFT JOIN FETCH s.episodeList e " +
             "JOIN s.user u " +
-            "WHERE s.id = :storyId"
-    )
+            "WHERE s.id = :storyId")
     Optional<Story> findByStoryAuthor(Long storyId);
 
     boolean existsByIdAndUser_UserId(Long storyId, Long userId);

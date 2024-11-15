@@ -60,6 +60,8 @@ public enum ErrorCode {
     PARAGRAPH_NOT_FOUND(HttpStatus.NOT_FOUND,"P001", "존재하지 않는 문단입니다."),
     PARAGRAPH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"P002", "이미 존재하는 uuid 입니다."),
     PARAGRAPH_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "P003", "이미 삭제된 uuid 입니다."),
+    INVALID_TEXT_ALIGN(HttpStatus.BAD_REQUEST, "P004", "유효하지 않은 문단 정렬입니다."),
+
 
     // Batch
     INVALID_BATCH_REQUEST(HttpStatus.BAD_REQUEST,"B001", "잘못된 배치 요청입니다."),
