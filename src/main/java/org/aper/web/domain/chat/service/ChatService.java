@@ -35,7 +35,7 @@ public class ChatService {
     }
 
     @Transactional
-    public ResponseDto<Void> createChat(Long userId, Long tutorId) {
+    public void createChat(Long userId, Long tutorId) {
         // 결제 횟수가 남아있는지 확인하는 코드도 추가 되어야 함.
 
         ChatRoom chatRoom = new ChatRoom();
@@ -51,8 +51,6 @@ public class ChatService {
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(userChatParticipant);
         chatParticipantRepository.save(tutorChatParticipant);
-
-        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
     }
 
     @Transactional

@@ -28,7 +28,8 @@ public class ChatController implements ChatControllerDocs {
         if (chatService.isCreatedChat(userId, tutorId)) {
             return ResponseDto.fail("이미 생성된 채팅방 입니다.");
         }
-        return chatService.createChat(userId, tutorId);
+        chatService.createChat(userId, tutorId);
+        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
     }
 
     @GetMapping
