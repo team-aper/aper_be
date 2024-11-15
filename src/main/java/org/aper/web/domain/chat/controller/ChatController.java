@@ -35,7 +35,8 @@ public class ChatController implements ChatControllerDocs {
     @GetMapping
     public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.getParticipatingChats(userDetails.user().getUserId());
+        List<ChatParticipatingResponseDto> response = chatService.getParticipatingChats(userDetails.user().getUserId());
+        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", response);
     }
 
     @DeleteMapping("/{roomId}")

@@ -68,6 +68,7 @@ public enum ErrorCode {
     // Chat
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다."),
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"CH002", "존재하지 않는 채팅방입니다."),
+    NO_PARTICIPATING_CHAT(HttpStatus.NOT_FOUND, "CH003", "참여 중인 채팅방이 없습니다."),
 
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),

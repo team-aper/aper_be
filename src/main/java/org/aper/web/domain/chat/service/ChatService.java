@@ -63,11 +63,11 @@ public class ChatService {
     }
 
     @Transactional
-    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+    public List<ChatParticipatingResponseDto> getParticipatingChats(Long userId) {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
         if (participatingChats.isEmpty()) {
-            return ResponseDto.fail("참여 중인 채팅방이 없습니다");
+            throw new ServiceException(ErrorCode.NO_PARTICIPATING_CHAT);
         }
 
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
@@ -84,7 +84,7 @@ public class ChatService {
             }
         }
 
-        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+        return participatingResponseDtos;
     }
 
     @Transactional
