@@ -40,6 +40,7 @@ public class ChatController implements ChatControllerDocs {
     public ResponseDto<Void> rejectChatRequest(
             @PathVariable Long roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+        chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+        return ResponseDto.success("튜터 요청을 거절하였습니다.");
     }
 }

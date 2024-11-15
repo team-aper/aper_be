@@ -85,25 +85,22 @@ public class ChatService {
     }
 
     @Transactional
-    public ResponseDto<Void> rejectChatRoomRequest(Long roomId, Long tutorId) {
+    public void rejectChatRoomRequest(Long roomId, Long tutorId) {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
-            return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_NOT_FOUND);
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (chatRoom.getIsAccepted()) {
-            return ResponseDto.fail("이미 요청을 수락하셨습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_ACCEPTED);
         }
         if (chatRoom.getIsRejected()) {
-            return ResponseDto.fail("이미 요청을 거절하셨습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_REJECTED);
         }
-
         chatRoom.reject();
         chatRoomRepository.save(chatRoom);
-
-        return ResponseDto.success("요청을 거절하였습니다.");
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {
