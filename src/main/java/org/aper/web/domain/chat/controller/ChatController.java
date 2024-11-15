@@ -25,22 +25,22 @@ public class ChatController implements ChatControllerDocs {
             @PathVariable Long tutorId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.user().getUserId();
-        if (chatService.isCreatedChat(userId, tutorId)) {
-            return ResponseDto.fail("이미 생성된 채팅방 입니다.");
-        }
-        return chatService.createChat(userId, tutorId);
+        chatService.createChat(userId, tutorId);
+        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
     }
 
     @GetMapping
     public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.getParticipatingChats(userDetails.user().getUserId());
+        List<ChatParticipatingResponseDto> response = chatService.getParticipatingChats(userDetails.user().getUserId());
+        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", response);
     }
 
     @DeleteMapping("/{roomId}")
     public ResponseDto<Void> rejectChatRequest(
             @PathVariable Long roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+        chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+        return ResponseDto.success("튜터 요청을 거절하였습니다.");
     }
 }

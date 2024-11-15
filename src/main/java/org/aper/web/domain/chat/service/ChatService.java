@@ -35,9 +35,10 @@ public class ChatService {
     }
 
     @Transactional
-    public ResponseDto<Void> createChat(Long userId, Long tutorId) {
-        // 결제 횟수가 남아있는지 확인하는 코드도 추가 되어야 함.
-
+    public void createChat(Long userId, Long tutorId) {
+        if (isCreatedChat(userId, tutorId)) {
+            throw new ServiceException(ErrorCode.CHAT_ALREADY_PARTICIPATING);
+        }
         ChatRoom chatRoom = new ChatRoom();
 
         User user = findByIdAndCheckPresent(userId, false);
@@ -46,30 +47,24 @@ public class ChatService {
         ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
         ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
 
-        // tutor에게 알림 보내야 함.
-
         chatRoomRepository.save(chatRoom);
         chatParticipantRepository.save(userChatParticipant);
         chatParticipantRepository.save(tutorChatParticipant);
-
-        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
     }
 
-    @Transactional
-    public boolean isCreatedChat(Long userId, Long tutorId) {
+    private boolean isCreatedChat(Long userId, Long tutorId) {
         String tag = tutorId + "-" + userId;
         viewRepository.updateChatRoomParticipantsView();
         List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
-
         return !existingChatRoom.isEmpty();
     }
 
     @Transactional
-    public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(Long userId) {
+    public List<ChatParticipatingResponseDto> getParticipatingChats(Long userId) {
         List<ChatParticipant> participatingChats = chatParticipantRepository.findByUserUserId(userId);
 
         if (participatingChats.isEmpty()) {
-            return ResponseDto.fail("참여 중인 채팅방이 없습니다");
+            throw new ServiceException(ErrorCode.NO_PARTICIPATING_CHAT);
         }
 
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
@@ -86,29 +81,26 @@ public class ChatService {
             }
         }
 
-        return ResponseDto.success("성공적으로 채팅방을 찾았습니다", participatingResponseDtos);
+        return participatingResponseDtos;
     }
 
     @Transactional
-    public ResponseDto<Void> rejectChatRoomRequest(Long roomId, Long tutorId) {
+    public void rejectChatRoomRequest(Long roomId, Long tutorId) {
         Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
 
         if (chatParticipantOptional.isEmpty()) {
-            return ResponseDto.fail("해당 채팅방 형성 요청이 없습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_NOT_FOUND);
         }
         ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
 
         if (chatRoom.getIsAccepted()) {
-            return ResponseDto.fail("이미 요청을 수락하셨습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_ACCEPTED);
         }
         if (chatRoom.getIsRejected()) {
-            return ResponseDto.fail("이미 요청을 거절하셨습니다.");
+            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_REJECTED);
         }
-
         chatRoom.reject();
         chatRoomRepository.save(chatRoom);
-
-        return ResponseDto.success("요청을 거절하였습니다.");
     }
 
     private User findByIdAndCheckPresent(Long id, Boolean tutor) {

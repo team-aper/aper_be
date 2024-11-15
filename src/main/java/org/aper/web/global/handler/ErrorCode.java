@@ -1,5 +1,6 @@
 package org.aper.web.global.handler;
 
+import co.elastic.clients.elasticsearch.nodes.Http;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -70,6 +71,11 @@ public enum ErrorCode {
     // Chat
     TUTOR_NOT_FOUND(HttpStatus.NOT_FOUND,"CH001", "존재하지 않는 튜터입니다."),
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"CH002", "존재하지 않는 채팅방입니다."),
+    NO_PARTICIPATING_CHAT(HttpStatus.NOT_FOUND, "CH003", "참여 중인 채팅방이 없습니다."),
+    CHAT_ALREADY_PARTICIPATING(HttpStatus.BAD_REQUEST, "CH004", "이미 생성된 채팅방 입니다."),
+    CHAT_ROOM_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "CH005", "해당 채팅방 형성 요청이 없습니다."),
+    CHAT_ROOM_REQUEST_ACCEPTED(HttpStatus.BAD_REQUEST, "CH006", "이미 요청을 수락하셨습니다."),
+    CHAT_ROOM_REQUEST_REJECTED(HttpStatus.BAD_REQUEST, "CH007", "이미 요청을 거절하셨습니다."),
 
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
