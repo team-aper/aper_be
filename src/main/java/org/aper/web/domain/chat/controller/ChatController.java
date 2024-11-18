@@ -20,14 +20,14 @@ public class ChatController implements ChatControllerDocs {
 
     private final ChatService chatService;
 
-    @PostMapping("/{tutorId}")
-    public ResponseDto<Void> createChat(
-            @PathVariable Long tutorId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long userId = userDetails.user().getUserId();
-        chatService.createChat(userId, tutorId);
-        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
-    }
+//    @PostMapping("/{tutorId}")
+//    public ResponseDto<Void> createChat(
+//            @PathVariable Long tutorId,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        Long userId = userDetails.user().getUserId();
+//        chatService.createChat(userId, tutorId);
+//        return ResponseDto.success("성공적으로 채팅방을 생성하였습니다.");
+//    }
 
     @GetMapping
     public ResponseDto<List<ChatParticipatingResponseDto>> getParticipatingChats(
@@ -36,11 +36,11 @@ public class ChatController implements ChatControllerDocs {
         return ResponseDto.success("성공적으로 채팅방을 찾았습니다", response);
     }
 
-    @DeleteMapping("/{roomId}")
-    public ResponseDto<Void> rejectChatRequest(
-            @PathVariable Long roomId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
-        return ResponseDto.success("튜터 요청을 거절하였습니다.");
-    }
+//    @DeleteMapping("/{roomId}")
+//    public ResponseDto<Void> rejectChatRequest(
+//            @PathVariable Long roomId,
+//            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        chatService.rejectChatRoomRequest(roomId, userDetails.user().getUserId());
+//        return ResponseDto.success("튜터 요청을 거절하였습니다.");
+//    }
 }

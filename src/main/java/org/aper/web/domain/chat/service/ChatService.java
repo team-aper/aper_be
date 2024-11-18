@@ -34,30 +34,30 @@ public class ChatService {
         this.viewRepository = viewRepository;
     }
 
-    @Transactional
-    public void createChat(Long userId, Long tutorId) {
-        if (isCreatedChat(userId, tutorId)) {
-            throw new ServiceException(ErrorCode.CHAT_ALREADY_PARTICIPATING);
-        }
-        ChatRoom chatRoom = new ChatRoom();
-
-        User user = findByIdAndCheckPresent(userId, false);
-        User tutor = findByIdAndCheckPresent(tutorId, true);
-
-        ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
-        ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
-
-        chatRoomRepository.save(chatRoom);
-        chatParticipantRepository.save(userChatParticipant);
-        chatParticipantRepository.save(tutorChatParticipant);
-    }
-
-    private boolean isCreatedChat(Long userId, Long tutorId) {
-        String tag = tutorId + "-" + userId;
-        viewRepository.updateChatRoomParticipantsView();
-        List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
-        return !existingChatRoom.isEmpty();
-    }
+//    @Transactional
+//    public void createChat(Long userId, Long tutorId) {
+//        if (isCreatedChat(userId, tutorId)) {
+//            throw new ServiceException(ErrorCode.CHAT_ALREADY_PARTICIPATING);
+//        }
+//        ChatRoom chatRoom = new ChatRoom();
+//
+//        User user = findByIdAndCheckPresent(userId, false);
+//        User tutor = findByIdAndCheckPresent(tutorId, true);
+//
+//        ChatParticipant userChatParticipant = new ChatParticipant(chatRoom, user, false);
+//        ChatParticipant tutorChatParticipant = new ChatParticipant(chatRoom, tutor, true);
+//
+//        chatRoomRepository.save(chatRoom);
+//        chatParticipantRepository.save(userChatParticipant);
+//        chatParticipantRepository.save(tutorChatParticipant);
+//    }
+//
+//    private boolean isCreatedChat(Long userId, Long tutorId) {
+//        String tag = tutorId + "-" + userId;
+//        viewRepository.updateChatRoomParticipantsView();
+//        List<ChatRoomView> existingChatRoom = viewRepository.findByParticipants(tag);
+//        return !existingChatRoom.isEmpty();
+//    }
 
     @Transactional
     public List<ChatParticipatingResponseDto> getParticipatingChats(Long userId) {
@@ -84,36 +84,36 @@ public class ChatService {
         return participatingResponseDtos;
     }
 
-    @Transactional
-    public void rejectChatRoomRequest(Long roomId, Long tutorId) {
-        Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
-
-        if (chatParticipantOptional.isEmpty()) {
-            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_NOT_FOUND);
-        }
-        ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
-
-        if (chatRoom.getIsAccepted()) {
-            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_ACCEPTED);
-        }
-        if (chatRoom.getIsRejected()) {
-            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_REJECTED);
-        }
-        chatRoom.reject();
-        chatRoomRepository.save(chatRoom);
-    }
-
-    private User findByIdAndCheckPresent(Long id, Boolean tutor) {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isEmpty()){
-            if (tutor) {
-                throw new ServiceException(ErrorCode.TUTOR_NOT_FOUND);
-            }
-            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
-        }
-        return user.get();
-    }
+//    @Transactional
+//    public void rejectChatRoomRequest(Long roomId, Long tutorId) {
+//        Optional<ChatParticipant> chatParticipantOptional = chatParticipantRepository.findByIsTutorAndUserUserIdAndChatRoomId(true, tutorId, roomId);
+//
+//        if (chatParticipantOptional.isEmpty()) {
+//            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_NOT_FOUND);
+//        }
+//        ChatRoom chatRoom = chatParticipantOptional.get().getChatRoom();
+//
+//        if (chatRoom.getIsAccepted()) {
+//            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_ACCEPTED);
+//        }
+//        if (chatRoom.getIsRejected()) {
+//            throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_REJECTED);
+//        }
+//        chatRoom.reject();
+//        chatRoomRepository.save(chatRoom);
+//    }
+//
+//    private User findByIdAndCheckPresent(Long id, Boolean tutor) {
+//        Optional<User> user = userRepository.findById(id);
+//
+//        if (user.isEmpty()){
+//            if (tutor) {
+//                throw new ServiceException(ErrorCode.TUTOR_NOT_FOUND);
+//            }
+//            throw new ServiceException(ErrorCode.USER_NOT_FOUND);
+//        }
+//        return user.get();
+//    }
 
 
 }
