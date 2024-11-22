@@ -13,6 +13,7 @@ import org.aper.web.domain.paragraph.service.ParagraphHelper;
 import org.aper.web.global.batch.service.method.BatchPostService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
 
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
+    private final EnumUtil enumUtil;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,7 +48,7 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
             Paragraph newParagraph = Paragraph.builder()
                     .uuid(itemPayload.id())
                     .content(itemPayload.content())
-                    .textAlign(TextAlignEnum.fromString(itemPayload.textAlign()))
+                    .textAlign(enumUtil.fromString(TextAlignEnum.class, itemPayload.textAlign()))
                     .previousUuid(itemPayload.prev())
                     .nextUuid(itemPayload.next())
                     .episode(episode)

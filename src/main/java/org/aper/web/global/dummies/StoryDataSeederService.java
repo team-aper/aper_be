@@ -17,6 +17,7 @@ import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.subscription.repository.SubscriptionRepository;
 import org.aper.web.domain.user.entity.User;
+import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,19 +34,20 @@ public class StoryDataSeederService {
     private final EpisodeRepository episodeRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final CurationRepository curationRepository;
+    private final EnumUtil enumUtil;
 
     @Transactional
     public void generateStoriesWithEpisodes(List<User> users, String[] genres, String[] routines, String[] lineStyles, Faker faker) {
         for (String genre : genres) {
             for (int i = 0; i < 8; i++) {
-                StoryRoutineEnum routineEnum = StoryRoutineEnum.fromString(routines[i % routines.length]);
+                StoryRoutineEnum routineEnum = enumUtil.fromString(StoryRoutineEnum.class, routines[i % routines.length]);
                 User user = users.get(faker.random().nextInt(users.size()));
 
                 Story story = Story.builder()
                         .title(faker.book().title())
-                        .genre(StoryGenreEnum.fromString(genre))
+                        .genre(enumUtil.fromString(StoryGenreEnum.class, genre))
                         .routine(routineEnum)
-                        .lineStyle(StoryLineStyleEnum.fromString(lineStyles[i % lineStyles.length]))
+                        .lineStyle(enumUtil.fromString(StoryLineStyleEnum.class, lineStyles[i % lineStyles.length]))
                         .user(user)
                         .build();
 
