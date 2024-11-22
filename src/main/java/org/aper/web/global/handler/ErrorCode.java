@@ -88,7 +88,11 @@ public enum ErrorCode {
     SUBSCRIBER_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 유저입니다."),
     AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다."),
     PUBLISHING_NOT_FOUND(HttpStatus.NOT_FOUND, "S003", "구독 작가의 글이 존재하지 않습니다."),
-    SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "해당하는 구독이 존재하지 않습니다.");
+    SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "해당하는 구독이 존재하지 않습니다."),
+
+    // default Enum Error
+    INVALID_ENUM_TYPE(HttpStatus.BAD_REQUEST, "DE001", "존재하지 않는 종류의 타입입니다.");
+
 
     private final String code;
     private final String message;

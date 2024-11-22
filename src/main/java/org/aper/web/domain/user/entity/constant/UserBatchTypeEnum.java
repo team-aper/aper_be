@@ -10,13 +10,4 @@ public enum UserBatchTypeEnum {
     CONTACTMAIL,    //컨택 메일
     HISTORY,    //이력
     CLASSDESCRIPTION; //1:1수업 소개글
-
-    public static UserBatchTypeEnum fromString(String value) {
-        for (UserBatchTypeEnum type : UserBatchTypeEnum.values()) {
-            if (type.name().equalsIgnoreCase(value)) {
-                return type;
-            }
-        }
-        throw new ServiceException(ErrorCode.INVALID_BATCH_REQUEST);
-    }
 }

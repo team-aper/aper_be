@@ -13,13 +13,4 @@ public enum StoryGenreEnum {
     ART, // 예술
     CRITICISM, // 비평
     POETRY; //시
-
-    public static StoryGenreEnum fromString(String value) {
-        for (StoryGenreEnum genre : StoryGenreEnum.values()) {
-            if (genre.name().equalsIgnoreCase(value)) {
-                return genre;
-            }
-        }
-        throw new ServiceException(ErrorCode.INVALID_GENRE);
-    }
 }
