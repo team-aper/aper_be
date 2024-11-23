@@ -12,6 +12,7 @@ import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
 import org.aper.web.domain.user.repository.UserHistoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.util.EnumUtil;
 import org.springframework.security.web.method.annotation.CsrfTokenArgumentResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
+    private final EnumUtil enumUtil;
 
     @Transactional
     public void changeHistory(User user, List<HistoryRequestDto> historyDtoList) {
@@ -31,7 +33,7 @@ public class UserHistoryService {
 
                     validateUserOwnership(history, user);
 
-                    HistoryTypeEnum historyType = HistoryTypeEnum.fromString(historyDto.historyType());
+                    HistoryTypeEnum historyType = enumUtil.fromString(HistoryTypeEnum.class, historyDto.historyType());
 
                     updateHistory(history, historyDto, historyType);
 
@@ -60,8 +62,8 @@ public class UserHistoryService {
 
     private void updateHistory(UserHistory history, HistoryRequestDto historyDto, HistoryTypeEnum historyType) {
         if (historyType.equals(HistoryTypeEnum.EDUCATION)) {
-            EndDateTypeEnum endDateType = EndDateTypeEnum.fromString(historyDto.endDateType());
-            StartDateTypeEnum startDateType = StartDateTypeEnum.fromString(historyDto.startDateType());
+            EndDateTypeEnum endDateType = enumUtil.fromString(EndDateTypeEnum.class, historyDto.endDateType());
+            StartDateTypeEnum startDateType = enumUtil.fromString(StartDateTypeEnum.class, historyDto.startDateType());
             history.updateEducation(historyDto.date(), historyDto.endDate(), historyDto.description(), endDateType, startDateType);
             return;
         }

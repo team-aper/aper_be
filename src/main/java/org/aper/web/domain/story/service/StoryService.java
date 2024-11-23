@@ -19,6 +19,7 @@ import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class StoryService {
     private final StoryMapper storyMapper;
     private final EpisodeRepository episodeRepository;
     private final KafkaEpisodesProducerService producerService;
+    private final EnumUtil enumUtil;
 
     @Transactional
     public void changePublicStatus(Long storyId, UserDetailsImpl userDetails) {
@@ -52,13 +54,13 @@ public class StoryService {
 
     @Transactional
     public CreatedStoryDto createStory(UserDetailsImpl userDetails, StoryCreateDto storyCreateDto) {
-        StoryRoutineEnum routineEnum = StoryRoutineEnum.fromString(storyCreateDto.routine());
+        StoryRoutineEnum routineEnum = enumUtil.fromString(StoryRoutineEnum.class, storyCreateDto.routine());
 
         Story story = Story.builder()
                 .title(storyCreateDto.title())
                 .routine(routineEnum)
-                .genre(StoryGenreEnum.fromString(storyCreateDto.genre()))
-                .lineStyle(StoryLineStyleEnum.fromString(storyCreateDto.lineStyle()))
+                .genre(enumUtil.fromString(StoryGenreEnum.class, storyCreateDto.genre()))
+                .lineStyle(enumUtil.fromString(StoryLineStyleEnum.class, storyCreateDto.lineStyle()))
                 .user(userDetails.user())
                 .build();
 
@@ -93,8 +95,8 @@ public class StoryService {
         Story story =  storyHelper.validateStoryOwnership(storyId, userDetails);
         story.updateCover(
                 coverChangeDto.title(),
-                StoryGenreEnum.fromString(coverChangeDto.genre()),
-                StoryLineStyleEnum.fromString(coverChangeDto.lineStyle())
+                enumUtil.fromString(StoryGenreEnum.class, coverChangeDto.genre()),
+                enumUtil.fromString(StoryLineStyleEnum.class, coverChangeDto.lineStyle())
         );
         storyRepository.save(story);
     }

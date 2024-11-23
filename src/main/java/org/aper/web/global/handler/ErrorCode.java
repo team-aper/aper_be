@@ -92,7 +92,10 @@ public enum ErrorCode {
     OAUTH2_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "O001", "OAuth2 인증 중 사용자를 찾을 수 없습니다."),
     INVALID_PROVIDER_REQUEST(HttpStatus.BAD_REQUEST, "O002", "Invalid provider: %s"),
     INVALID_FORMAT_REQUEST(HttpStatus.BAD_REQUEST, "O003", "Invalid format Request: %s"),
-    REQUEST_IS_NULL(HttpStatus.BAD_REQUEST, "O004", "Original request is null");
+    REQUEST_IS_NULL(HttpStatus.BAD_REQUEST, "O004", "Original request is null"),
+
+    //Default Enum Type Error
+    INVALID_ENUM_TYPE(HttpStatus.BAD_REQUEST, "ET001", "잘못된 종류의 타입입니다.");
 
 
     private final String code;

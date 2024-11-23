@@ -10,6 +10,7 @@ import org.aper.web.domain.paragraph.service.ParagraphHelper;
 import org.aper.web.global.batch.service.method.BatchPutService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
+import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
 
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
+    private final EnumUtil enumUtil;
 
     @Override
     public boolean handleModifiedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids) {
@@ -43,7 +45,7 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
             }
 
             paragraph.updateContent(itemPayload.content());
-            paragraph.updateTextAlign(TextAlignEnum.fromString(itemPayload.textAlign()));
+            paragraph.updateTextAlign(enumUtil.fromString(TextAlignEnum.class, itemPayload.textAlign()));
             paragraph.updatePreviousUuid(itemPayload.prev());
             paragraph.updateNextUuid(itemPayload.next());
 

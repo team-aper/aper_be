@@ -91,13 +91,4 @@ public enum StoryRoutineEnum {
         }
         return episodes;
     }
-
-    public static StoryRoutineEnum fromString(String value) {
-        for (StoryRoutineEnum routine : StoryRoutineEnum.values()) {
-            if (routine.name().equalsIgnoreCase(value)) {
-                return routine;
-            }
-        }
-        throw new ServiceException(ErrorCode.INVALID_ROUTINE);
-    }
 }
