@@ -27,6 +27,8 @@ public class AuthenticatedMatchers {
             "/field/**",
             "/story/**",
             "/episode/**",
-            "/user/tutors"
+            "/user/tutors",
+            "/login/oauth2/code/**",
+            "/oauth2/**"
     };
 }
