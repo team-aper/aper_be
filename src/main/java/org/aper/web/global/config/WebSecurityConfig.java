@@ -8,6 +8,7 @@ import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandle
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
+import org.aper.web.global.oauth2.CustomRequestEntityConverter;
 import org.aper.web.global.security.UserDetailsServiceImpl;
 import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -21,6 +22,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -84,17 +89,33 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authorizationCodeTokenResponseClient() {
+        DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
+
+        tokenResponseClient.setRequestEntityConverter(request -> {
+            if ("kakao".equals(request.getClientRegistration().getRegistrationId()) || "naver".equals(request.getClientRegistration().getRegistrationId())) {
+                return new CustomRequestEntityConverter().convert(request);
+            }
+            return new OAuth2AuthorizationCodeGrantRequestEntityConverter().convert(request);
+        });
+        return tokenResponseClient;
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement(sessionManagement ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
         http.oauth2Login(oauth2Login ->
                 oauth2Login
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(customAuthenticationFailureHandler)
+                        .tokenEndpoint(tokenEndpoint ->
+                                tokenEndpoint.accessTokenResponseClient(authorizationCodeTokenResponseClient())
+                        )
                         .userInfoEndpoint(userInfoEndpoint ->
                                 userInfoEndpoint.userService(customOAuth2UserService())
                         )
@@ -104,8 +125,7 @@ public class WebSecurityConfig {
         http.cors(cors -> cors.configurationSource(configurationSource()));
 
         // 권한에 따른 접근 설정
-        http.authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
+        http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(AuthenticatedMatchers.flexiblePathArray).permitAll()
                         .requestMatchers(AuthenticatedMatchers.swaggerArray).permitAll()

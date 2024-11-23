@@ -1,6 +1,5 @@
 package org.aper.web.global.handler;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -62,7 +61,6 @@ public enum ErrorCode {
     PARAGRAPH_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "P003", "이미 삭제된 uuid 입니다."),
     INVALID_TEXT_ALIGN(HttpStatus.BAD_REQUEST, "P004", "유효하지 않은 문단 정렬입니다."),
 
-
     // Batch
     INVALID_BATCH_REQUEST(HttpStatus.BAD_REQUEST,"B001", "잘못된 배치 요청입니다."),
     INVALID_BATCH_URL(HttpStatus.BAD_REQUEST,"B002", "잘못된 URL입니다."),
@@ -88,7 +86,14 @@ public enum ErrorCode {
     SUBSCRIBER_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 유저입니다."),
     AUTHOR_NOT_FOUND(HttpStatus.NOT_FOUND, "S002", "존재하지 않는 작가입니다."),
     PUBLISHING_NOT_FOUND(HttpStatus.NOT_FOUND, "S003", "구독 작가의 글이 존재하지 않습니다."),
-    SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "해당하는 구독이 존재하지 않습니다.");
+    SUBSCRIPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "S004", "해당하는 구독이 존재하지 않습니다."),
+
+    // OAuth2
+    OAUTH2_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "O001", "OAuth2 인증 중 사용자를 찾을 수 없습니다."),
+    INVALID_PROVIDER_REQUEST(HttpStatus.BAD_REQUEST, "O002", "Invalid provider: %s"),
+    INVALID_FORMAT_REQUEST(HttpStatus.BAD_REQUEST, "O003", "Invalid format Request: %s"),
+    REQUEST_IS_NULL(HttpStatus.BAD_REQUEST, "O004", "Original request is null");
+
 
     private final String code;
     private final String message;

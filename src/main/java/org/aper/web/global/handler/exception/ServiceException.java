@@ -18,6 +18,13 @@ public class ServiceException extends RuntimeException {
         this.message = errorCode.getMessage();
     }
 
+    public ServiceException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.status = errorCode.getStatus();
+        this.code = errorCode.getCode();
+        this.message = customMessage;
+    }
+
     public ErrorResponseDto toErrorResponse() {
         return new ErrorResponseDto(this.status.value(), this.code, this.message);
     }

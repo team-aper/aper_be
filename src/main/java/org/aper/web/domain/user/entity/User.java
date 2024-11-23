@@ -11,6 +11,7 @@ import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Getter
@@ -81,12 +82,13 @@ public class User {
 
     @Builder
     public User(String penName, String password, String email, UserRoleEnum role) {
+        Random random = new Random();
         this.email = email;
         this.penName = penName;
         this.password = password;
         this.role = role;
         this.description = "안녕하세요, " + penName + "입니다.";
-        this.fieldImage = "/images/im1.jpg";
+        this.fieldImage = "/images/im" + random.nextInt(9) + 1 + ".jpg";
         this.point = 0L;
         this.requestTutor = Boolean.FALSE;
     }
