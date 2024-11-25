@@ -65,8 +65,9 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     //aper-library implementation
-    implementation 'com.github.team-aper:aper-library:0.1.1-dev.0'
+    implementation 'com.github.team-aper:aper-library:0.2.0-dev.0'
 }
+
 
 
 tasks.named('test') {
