@@ -1,6 +1,6 @@
 package org.aper.web.domain.curation.repository;
 
-import org.aper.web.domain.curation.entity.Curation;
+import com.aperlibrary.curation.entity.Curation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

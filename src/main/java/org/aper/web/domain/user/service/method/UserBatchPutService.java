@@ -1,19 +1,16 @@
 package org.aper.web.domain.user.service.method;
 
+import com.aperlibrary.user.entity.constant.UserBatchTypeEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.image.service.ImageEncoder;
 import org.aper.web.domain.image.service.S3ImageService;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.constant.UserBatchTypeEnum;
 import org.aper.web.domain.user.service.UserHistoryService;
 import org.aper.web.domain.user.service.UserService;
 import org.aper.web.global.batch.service.method.BatchPutService;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;

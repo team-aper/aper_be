@@ -1,16 +1,16 @@
 package org.aper.web.domain.episode.service;
 
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.subscription.entity.Subscription;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeHeaderDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.EpisodeTextDto;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
 import org.aper.web.domain.story.service.StoryHelper;
-import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.subscription.repository.SubscriptionRepository;
 import org.aper.web.global.sse.service.RedisPublisher;
 import org.aper.web.global.handler.ErrorCode;

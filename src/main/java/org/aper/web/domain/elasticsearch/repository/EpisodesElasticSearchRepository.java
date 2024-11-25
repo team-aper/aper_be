@@ -1,11 +1,11 @@
 package org.aper.web.domain.elasticsearch.repository;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
 import org.aper.web.domain.elasticsearch.service.ElasticSearchMapper;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;

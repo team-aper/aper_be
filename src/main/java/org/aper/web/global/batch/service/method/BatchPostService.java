@@ -1,6 +1,6 @@
 package org.aper.web.global.batch.service.method;
 
-import org.aper.web.domain.episode.entity.Episode;
+import com.aperlibrary.episode.entity.Episode;
 
 import java.util.List;
 

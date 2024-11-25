@@ -1,19 +1,16 @@
 package org.aper.web.domain.user.service;
 
+import com.aperlibrary.user.entity.User;
+import com.aperlibrary.user.entity.UserHistory;
+import com.aperlibrary.user.entity.constant.EndDateTypeEnum;
+import com.aperlibrary.user.entity.constant.HistoryTypeEnum;
+import com.aperlibrary.user.entity.constant.StartDateTypeEnum;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.field.service.FieldHelper;
-import org.aper.web.domain.field.service.FieldMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.UserHistory;
-import org.aper.web.domain.user.entity.constant.EndDateTypeEnum;
-import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
-import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
 import org.aper.web.domain.user.repository.UserHistoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.util.EnumUtil;
-import org.springframework.security.web.method.annotation.CsrfTokenArgumentResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

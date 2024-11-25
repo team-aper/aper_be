@@ -1,14 +1,14 @@
 package org.aper.web.domain.main.service;
 
+import com.aperlibrary.curation.entity.Curation;
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+import com.aperlibrary.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.curation.entity.Curation;
 import org.aper.web.domain.curation.repository.CurationRepository;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.specification.EpisodeSpecification;
 import org.aper.web.domain.main.dto.MainResponseDto.*;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

@@ -1,8 +1,8 @@
 package org.aper.web.domain.review.dto;
 
+import com.aperlibrary.review.entity.ReviewTypeEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 
 import java.util.List;
 

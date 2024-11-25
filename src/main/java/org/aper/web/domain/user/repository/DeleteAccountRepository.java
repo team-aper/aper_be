@@ -1,6 +1,6 @@
 package org.aper.web.domain.user.repository;
 
-import org.aper.web.domain.user.entity.DeleteAccount;
+import com.aperlibrary.user.entity.DeleteAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,11 +1,11 @@
 package org.aper.web.domain.review.controller;
 
+import com.aperlibrary.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.review.service.ReviewService;
 import org.aper.web.domain.review.dto.ReviewRequestDto.CreateReviewRequestDto;
 import org.aper.web.domain.review.dto.ReviewResponseDto.CreatedReviewDto;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.valid.UserValidationSequence;
 import org.aper.web.global.docs.ReviewControllerDocs;
 import org.aper.web.global.dto.ResponseDto;

@@ -1,9 +1,9 @@
 package org.aper.web.domain.main.service;
 
-import org.aper.web.domain.curation.entity.Curation;
-import org.aper.web.domain.episode.entity.Episode;
+import com.aperlibrary.curation.entity.Curation;
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.user.entity.User;
 import org.aper.web.domain.main.dto.MainResponseDto.*;
-import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.aper.web.domain.episode.repository;
 
-import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

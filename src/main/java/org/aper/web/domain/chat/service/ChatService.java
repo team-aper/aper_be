@@ -1,15 +1,14 @@
 package org.aper.web.domain.chat.service;
 
+import com.aperlibrary.chat.entity.ChatParticipant;
+import com.aperlibrary.chat.entity.ChatRoom;
+import com.aperlibrary.chat.entity.ChatRoomView;
+import com.aperlibrary.user.entity.User;
 import org.aper.web.domain.chat.dto.ChatParticipatingResponseDto;
-import org.aper.web.domain.chat.entity.ChatParticipant;
-import org.aper.web.domain.chat.entity.ChatRoom;
-import org.aper.web.domain.chat.entity.ChatRoomView;
 import org.aper.web.domain.chat.repository.ChatParticipantRepository;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.chat.repository.ChatRoomViewRepository;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.stereotype.Service;
@@ -70,15 +69,13 @@ public class ChatService {
         List<ChatParticipatingResponseDto> participatingResponseDtos = new ArrayList<>();
         for (ChatParticipant chatParticipant : participatingChats) {
             ChatRoom chatRoom = chatParticipant.getChatRoom();
-            if (!chatRoom.getIsRejected()) {
-                ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
-                        chatRoom.getId(),
-                        chatParticipant.getIsTutor(),
-                        chatRoom.getIsAccepted(),
-                        chatRoom.getStartTime()
-                );
-                participatingResponseDtos.add(participatingResponseDto);
-            }
+            ChatParticipatingResponseDto participatingResponseDto = new ChatParticipatingResponseDto(
+                    chatRoom.getId(),
+                    chatParticipant.getIsTutor(),
+                    chatRoom.getIsAccepted(),
+                    chatRoom.getStartTime()
+            );
+            participatingResponseDtos.add(participatingResponseDto);
         }
 
         return participatingResponseDtos;
@@ -96,7 +93,7 @@ public class ChatService {
         if (chatRoom.getIsAccepted()) {
             throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_ACCEPTED);
         }
-        if (chatRoom.getIsRejected()) {
+        if (chatRoom.getIsRequested() & !chatRoom.getIsAccepted()) {
             throw new ServiceException(ErrorCode.CHAT_ROOM_REQUEST_REJECTED);
         }
         chatRoom.reject();

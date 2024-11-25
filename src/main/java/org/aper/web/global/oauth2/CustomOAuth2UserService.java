@@ -1,8 +1,8 @@
 package org.aper.web.global.oauth2;
 
+import com.aperlibrary.user.entity.User;
+import com.aperlibrary.user.entity.constant.UserRoleEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

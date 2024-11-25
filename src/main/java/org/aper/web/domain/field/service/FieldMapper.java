@@ -1,15 +1,15 @@
 package org.aper.web.domain.field.service;
 
-import org.aper.web.domain.episode.entity.Episode;
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.review.entity.ReviewDetail;
+import com.aperlibrary.review.entity.ReviewTypeEnum;
+import com.aperlibrary.story.entity.Story;
+import com.aperlibrary.user.entity.User;
+import com.aperlibrary.user.entity.UserHistory;
 import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;
-import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
-import org.aper.web.domain.review.entity.ReviewDetail;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.UserHistory;
-import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

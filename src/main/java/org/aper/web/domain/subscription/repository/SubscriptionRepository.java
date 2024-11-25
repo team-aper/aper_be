@@ -1,7 +1,7 @@
 package org.aper.web.domain.subscription.repository;
 
-import org.aper.web.domain.subscription.entity.Subscription;
-import org.aper.web.domain.user.entity.User;
+import com.aperlibrary.subscription.entity.Subscription;
+import com.aperlibrary.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

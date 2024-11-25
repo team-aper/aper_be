@@ -1,11 +1,11 @@
 package org.aper.web.domain.kafka.service;
 
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.story.entity.Story;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaEpisodeDto;
-import org.aper.web.domain.story.entity.Story;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

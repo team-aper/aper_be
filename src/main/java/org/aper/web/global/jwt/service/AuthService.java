@@ -1,12 +1,12 @@
 package org.aper.web.global.jwt.service;
 
+import com.aperlibrary.user.entity.User;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.service.UserService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

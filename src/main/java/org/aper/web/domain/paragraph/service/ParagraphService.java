@@ -1,9 +1,9 @@
 package org.aper.web.domain.paragraph.service;
 
+import com.aperlibrary.episode.entity.Episode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
 import org.aper.web.domain.paragraph.service.method.ParagraphDeleteService;
 import org.aper.web.domain.paragraph.service.method.ParagraphPostService;

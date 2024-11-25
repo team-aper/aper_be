@@ -1,10 +1,10 @@
 package org.aper.web.domain.main.controller;
 
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.main.dto.MainResponseDto.*;
 import org.aper.web.domain.main.service.MainService;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.docs.MainControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
