@@ -1,0 +1,16 @@
+rootProject.name = 'web'
+
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://jitpack.io'
+            credentials {
+                username = System.getenv("JITPACK_USERNAME") ?: ""
+                password = ""
+            }
+        }
+    }
+}
