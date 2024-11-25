@@ -1,6 +1,6 @@
 package org.aper.web.domain.story.repository;
 
-import org.aper.web.domain.story.entity.Story;
+import com.aperlibrary.story.entity.Story;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

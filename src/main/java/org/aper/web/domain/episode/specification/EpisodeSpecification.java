@@ -1,10 +1,10 @@
 package org.aper.web.domain.episode.specification;
 
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.story.entity.Story;
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
-import org.aper.web.domain.episode.entity.Episode;
-import org.aper.web.domain.story.entity.Story;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface EpisodeSpecification {

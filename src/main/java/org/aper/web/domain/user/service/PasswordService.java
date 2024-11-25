@@ -1,9 +1,9 @@
 package org.aper.web.domain.user.service;
 
 
+import com.aperlibrary.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

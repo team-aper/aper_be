@@ -1,5 +1,6 @@
 package org.aper.web.global.docs;
 
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.aper.web.domain.main.dto.MainResponseDto.GetCurationsListResponseDto;
 import org.aper.web.domain.main.dto.MainResponseDto.GetEpisodesListResponseDto;
 import org.aper.web.domain.main.dto.MainResponseDto.GetUsersListResponseDto;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.springframework.web.bind.annotation.RequestParam;

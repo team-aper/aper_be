@@ -1,5 +1,6 @@
 package org.aper.web.domain.search.service;
 
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
@@ -10,7 +11,6 @@ import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchAuthorResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchPenNameResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.data.domain.PageRequest;

@@ -1,6 +1,6 @@
 package org.aper.web.domain.chat.repository;
 
-import org.aper.web.domain.chat.entity.ChatRoomView;
+import com.aperlibrary.chat.entity.ChatRoomView;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

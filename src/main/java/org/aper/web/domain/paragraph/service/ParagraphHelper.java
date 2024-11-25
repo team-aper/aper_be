@@ -1,9 +1,9 @@
 package org.aper.web.domain.paragraph.service;
 
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.paragraph.entity.Paragraph;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
-import org.aper.web.domain.paragraph.entity.Paragraph;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

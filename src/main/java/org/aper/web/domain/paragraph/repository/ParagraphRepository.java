@@ -1,6 +1,6 @@
 package org.aper.web.domain.paragraph.repository;
 
-import org.aper.web.domain.paragraph.entity.Paragraph;
+import com.aperlibrary.paragraph.entity.Paragraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,5 +1,7 @@
 package org.aper.web.domain.user.service;
 
+import com.aperlibrary.user.entity.User;
+import com.aperlibrary.user.entity.constant.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
@@ -10,8 +12,6 @@ import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto;
 import org.aper.web.domain.user.dto.UserResponseDto.IsDuplicated;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

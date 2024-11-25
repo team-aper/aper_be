@@ -1,9 +1,13 @@
 package org.aper.web.domain.story.service;
 
+import com.aperlibrary.episode.entity.Episode;
+import com.aperlibrary.story.entity.Story;
+import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+import com.aperlibrary.story.entity.constant.StoryLineStyleEnum;
+import com.aperlibrary.story.entity.constant.StoryRoutineEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
-import org.aper.web.domain.episode.entity.Episode;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
@@ -11,10 +15,6 @@ import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.GetStoryDto;
-import org.aper.web.domain.story.entity.Story;
-import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
-import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
-import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;

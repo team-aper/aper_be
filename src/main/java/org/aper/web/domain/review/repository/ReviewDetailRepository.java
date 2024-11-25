@@ -1,6 +1,6 @@
 package org.aper.web.domain.review.repository;
 
-import org.aper.web.domain.review.entity.ReviewDetail;
+import com.aperlibrary.review.entity.ReviewDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
