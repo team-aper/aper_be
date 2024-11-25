@@ -1,11 +1,11 @@
 package org.aper.web.global.handler.authHandler;
 
+import com.aperlibrary.user.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.handler.ErrorCode;

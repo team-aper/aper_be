@@ -1,16 +1,16 @@
 package org.aper.web.domain.review.service;
 
+import com.aperlibrary.chat.entity.ChatRoom;
+import com.aperlibrary.review.entity.Review;
+import com.aperlibrary.review.entity.ReviewDetail;
+import com.aperlibrary.review.entity.ReviewTypeEnum;
+import com.aperlibrary.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
-import org.aper.web.domain.review.entity.Review;
-import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.review.repository.ReviewRepository;
 import org.aper.web.domain.review.dto.ReviewRequestDto.CreateReviewRequestDto;
 import org.aper.web.domain.review.dto.ReviewResponseDto.CreatedReviewDto;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.review.entity.constant.ReviewTypeEnum;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -59,7 +59,7 @@ public class ReviewService {
         }
         reviewRepository.save((review));
 
-        chatRoom.setReview(review);
+        //chatRoom.setReview(review);
         chatRoomRepository.save(chatRoom);
 
         return new CreatedReviewDto(review.getId());

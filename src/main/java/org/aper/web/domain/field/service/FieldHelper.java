@@ -1,10 +1,9 @@
 package org.aper.web.domain.field.service;
 
+import com.aperlibrary.subscription.entity.Subscription;
+import com.aperlibrary.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.subscription.repository.SubscriptionRepository;
-import org.aper.web.domain.user.entity.User;
-import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Component;
 

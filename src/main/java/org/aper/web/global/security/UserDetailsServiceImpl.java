@@ -1,6 +1,6 @@
 package org.aper.web.global.security;
 
-import org.aper.web.domain.user.entity.User;
+import com.aperlibrary.user.entity.User;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
