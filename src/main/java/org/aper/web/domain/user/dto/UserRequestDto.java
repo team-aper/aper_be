@@ -81,13 +81,12 @@ public class UserRequestDto {
             String historyType,
             String endDateType,
             String startDateType,
-
             @NotBlank(message = "날짜를 입력해주세요.", groups = NotBlankGroup.class)
-            @JsonFormat(pattern = "yyyy.MM")
-            YearMonth date,
+            @Pattern(regexp = "\\d{4}\\.\\d{2}", message = "날짜 형식은 yyyy.MM이어야 합니다.")
+            String date,
 
-            @JsonFormat(pattern = "yyyy.MM")
-            YearMonth endDate,
+            @Pattern(regexp = "\\d{4}\\.\\d{2}", message = "날짜 형식은 yyyy.MM이어야 합니다.")
+            String endDate,
             String description
     ){}
 
