@@ -61,7 +61,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdExceptMe(Long userId, Long exceptUserId);
 
     @Query("SELECT u FROM User u " +
-            "JOIN FETCH u.userHistories h")
+            "JOIN FETCH u.userHistories h " +
+            "WHERE u.userId = :id")
     Optional<User> findByIdWithHistory(Long id);
 
 
