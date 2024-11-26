@@ -30,12 +30,6 @@ jobs:
           mkdir -p ./src/main/resources/yml
           echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
 
-      - name: Build with Gradle
-        env:
-          JITPACK_USERNAME: ${{ secrets.JITPACK_USERNAME }}
-          JITPACK_PASSWORD: ${{ secrets.JITPACK_PASSWORD }}
-        run: ./gradlew build
-
       # Gradle 빌드 할 때, 이미 저장한 데이터를 캐싱하여 빌드시 이를 사용하도록함.
       - name: Gradle Caching
         uses: actions/cache@v3
