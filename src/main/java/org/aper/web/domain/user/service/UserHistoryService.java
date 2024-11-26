@@ -14,6 +14,8 @@ import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.List;
 
 @Service
@@ -21,6 +23,7 @@ import java.util.List;
 public class UserHistoryService {
     private final UserHistoryRepository userHistoryRepository;
     private final EnumUtil enumUtil;
+    private final UserMapper userMapper;
 
     @Transactional
     public void changeHistory(User user, List<HistoryRequestDto> historyDtoList) {
@@ -58,13 +61,15 @@ public class UserHistoryService {
     }
 
     private void updateHistory(UserHistory history, HistoryRequestDto historyDto, HistoryTypeEnum historyType) {
+        YearMonth date = userMapper.StringToYearMonth(historyDto.date());
         if (historyType.equals(HistoryTypeEnum.EDUCATION)) {
             EndDateTypeEnum endDateType = enumUtil.fromString(EndDateTypeEnum.class, historyDto.endDateType());
             StartDateTypeEnum startDateType = enumUtil.fromString(StartDateTypeEnum.class, historyDto.startDateType());
-            history.updateEducation(historyDto.date(), historyDto.endDate(), historyDto.description(), endDateType, startDateType);
+            YearMonth endDate = userMapper.StringToYearMonth(historyDto.endDate());
+            history.updateEducation(date, endDate, historyDto.description(), endDateType, startDateType);
             return;
         }
-        history.updateAwardPublication(historyDto.date(), historyDto.description(), historyType);
+        history.updateAwardPublication(date, historyDto.description(), historyType);
     }
 }
 

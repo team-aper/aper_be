@@ -6,6 +6,9 @@ import org.aper.web.domain.field.service.FieldMapper;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+
 @Service
 @RequiredArgsConstructor
 public class UserMapper {
@@ -19,5 +22,9 @@ public class UserMapper {
                 fieldMapper.toDetailsResponse(user.getUserHistories()),
                 user.getClassDescription()
         );
+    }
+
+    public YearMonth StringToYearMonth(String yearMonth) {
+        return YearMonth.parse(yearMonth, DateTimeFormatter.ofPattern("yyyy.MM"));
     }
 }
