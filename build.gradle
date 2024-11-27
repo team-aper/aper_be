@@ -50,7 +50,7 @@ dependencies {
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
-    // dummies
+    //dummies
     implementation 'net.datafaker:datafaker:2.2.2'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -65,7 +65,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     //aper-library implementation
-    implementation 'com.github.team-aper:aper-library:0.3.1-dev.0'
+    implementation project(':aper-library')
 }
 
 
