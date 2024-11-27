@@ -1,9 +1,0 @@
-server:
-  port: 8084
-
-spring:
-  config:
-    import:
-      - classpath:/yml/application-secret.yml
-    activate:
-      on-profile: local
