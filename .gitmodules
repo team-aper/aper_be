@@ -1,0 +1,3 @@
+[submodule "libs/aper-library"]
+	path = libs/aper-library
+	url = https://github.com/team-aper/aper-library.git
