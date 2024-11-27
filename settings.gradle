@@ -1,9 +1,12 @@
 rootProject.name = 'web'
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
+
+include ':shared-library'
+project(':shared-library').projectDir = file('libs/shared-library')
