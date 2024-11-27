@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: aperlibrary
+
+  config:
+    import:
+      - classpath:/yml/application-local.yml
+      - classpath:/yml/application-dev.yml
+  profiles:
+    active: local
