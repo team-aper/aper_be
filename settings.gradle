@@ -1,7 +1,10 @@
 rootProject.name = 'web'
 
+include ':aper-library'
+project(':aper-library').projectDir = file('libs/aper-library')
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         mavenCentral()
         maven { url 'https://jitpack.io' }
