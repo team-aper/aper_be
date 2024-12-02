@@ -63,7 +63,7 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://www.aper.cc", "https://aper.cc"));
         configuration.setAllowCredentials(true);
         configuration.setExposedHeaders(
                 List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
