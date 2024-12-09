@@ -20,9 +20,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -37,52 +34,49 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
 
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        try {
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-        String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-        String role = oAuth2User.getAuthorities().stream()
-                .findFirst()
-                .orElseThrow(() -> new ServiceException(ErrorCode.AUTH_NOT_FOUND))
-                .getAuthority();
+            String email = oAuth2User.getAttribute("email");
+            String name = oAuth2User.getAttribute("name");
+            String role = oAuth2User.getAuthorities().stream()
+                    .findFirst()
+                    .orElseThrow(() -> new ServiceException(ErrorCode.AUTH_NOT_FOUND))
+                    .getAuthority();
 
-        boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
+            boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
 
-        if (!isExist) {
-            throw new ServiceException(ErrorCode.OAUTH2_USER_NOT_FOUND);
-        }
+            if (!isExist) {
+                throw new ServiceException(ErrorCode.OAUTH2_USER_NOT_FOUND);
+            }
 
-        // 이메일로 사용자 정보 조회
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+            // 이메일로 사용자 정보 조회
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
 
-        // JWT 토큰 생성
-        GeneratedToken tokens = tokenProvider.generateToken(email, role, name);
-        response.setHeader("Authorization", tokens.getAccessToken());
-        cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
+            // JWT 토큰 생성
+            GeneratedToken tokens = tokenProvider.generateToken(email, role, name);
+            response.setHeader("Authorization", tokens.getAccessToken());
+            cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
 
-        // UserInfo 생성 (DB에서 가져온 정보로 생성)
-        UserInfo userInfo = new UserInfo(
-                user.getUserId(),
-                user.getEmail(),
-                user.getPenName(),
-                user.getFieldImage()
-        );
+            // UserInfo 생성 (DB에서 가져온 정보로 생성)
+            UserInfo userInfo = new UserInfo(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getPenName(),
+                    user.getFieldImage()
+            );
 
-        // ResponseDto 생성
-        ResponseDto<UserInfo> responseDto = ResponseDto.success("로그인 성공", userInfo);
+            // JSON 응답 반환
+            ResponseDto<UserInfo> responseDto = ResponseDto.success("로그인 성공", userInfo);
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-        // 응답 반환
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        try (PrintWriter writer = response.getWriter()) {
-            String jsonResponse = new ObjectMapper().writeValueAsString(responseDto);
-            writer.write(jsonResponse);
-        } catch (IOException e) {
-            log.error("Error writing success response", e);
+            new ObjectMapper().writeValue(response.getWriter(), responseDto);
+        } catch (Exception e) {
+            log.error("Error during authentication success handling", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

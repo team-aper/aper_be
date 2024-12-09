@@ -1,4 +1,4 @@
-package org.aper.web.global.oauth2.service;
+package org.aper.web.global.oauth2;
 
 import com.aperlibrary.user.entity.User;
 import com.aperlibrary.user.entity.constant.UserRoleEnum;
@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
-import org.aper.web.global.oauth2.OAuth2Attribute;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
