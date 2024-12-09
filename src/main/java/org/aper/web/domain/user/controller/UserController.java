@@ -6,6 +6,7 @@ import org.aper.web.domain.search.dto.SearchDto;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.dto.UserResponseDto.*;
 import org.aper.web.domain.user.service.*;
+import org.aper.web.domain.user.service.email.EmailCertService;
 import org.aper.web.domain.user.valid.UserValidationSequence;
 import org.aper.web.global.docs.UserControllerDocs;
 import org.aper.web.global.dto.ResponseDto;

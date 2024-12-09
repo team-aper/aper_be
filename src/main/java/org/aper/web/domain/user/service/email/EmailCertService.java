@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.service;
+package org.aper.web.domain.user.service.email;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
@@ -32,8 +32,13 @@ public class EmailCertService {
 
         String subject = "Aper : 이메일 인증번호 확인";
 
-        mailSendService.sendEmail(emailSendDto.email(), subject, certificationNumber);
+        // 템플릿 서비스 사용
+        EmailTemplateService templateService = new EmailTemplateService();
+        String htmlContent = templateService.loadHtmlTemplate(certificationNumber);
+
+        mailSendService.sendEmail(emailSendDto.email(), subject, htmlContent);
     }
+
 
     @Transactional
     public void emailAuthCheck(EmailAuthDto emailAuthDto) {

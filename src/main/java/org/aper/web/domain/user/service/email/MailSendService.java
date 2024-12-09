@@ -1,4 +1,4 @@
-package org.aper.web.domain.user.service;
+package org.aper.web.domain.user.service.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -23,20 +23,17 @@ public class MailSendService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String to, String subject, String content) {
+    public void sendEmail(String to, String subject, String htmlContent) {
         try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false,"UTF-8");
-            message.setFrom(sender);
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(content);
-
-            javaMailSender.send(mimeMessage);
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+            helper.setFrom(sender);
+            javaMailSender.send(message);
         } catch (MessagingException e) {
-            log.error("인증코드 전송 실패");
             throw new ServiceException(ErrorCode.EMAIL_SEND_FAILURE);
         }
     }
-
 }
