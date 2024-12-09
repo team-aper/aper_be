@@ -43,6 +43,7 @@ public class FieldService {
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
         boolean isSubscribed = fieldHelper.isSubscribed(authorId, userDetails);
         return new FieldHeaderResponseDto(
+                user.getUserId(),
                 user.getPenName(),
                 user.getFieldImage(),
                 user.getDescription(),

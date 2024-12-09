@@ -6,6 +6,7 @@ import java.util.List;
 public class FieldResponseDto {
 
     public record FieldHeaderResponseDto(
+            Long authorId,
             String penName,
             String fieldImage,
             String description,

@@ -22,6 +22,7 @@ public class StoryMapper {
         LocalDateTime date = story.isOnDisplay() ? story.getPublicDate() : story.getCreatedAt();
 
         return new GetStoryDto(
+                story.getUser().getUserId(),
                 story.getTitle(),
                 story.getRoutine().name(),
                 story.getUser().getPenName(),
@@ -38,6 +39,7 @@ public class StoryMapper {
         List<CreatedEpisodeDto> publishedEpisodes = episodeDtoCreateService.getPublishedEpisodesWithDDay(story.getId());
 
         return new GetStoryDto(
+                story.getUser().getUserId(),
                 story.getTitle(),
                 story.getRoutine().name(),
                 story.getUser().getPenName(),
