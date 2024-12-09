@@ -20,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -113,6 +114,12 @@ public class AuthService {
     @Transactional(readOnly = true)
     public UserInfo getUserInfo(LoginRequestDto loginRequestDto) {
         User user = userService.findUser(loginRequestDto.email());
+        return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfo getMe(UserDetails userDetails) {
+        User user = userService.findUser(userDetails.getUsername());
         return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
     }
 }

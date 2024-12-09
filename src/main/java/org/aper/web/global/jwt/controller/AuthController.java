@@ -6,14 +6,12 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.global.docs.AuthControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
-import org.aper.web.global.handler.ErrorCode;
-import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.jwt.dto.GeneratedToken;
 import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.jwt.service.AuthService;
 import org.aper.web.global.jwt.service.CookieService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,20 +46,8 @@ public class AuthController implements AuthControllerDocs {
     }
 
     @GetMapping("/auth/me")
-    public ResponseDto<UserInfo> getUserInfo(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new ServiceException(ErrorCode.UNAUTHORIZED_USER);
-        }
-
-        OAuth2User user = (OAuth2User) authentication.getPrincipal();
-
-        UserInfo userInfo = new UserInfo(
-                user.getAttribute("id"),
-                user.getAttribute("email"),
-                user.getAttribute("name"),
-                user.getAttribute("profileImage")
-        );
-
+    public ResponseDto<UserInfo> getMe(@AuthenticationPrincipal UserDetails userDetails) {
+        UserInfo userInfo = authService.getMe(userDetails);
         return ResponseDto.success("User Info Data", userInfo);
     }
 

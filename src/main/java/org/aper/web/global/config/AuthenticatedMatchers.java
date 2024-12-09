@@ -21,7 +21,8 @@ public class AuthenticatedMatchers {
             "/curation/main",
             "/main/*",
             "/search/*",
-            "/scheduler/test"
+            "/scheduler/test",
+            "/auth/me"
     };
     public static final String[] flexiblePathArray = {
             "/field/**",
