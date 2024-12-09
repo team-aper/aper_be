@@ -61,13 +61,13 @@ public class WebSecurityConfig {
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://www.aper.cc", "https://aper.cc"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(
-                List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
 
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.addAllowedOriginPattern("https://*.aper.cc");
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
