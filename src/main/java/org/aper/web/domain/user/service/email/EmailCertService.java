@@ -39,7 +39,6 @@ public class EmailCertService {
         mailSendService.sendEmail(emailSendDto.email(), subject, htmlContent);
     }
 
-
     @Transactional
     public void emailAuthCheck(EmailAuthDto emailAuthDto) {
         String certificationNumber = emailRepository.getCertificationNumber(emailAuthDto.email());
