@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.jwt.TokenProvider;
@@ -23,7 +22,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
     private final CookieService cookieService;
-    private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
