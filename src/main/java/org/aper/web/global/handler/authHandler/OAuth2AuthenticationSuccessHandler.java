@@ -1,18 +1,14 @@
 package org.aper.web.global.handler.authHandler;
 
-import com.aperlibrary.user.entity.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.dto.GeneratedToken;
-import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.jwt.service.CookieService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -50,30 +46,20 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 throw new ServiceException(ErrorCode.OAUTH2_USER_NOT_FOUND);
             }
 
-            // 이메일로 사용자 정보 조회
-            User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-
             // JWT 토큰 생성
             GeneratedToken tokens = tokenProvider.generateToken(email, role, name);
             response.setHeader("Authorization", tokens.getAccessToken());
             cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
 
-            // UserInfo 생성 (DB에서 가져온 정보로 생성)
-            UserInfo userInfo = new UserInfo(
-                    user.getUserId(),
-                    user.getEmail(),
-                    user.getPenName(),
-                    user.getFieldImage()
-            );
+            // 리다이렉트 URL 처리
+            String redirectUrl = request.getParameter("redirectUrl");
+            if (redirectUrl == null || redirectUrl.isEmpty()) {
+                redirectUrl = "https://www.aper.cc/"; // 기본 URL
+            }
 
-            // JSON 응답 반환
-            ResponseDto<UserInfo> responseDto = ResponseDto.success("로그인 성공", userInfo);
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            // 리다이렉트 실행
+            response.sendRedirect(redirectUrl);
 
-            new ObjectMapper().writeValue(response.getWriter(), responseDto);
         } catch (Exception e) {
             log.error("Error during authentication success handling", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
