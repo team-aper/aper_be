@@ -1,11 +1,11 @@
-package org.aper.web.global.jwt.service;
+package org.aper.web.global.jwt.service.token;
 
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.TokenException;
-import org.aper.web.global.jwt.dto.TokenVerificationResult;
-import org.aper.web.global.jwt.dto.VerifiedToken;
+import org.aper.web.global.jwt.dto.token.TokenVerificationResult;
+import org.aper.web.global.jwt.dto.token.VerifiedToken;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
