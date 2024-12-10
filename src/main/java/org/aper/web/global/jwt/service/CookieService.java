@@ -29,12 +29,9 @@ public class CookieService {
     public Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
         cookie.setSecure(true);
-        cookie.setSecure(false);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setDomain("aper.cc");
         cookie.setAttribute("SameSite", "None");
-//        cookie.setAttribute("SameSite", "Lax");
         return cookie;
     }
 
