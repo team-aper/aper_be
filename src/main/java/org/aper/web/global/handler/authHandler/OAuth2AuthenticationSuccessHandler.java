@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final TempTokenService tempTokenService; // 임시 토큰 저장소
+    private final TempTokenService tempTokenService;
 
     @Override
     @Transactional(readOnly = true)
@@ -26,13 +26,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) {
 
         try {
-            response.setHeader("Access-Control-Allow-Origin", "https://www.aper.cc");
-            response.setHeader("Access-Control-Allow-Credentials", "true");
-            response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
             String email = oAuth2User.getAttribute("email");
-            String name = oAuth2User.getAttribute("name");
 
             boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
             if (!isExist) {
@@ -43,7 +38,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             String redirectUrl = "https://www.aper.cc/oauth/success?tempToken=" + tempToken;
             response.sendRedirect(redirectUrl);
-
         } catch (Exception e) {
             log.error("Error during authentication success handling", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
