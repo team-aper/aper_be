@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
-import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.jwt.dto.GeneratedToken;
-import org.aper.web.global.jwt.service.CookieService;
+import org.aper.web.global.jwt.service.token.TempTokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -20,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final TokenProvider tokenProvider;
-    private final CookieService cookieService;
+    private final TempTokenService tempTokenService; // 임시 토큰 저장소
 
     @Override
     @Transactional(readOnly = true)
@@ -34,26 +31,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-
             String email = oAuth2User.getAttribute("email");
             String name = oAuth2User.getAttribute("name");
-            String role = oAuth2User.getAuthorities().stream()
-                    .findFirst()
-                    .orElseThrow(() -> new ServiceException(ErrorCode.AUTH_NOT_FOUND))
-                    .getAuthority();
 
             boolean isExist = Boolean.TRUE.equals(oAuth2User.getAttribute("exist"));
-
             if (!isExist) {
                 throw new ServiceException(ErrorCode.OAUTH2_USER_NOT_FOUND);
             }
 
-            // JWT 토큰 생성
-            GeneratedToken tokens = tokenProvider.generateToken(email, role, name);
-            cookieService.setCookie(response, "Authorization", tokens.getAccessToken());
-            cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
+            String tempToken = tempTokenService.generateTempToken(email);
 
-            String redirectUrl = "https://www.aper.cc/oauth/success";
+            String redirectUrl = "https://www.aper.cc/oauth/success?tempToken=" + tempToken;
             response.sendRedirect(redirectUrl);
 
         } catch (Exception e) {
