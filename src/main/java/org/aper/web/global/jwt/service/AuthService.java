@@ -20,12 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.io.UnsupportedEncodingException;
 
 @Service
 @Slf4j
@@ -55,7 +52,7 @@ public class AuthService {
         this.tokenValidationService = tokenValidationService;
     }
 
-    public GeneratedToken authenticateAndLogin(@Valid LoginRequestDto requestDto, HttpServletResponse response) {
+    public GeneratedToken authenticateAndLogin(@Valid LoginRequestDto requestDto) {
         try {
             Authentication authentication = authenticateUser(requestDto.email(), requestDto.password());
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -77,7 +74,7 @@ public class AuthService {
     }
 
     @Transactional
-    public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) {
         String accessTokenValue = tokenProvider.getJwtFromHeader(request);
         validateTokenPresence(accessTokenValue);
 
@@ -117,9 +114,32 @@ public class AuthService {
         return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
     }
 
-    @Transactional(readOnly = true)
-    public UserInfo getMe(UserDetails userDetails) {
-        User user = userService.findUser(userDetails.getUsername());
+    @Transactional
+    public UserInfo getMe(HttpServletRequest request, HttpServletResponse response) {
+        String accessToken = cookieService.getCookieValue(request, "Authorization");
+        String accessTokenValue = tokenProvider.removeBearerPrefix(accessToken);
+        validateTokenPresence(accessTokenValue);
+
+        Claims claims = tokenValidationService.verifyAccessToken(accessTokenValue);
+        String email = claims.getSubject();
+
+        if (email == null) {
+            throw new ServiceException(ErrorCode.UNAUTHORIZED_USER, "Invalid AccessToken");
+        }
+
+        User user = userService.findUser(email);
+
+        String storedRefreshToken = refreshTokenService.getRefreshToken(email);
+        tokenValidationService.verifyRefreshToken(storedRefreshToken);
+
+        blacklistTokens(accessTokenValue, storedRefreshToken);
+
+        cookieService.deleteCookie(request, response, "Authorization");
+        GeneratedToken tokens = generateNewTokens(email, request, response);
+
+        response.setHeader("Authorization", tokens.getAccessToken());
+        cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
+
         return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
     }
 }

@@ -70,6 +70,10 @@ public class TokenProvider {
 
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(tokenProperties.getAuthorizationHeader());
+        return removeBearerPrefix(bearerToken);
+    }
+
+    public String removeBearerPrefix(String bearerToken) {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
         }

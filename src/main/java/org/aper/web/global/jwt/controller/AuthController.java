@@ -10,8 +10,6 @@ import org.aper.web.global.jwt.dto.GeneratedToken;
 import org.aper.web.global.jwt.dto.UserInfo;
 import org.aper.web.global.jwt.service.AuthService;
 import org.aper.web.global.jwt.service.CookieService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +30,7 @@ public class AuthController implements AuthControllerDocs {
 
     @PostMapping("/login")
     public ResponseDto<UserInfo> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) throws UnsupportedEncodingException {
-        GeneratedToken tokens = authService.authenticateAndLogin(loginRequestDto, response);
+        GeneratedToken tokens = authService.authenticateAndLogin(loginRequestDto);
         setTokensInResponse(tokens, response);
         UserInfo userInfo = authService.getUserInfo(loginRequestDto);
         return ResponseDto.success("로그인 성공", userInfo);
@@ -46,8 +44,8 @@ public class AuthController implements AuthControllerDocs {
     }
 
     @GetMapping("/auth/me")
-    public ResponseDto<UserInfo> getMe(@AuthenticationPrincipal UserDetails userDetails) {
-        UserInfo userInfo = authService.getMe(userDetails);
+    public ResponseDto<UserInfo> getMe(HttpServletRequest request, HttpServletResponse response) {
+        UserInfo userInfo = authService.getMe(request, response);
         return ResponseDto.success("User Info Data", userInfo);
     }
 
