@@ -22,7 +22,7 @@ public class AuthenticatedMatchers {
             "/main/*",
             "/search/*",
             "/scheduler/test",
-            "/auth/me"
+            "/oauth/login"
     };
     public static final String[] flexiblePathArray = {
             "/field/**",
