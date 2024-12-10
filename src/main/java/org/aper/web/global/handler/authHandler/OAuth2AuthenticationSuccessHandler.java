@@ -49,8 +49,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             response.setHeader("Authorization", tokens.getAccessToken());
             cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
 
-            response.setStatus(HttpServletResponse.SC_OK);
-
+            // 원하는 리다이렉션 경로
+            String provider = request.getParameter("provider");
+            String redirectUrl = String.format("https://www.aper.cc/login/oauth/code/%s", provider);
+            response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             log.error("Error during authentication success handling", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
