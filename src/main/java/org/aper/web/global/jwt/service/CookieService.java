@@ -18,7 +18,6 @@ public class CookieService {
             cookie.setValue("");
             cookie.setPath("/");
             cookie.setSecure(true);
-            cookie.setDomain(".aper.cc");
             cookie.setAttribute("SameSite", "None");
             cookie.setMaxAge(0);
             cookie.setHttpOnly(true);
@@ -33,7 +32,7 @@ public class CookieService {
         cookie.setSecure(false);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setDomain(".aper.cc");
+        cookie.setDomain("aper.cc");
         cookie.setAttribute("SameSite", "None");
 //        cookie.setAttribute("SameSite", "Lax");
         return cookie;
