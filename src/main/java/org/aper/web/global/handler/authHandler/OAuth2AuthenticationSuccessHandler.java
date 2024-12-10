@@ -46,12 +46,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             // JWT 토큰 생성
             GeneratedToken tokens = tokenProvider.generateToken(email, role, name);
-            response.setHeader("Authorization", tokens.getAccessToken());
+            cookieService.setCookie(response,"Authorization", tokens.getAccessToken());
             cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
 
-            // 원하는 리다이렉션 경로
             String redirectUrl = "https://www.aper.cc/oauth/success";
             response.sendRedirect(redirectUrl);
+
         } catch (Exception e) {
             log.error("Error during authentication success handling", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
