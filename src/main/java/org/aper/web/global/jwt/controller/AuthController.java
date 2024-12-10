@@ -6,11 +6,11 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.global.docs.AuthControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
-import org.aper.web.global.jwt.dto.GeneratedToken;
-import org.aper.web.global.jwt.dto.UserInfo;
+import org.aper.web.global.jwt.dto.AuthRequestDto;
+import org.aper.web.global.jwt.dto.AuthResponseDto.UserInfo;
+import org.aper.web.global.jwt.dto.token.GeneratedToken;
 import org.aper.web.global.jwt.service.AuthService;
 import org.aper.web.global.jwt.service.CookieService;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +32,7 @@ public class AuthController implements AuthControllerDocs {
     public ResponseDto<UserInfo> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) throws UnsupportedEncodingException {
         GeneratedToken tokens = authService.authenticateAndLogin(loginRequestDto);
         setTokensInResponse(tokens, response);
-        UserInfo userInfo = authService.getUserInfo(loginRequestDto);
+        UserInfo userInfo = authService.getUserInfo(loginRequestDto.email());
         return ResponseDto.success("로그인 성공", userInfo);
     }
 
@@ -43,9 +43,9 @@ public class AuthController implements AuthControllerDocs {
         return ResponseDto.success("토큰 재발급 성공");
     }
 
-    @GetMapping("/auth/me")
-    public ResponseDto<UserInfo> getMe(HttpServletRequest request, HttpServletResponse response) {
-        UserInfo userInfo = authService.getMe(request, response);
+    @PostMapping("/oauth/login")
+    public ResponseDto<UserInfo> oauthLogin(@RequestBody AuthRequestDto.GetMeRequestDto getMeRequestDto, HttpServletResponse response) {
+        UserInfo userInfo = authService.oauthLogin(getMeRequestDto, response);
         return ResponseDto.success("User Info Data", userInfo);
     }
 
