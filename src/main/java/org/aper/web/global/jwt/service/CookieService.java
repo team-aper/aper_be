@@ -32,7 +32,7 @@ public class CookieService {
         cookie.setSecure(false);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setDomain("aper.cc");
+        cookie.setDomain(".aper.cc");
         cookie.setAttribute("SameSite", "None");
 //        cookie.setAttribute("SameSite", "Lax");
         return cookie;

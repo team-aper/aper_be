@@ -29,6 +29,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) {
 
         try {
+            response.setHeader("Access-Control-Allow-Origin", "https://www.aper.cc");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
             String email = oAuth2User.getAttribute("email");

@@ -124,7 +124,7 @@ public class AuthService {
         String email = claims.getSubject();
 
         if (email == null) {
-            throw new ServiceException(ErrorCode.UNAUTHORIZED_USER, "Invalid AccessToken");
+            throw new ServiceException(ErrorCode.UNAUTHORIZED_USER);
         }
 
         User user = userService.findUser(email);
