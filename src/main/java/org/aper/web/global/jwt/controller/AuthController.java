@@ -45,7 +45,7 @@ public class AuthController implements AuthControllerDocs {
         return ResponseDto.success("토큰 재발급 성공");
     }
 
-    @GetMapping("/auth/me")
+    @GetMapping("/oauth/success")
     public ResponseDto<UserInfo> getMe(@AuthenticationPrincipal UserDetails userDetails) {
         UserInfo userInfo = authService.getMe(userDetails);
         return ResponseDto.success("User Info Data", userInfo);

@@ -49,14 +49,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             response.setHeader("Authorization", tokens.getAccessToken());
             cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
 
-            // 리다이렉트 URL 처리
-            String redirectUrl = request.getParameter("redirectUrl");
-            if (redirectUrl == null || redirectUrl.isEmpty()) {
-                redirectUrl = "https://www.aper.cc/"; // 기본 URL
-            }
-
-            // 리다이렉트 실행
-            response.sendRedirect(redirectUrl);
+            response.setStatus(HttpServletResponse.SC_OK);
 
         } catch (Exception e) {
             log.error("Error during authentication success handling", e);
