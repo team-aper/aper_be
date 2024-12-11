@@ -16,6 +16,7 @@ import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.jwt.dto.AuthRequestDto;
 import org.aper.web.global.jwt.dto.AuthResponseDto;
 import org.aper.web.global.jwt.dto.AuthResponseDto.UserInfo;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.UnsupportedEncodingException;
@@ -65,4 +66,18 @@ public interface AuthControllerDocs {
             @Parameter(description = "임시 토큰 요청 데이터", required = true) @RequestBody @Valid AuthRequestDto.GetMeRequestDto getMeRequestDto,
             @Parameter(hidden = true) HttpServletResponse response
     );
+
+    @Operation(summary = "사용자 로그아웃", description = "사용자를 로그아웃 처리하고 Security Context를 초기화합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode: C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "401", description = "인증 실패: (ErrorCode: A010 - 인증되지 않은 사용자입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<Void> logout(
+            @Parameter(hidden = true) HttpServletRequest request,
+            @Parameter(hidden = true) HttpServletResponse response,
+            @Parameter(hidden = true) Authentication authentication
+    );
+
 }

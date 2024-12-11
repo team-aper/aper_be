@@ -2,9 +2,11 @@ package org.aper.web.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.handler.authHandler.*;
+import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
+import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationFailureHandler;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
 import org.aper.web.global.oauth2.CustomRequestEntityConverter;
 import org.aper.web.global.security.UserDetailsServiceImpl;
@@ -19,7 +21,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
@@ -40,7 +41,6 @@ public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
-    public final LogoutService logoutService;
     public final UserRepository userRepository;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
@@ -124,12 +124,7 @@ public class WebSecurityConfig {
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin(AbstractHttpConfigurer::disable);
-
-        http.logout(logoutConfig -> logoutConfig
-                .logoutUrl("/logout")
-                .addLogoutHandler(logoutService)
-                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
-        );
+        http.logout(AbstractHttpConfigurer::disable);
 
         // 예외 처리 설정
         http.exceptionHandling(exceptionHandling ->
