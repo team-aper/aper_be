@@ -1,10 +1,8 @@
 package org.aper.web.global.config;
 
+import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
-import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
-import org.aper.web.global.handler.authHandler.CustomAuthenticationFailureHandler;
-import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
+import org.aper.web.global.handler.authHandler.*;
 import org.aper.web.global.jwt.TokenProvider;
 import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
@@ -36,6 +34,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
@@ -45,19 +44,8 @@ public class WebSecurityConfig {
     public final UserRepository userRepository;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    public final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository, CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
-        this.tokenProvider = tokenProvider;
-        this.userDetailsService = userDetailsService;
-        this.logoutService = logoutService;
-        this.userRepository = userRepository;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
-        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
-    }
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -112,7 +100,7 @@ public class WebSecurityConfig {
         http.oauth2Login(oauth2Login ->
                 oauth2Login
                         .successHandler(oAuth2AuthenticationSuccessHandler)
-                        .failureHandler(customAuthenticationFailureHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
                         .tokenEndpoint(tokenEndpoint ->
                                 tokenEndpoint.accessTokenResponseClient(authorizationCodeTokenResponseClient())
                         )
