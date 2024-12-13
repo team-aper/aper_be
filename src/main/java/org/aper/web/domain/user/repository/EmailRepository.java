@@ -14,10 +14,10 @@ public class EmailRepository {
         this.redisTemplate = redisTemplate;
     }
 
-    /*이메일 인증 유효기간 5분*/
+    /* 이메일 인증 유효기간 10분 */
     public void saveCertificationNumber(String email, String certificationNumber) {
         redisTemplate.opsForValue()
-            .set(email, certificationNumber, Duration.ofSeconds(300));
+            .set(email, certificationNumber, Duration.ofMinutes(10));
     }
 
     public String getCertificationNumber(String email) {

@@ -1,4 +1,4 @@
-package org.aper.web.global.jwt.service;
+package org.aper.web.global.jwt.service.token;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

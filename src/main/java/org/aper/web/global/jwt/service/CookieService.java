@@ -17,7 +17,7 @@ public class CookieService {
         if (cookie != null) {
             cookie.setValue("");
             cookie.setPath("/");
-            cookie.setSecure(false);
+            cookie.setSecure(true);
             cookie.setAttribute("SameSite", "None");
             cookie.setMaxAge(0);
             cookie.setHttpOnly(true);
@@ -28,12 +28,10 @@ public class CookieService {
     @NotNull
     public Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);
-//        cookie.setSecure(true);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-//        cookie.setAttribute("SameSite", "None"); 차후 수정 필요
-        cookie.setAttribute("SameSite", "Lax");
+        cookie.setAttribute("SameSite", "None");
         return cookie;
     }
 
@@ -49,6 +47,17 @@ public class CookieService {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(cookieName)) {
                     return cookie;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getCookieValue(HttpServletRequest request, String cookieName) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
                 }
             }
         }

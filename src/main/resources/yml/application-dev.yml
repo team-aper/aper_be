@@ -24,19 +24,20 @@ spring:
     show-sql: true
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${email-auth.username}
-    password: ${email-auth.password}
+    host: smtp.gmail.com # 서버 호스트
+    port: 587 # 서버 포트
+    username: ${email-auth.username} # 이메일 발신자 아이디
+    password: ${email-auth.password} # 앱 비밀번호
     properties:
       mail:
         smtp:
-          auth: true
-          timeout: 50000
+          auth: true # 사용자 인증 시도 여부
+          connection timeout : 5000
+          timeout: 5000 # Socket Read Timeout 시간(ms)
+          write timeout: 5000
           starttls:
-            enable: true
-          ssl:
-            trust: smtp.gmail.com
+            enable: true # StartTLS 활성화 여부
+            required: true
 
   data:
     redis:

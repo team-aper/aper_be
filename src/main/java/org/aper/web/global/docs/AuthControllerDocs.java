@@ -3,9 +3,9 @@ package org.aper.web.global.docs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +13,10 @@ import jakarta.validation.Valid;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
-import org.aper.web.global.jwt.dto.UserInfo;
+import org.aper.web.global.jwt.dto.AuthRequestDto;
+import org.aper.web.global.jwt.dto.AuthResponseDto;
+import org.aper.web.global.jwt.dto.AuthResponseDto.UserInfo;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.UnsupportedEncodingException;
@@ -28,7 +31,7 @@ public interface AuthControllerDocs {
             @ApiResponse(responseCode = "401", description = "인증 실패: (ErrorCode: A001 - 인증에 실패하였습니다.)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    ResponseDto<UserInfo> login(
+    ResponseDto<AuthResponseDto.UserInfo> login(
             @Parameter(description = "로그인 요청 데이터", required = true) @RequestBody @Valid LoginRequestDto loginRequestDto,
             @Parameter(hidden = true) HttpServletResponse response
     ) throws UnsupportedEncodingException;
@@ -51,4 +54,30 @@ public interface AuthControllerDocs {
             @Parameter(hidden = true) HttpServletRequest request,
             @Parameter(hidden = true) HttpServletResponse response
     ) throws UnsupportedEncodingException;
+
+    @Operation(summary = "OAuth 토큰 발급", description = "OAuth 인증 성공 후 임시 토큰을 통해 최종 액세스 및 리프레시 토큰을 발급하고 사용자 정보를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "토큰 발급 성공", content = @Content(schema = @Schema(implementation = AuthResponseDto.UserInfo.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode: C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "403", description = "인증 실패: (ErrorCode: A010 - 인증되지 않은 사용자입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<AuthResponseDto.UserInfo> oauthLogin(
+            @Parameter(description = "임시 토큰 요청 데이터", required = true) @RequestBody @Valid AuthRequestDto.GetMeRequestDto getMeRequestDto,
+            @Parameter(hidden = true) HttpServletResponse response
+    );
+
+    @Operation(summary = "사용자 로그아웃", description = "사용자를 로그아웃 처리하고 Security Context를 초기화합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 (ErrorCode: C002 - 유효성 검사 실패)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "401", description = "인증 실패: (ErrorCode: A010 - 인증되지 않은 사용자입니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<Void> logout(
+            @Parameter(hidden = true) HttpServletRequest request,
+            @Parameter(hidden = true) HttpServletResponse response,
+            @Parameter(hidden = true) Authentication authentication
+    );
+
 }

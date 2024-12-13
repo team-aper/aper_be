@@ -1,12 +1,12 @@
 package org.aper.web.global.config;
 
+import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
 import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
-import org.aper.web.global.handler.authHandler.CustomAuthenticationFailureHandler;
+import org.aper.web.global.handler.authHandler.OAuth2AuthenticationFailureHandler;
 import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
 import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.jwt.service.LogoutService;
 import org.aper.web.global.oauth2.CustomOAuth2UserService;
 import org.aper.web.global.oauth2.CustomRequestEntityConverter;
 import org.aper.web.global.security.UserDetailsServiceImpl;
@@ -21,7 +21,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
@@ -36,38 +35,27 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
-    public final LogoutService logoutService;
     public final UserRepository userRepository;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    public final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    public WebSecurityConfig(TokenProvider tokenProvider, UserDetailsServiceImpl userDetailsService, LogoutService logoutService, UserRepository userRepository, CustomAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedHandler accessDeniedHandler, CustomAuthenticationFailureHandler customAuthenticationFailureHandler, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
-        this.tokenProvider = tokenProvider;
-        this.userDetailsService = userDetailsService;
-        this.logoutService = logoutService;
-        this.userRepository = userRepository;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.accessDeniedHandler = accessDeniedHandler;
-        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
-        this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
-    }
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://www.aper.cc", "https://aper.cc"));
-        configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(
-                List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
 
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+        configuration.addAllowedOriginPattern("https://*.aper.cc");
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -112,7 +100,7 @@ public class WebSecurityConfig {
         http.oauth2Login(oauth2Login ->
                 oauth2Login
                         .successHandler(oAuth2AuthenticationSuccessHandler)
-                        .failureHandler(customAuthenticationFailureHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
                         .tokenEndpoint(tokenEndpoint ->
                                 tokenEndpoint.accessTokenResponseClient(authorizationCodeTokenResponseClient())
                         )
@@ -136,12 +124,7 @@ public class WebSecurityConfig {
         http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin(AbstractHttpConfigurer::disable);
-
-        http.logout(logoutConfig -> logoutConfig
-                .logoutUrl("/logout")
-                .addLogoutHandler(logoutService)
-                .logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()))
-        );
+        http.logout(AbstractHttpConfigurer::disable);
 
         // 예외 처리 설정
         http.exceptionHandling(exceptionHandling ->

@@ -12,6 +12,7 @@ public class StoryResponseDto {
     ){}
 
     public record GetStoryDto(
+            Long authorId,
             String coverTitle,
             String routineType,
             String penName,

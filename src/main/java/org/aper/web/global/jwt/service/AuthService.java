@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.LoginRequestDto;
 import org.aper.web.domain.user.service.UserService;
@@ -12,8 +13,13 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.exception.TokenException;
 import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.jwt.dto.GeneratedToken;
-import org.aper.web.global.jwt.dto.UserInfo;
+import org.aper.web.global.jwt.dto.AuthRequestDto.GetMeRequestDto;
+import org.aper.web.global.jwt.dto.AuthResponseDto.UserInfo;
+import org.aper.web.global.jwt.dto.token.GeneratedToken;
+import org.aper.web.global.jwt.service.token.RefreshTokenService;
+import org.aper.web.global.jwt.service.token.TempTokenService;
+import org.aper.web.global.jwt.service.token.TokenBlacklistService;
+import org.aper.web.global.jwt.service.token.TokenValidationService;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,10 +30,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthService {
 
     private final TokenProvider tokenProvider;
@@ -37,24 +42,9 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final CookieService cookieService;
     private final TokenValidationService tokenValidationService;
+    private final TempTokenService tempTokenService;
 
-    public AuthService(TokenProvider tokenProvider,
-                       AuthenticationManager authenticationManager,
-                       UserService userService,
-                       TokenBlacklistService tokenBlacklistService,
-                       RefreshTokenService refreshTokenService,
-                       CookieService cookieService,
-                       TokenValidationService tokenValidationService) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManager = authenticationManager;
-        this.userService = userService;
-        this.tokenBlacklistService = tokenBlacklistService;
-        this.refreshTokenService = refreshTokenService;
-        this.cookieService = cookieService;
-        this.tokenValidationService = tokenValidationService;
-    }
-
-    public GeneratedToken authenticateAndLogin(@Valid LoginRequestDto requestDto, HttpServletResponse response) {
+    public GeneratedToken authenticateAndLogin(@Valid LoginRequestDto requestDto) {
         try {
             Authentication authentication = authenticateUser(requestDto.email(), requestDto.password());
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -76,7 +66,7 @@ public class AuthService {
     }
 
     @Transactional
-    public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    public GeneratedToken reissue(HttpServletRequest request, HttpServletResponse response) {
         String accessTokenValue = tokenProvider.getJwtFromHeader(request);
         validateTokenPresence(accessTokenValue);
 
@@ -111,8 +101,23 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfo getUserInfo(LoginRequestDto loginRequestDto) {
-        User user = userService.findUser(loginRequestDto.email());
+    public UserInfo getUserInfo(String email) {
+        User user = userService.findUser(email);
+        return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
+    }
+
+    @Transactional
+    public UserInfo oauthLogin(GetMeRequestDto getMeRequestDto, HttpServletResponse response) {
+        String email = tempTokenService.getEmailByTempToken(getMeRequestDto.tempToken());
+
+        tempTokenService.deleteTempToken(getMeRequestDto.tempToken());
+
+        User user = userService.findUser(email);
+
+        GeneratedToken tokens = tokenProvider.generateToken(user.getEmail(), user.getRole().getAuthority(), user.getPenName());
+        response.setHeader("Authorization", tokens.getAccessToken());
+        cookieService.setCookie(response, "Refresh-Token", tokens.getRefreshToken());
+
         return new UserInfo(user.getUserId(), user.getEmail(), user.getPenName(), user.getFieldImage());
     }
 }

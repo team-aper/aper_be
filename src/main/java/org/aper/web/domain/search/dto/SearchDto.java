@@ -34,7 +34,7 @@ public class SearchDto {
 
     public record AuthorListResponseDto(
             String penName,
-            String fieldImageUrl,
+            String fieldImage,
             String description,
             Long authorId,
             List<AuthorStoryListResponseDto> storyList,

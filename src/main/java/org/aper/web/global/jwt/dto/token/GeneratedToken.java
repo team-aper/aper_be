@@ -1,4 +1,4 @@
-package org.aper.web.global.jwt.dto;
+package org.aper.web.global.jwt.dto.token;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
