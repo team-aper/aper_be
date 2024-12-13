@@ -42,7 +42,7 @@ public class SubscriptionHelper {
     }
 
     public boolean hasSubscriptions(Long userId) {
-        return subscriptionRepository.existsBySubscriber_UserId(userId);
+        return !subscriptionRepository.existsBySubscriber_UserId(userId);
     }
 
     public User getAuthor(Long authorId) {
@@ -80,4 +80,7 @@ public class SubscriptionHelper {
         return Boolean.TRUE.equals(redisTemplate.opsForValue().get(key));
     }
 
+    public boolean isSubscriber(Long userId, Long authorId) {
+        return subscriptionRepository.existsBySubscriber_UserIdAndAuthor_UserId(userId, authorId);
+    }
 }

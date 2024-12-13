@@ -1,5 +1,6 @@
 package org.aper.web.domain.subscription.controller;
 
+import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.IsSubscriber;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecommendations;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthors;
 import org.aper.web.domain.subscription.service.SubscriptionService;
@@ -25,6 +26,12 @@ public class SubscriptionController implements SubscriptionControllerDocs {
     public ResponseDto<Void> subscribe(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         subscriptionService.subscribe(userDetails, authorId);
         return ResponseDto.success("Subscribed successfully");
+    }
+
+    @GetMapping("/subscribe/{authorId}")
+    public ResponseDto<IsSubscriber> isSubscriber(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails, authorId);
+        return ResponseDto.success("is Subscriber", isSubscriber);
     }
 
     @GetMapping("/subscribed-authors")

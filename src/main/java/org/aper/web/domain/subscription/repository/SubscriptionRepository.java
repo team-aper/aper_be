@@ -22,4 +22,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Optional<Subscription> findByAuthorUserIdAndSubscriberUserId(Long authorId, Long subscriberId);
 
     boolean existsBySubscriber_UserId(Long userId);
+
+    boolean existsBySubscriber_UserIdAndAuthor_UserId(Long userId, Long authorId);
 }
