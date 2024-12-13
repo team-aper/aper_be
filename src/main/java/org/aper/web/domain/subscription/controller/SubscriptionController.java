@@ -29,8 +29,9 @@ public class SubscriptionController implements SubscriptionControllerDocs {
     }
 
     @GetMapping("/subscribe/{authorId}")
-    public ResponseDto<IsSubscriber> isSubscriber(@PathVariable Long authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails, authorId);
+    public ResponseDto<IsSubscriber> isSubscriber(@PathVariable String authorId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Long longAuthorId = Long.valueOf(authorId);
+        IsSubscriber isSubscriber = subscriptionService.isSubscriber(userDetails, longAuthorId);
         return ResponseDto.success("is Subscriber", isSubscriber);
     }
 
