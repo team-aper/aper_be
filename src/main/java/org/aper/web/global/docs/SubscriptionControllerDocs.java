@@ -38,7 +38,7 @@ public interface SubscriptionControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<IsSubscriber> isSubscriber(
-            @Parameter(description = "작가 ID", required = true) @PathVariable String authorId,
+            @Parameter(description = "작가 ID", required = true) @PathVariable Long authorId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     );
 
