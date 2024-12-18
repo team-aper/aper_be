@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Map;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -22,6 +25,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmailWithOutDeleteAccount(email)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
 
-        return new UserDetailsImpl(user);
+        return new UserDetailsImpl(user, Collections.emptyMap());
+    }
+
+    public UserDetails loadUserByUsername(String email, Map<String, Object> attributes) {
+        User user = userRepository.findByEmailWithOutDeleteAccount(email)
+                .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+
+        return new UserDetailsImpl(user, attributes);
     }
 }
