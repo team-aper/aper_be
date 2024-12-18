@@ -147,7 +147,7 @@ kafka:
 slack:
   webhook:
     url: ${slack.url}
-  enabled: false
+  enabled: true
 
 security:
   authorization-header: ${security.authorization-header}

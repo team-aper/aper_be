@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.AuthorRecommendations;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.SubscribedAuthors;
+import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.IsSubscriber;
 import org.aper.web.global.dto.ErrorResponseDto;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
@@ -26,6 +27,17 @@ public interface SubscriptionControllerDocs {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     ResponseDto<Void> subscribe(
+            @Parameter(description = "작가 ID", required = true) @PathVariable Long authorId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    );
+
+    @Operation(summary = "구독 여부 확인", description = "사용자가 특정 작가를 구독 중인지 확인합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "구독 여부 확인 성공", content = @Content(schema = @Schema(implementation = IsSubscriber.class))),
+            @ApiResponse(responseCode = "404", description = "사용자 또는 작가 정보를 찾을 수 없음 (ErrorCode: SUBSCRIBER_NOT_FOUND, AUTHOR_NOT_FOUND)", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    ResponseDto<IsSubscriber> isSubscriber(
             @Parameter(description = "작가 ID", required = true) @PathVariable Long authorId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     );

@@ -35,7 +35,7 @@ public class SubscriptionService {
     public SubscribedAuthors getSubscribedAuthors(UserDetailsImpl userDetails, int page, int size) {
         Long subscriberId = userDetails.user().getUserId();
 
-        if (!subscriptionHelper.hasSubscriptions(subscriberId)) {
+        if (subscriptionHelper.hasSubscriptions(subscriberId)) {
             return null;
         }
 
@@ -76,5 +76,12 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.findBySubscriberAndAuthor(subscriber, author)
                 .orElseThrow(() -> new ServiceException(ErrorCode.SUBSCRIPTION_NOT_FOUND));
         subscriptionRepository.delete(subscription);
+    }
+
+    public IsSubscriber isSubscriber(UserDetailsImpl userDetails, Long authorId) {
+        if (subscriptionHelper.isSubscriber(userDetails.user().getUserId(), authorId)) {
+            return new IsSubscriber(true);
+        }
+        return new IsSubscriber(false);
     }
 }
