@@ -8,6 +8,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.aper.web.global.security.UserDetailsServiceImpl;
+import org.aper.web.global.util.PasswordUtil;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -62,9 +62,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         try {
-            log.debug("Trying to load user by email: {}", email);
+            log.debug("Trying to load user by email using UserDetailsServiceImpl: {}", email);
+
             UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(email, attributes);
+
             log.debug("User successfully loaded: {}", userDetails);
+            attributes.put("exist", true);
             return userDetails;
 
         } catch (ServiceException e) {
@@ -72,7 +75,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
             User newUser = User.builder()
                     .email(email)
-                    .password(UUID.randomUUID().toString())
+                    .password(PasswordUtil.hashPassword(PasswordUtil.generateRandomPassword()))
                     .penName((String) attributes.get("name"))
                     .role(UserRoleEnum.USER)
                     .build();
@@ -81,6 +84,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             userRepository.save(newUser);
             log.info("New user created successfully: {}", newUser);
 
+            attributes.put("exist", false);
             return new UserDetailsImpl(newUser, attributes);
         }
     }

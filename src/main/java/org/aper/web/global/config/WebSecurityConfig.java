@@ -68,7 +68,7 @@ public class WebSecurityConfig {
 
     @Bean
     public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService(userDetailsService);
+        return new CustomOAuth2UserService(userRepository, userDetailsService);
     }
 
     @Bean
