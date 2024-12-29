@@ -157,3 +157,12 @@ security:
   bearer-prefix: ${security.bearer-prefix}
   access-token-expiration: ${security.access-token-expiration}
   refresh-token-expiration: ${security.refresh-token-expiration}
+
+logging:
+    level:
+      root: DEBUG
+      org.apache.kafka: INFO
+      javax.management: INFO
+      sun.rmi: INFO
+      org.hibernate: WARN
+      org.springframework.kafka: INFO
