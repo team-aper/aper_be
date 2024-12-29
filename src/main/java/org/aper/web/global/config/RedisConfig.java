@@ -1,13 +1,13 @@
 package org.aper.web.global.config;
 
-import org.aper.web.global.sse.service.RedisSubscriber;
 import org.aper.web.global.properties.RedisProperties;
+import org.aper.web.global.sse.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -26,12 +26,14 @@ public class RedisConfig {
         this.redisProperties = redisProperties;
     }
 
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        RedisClusterConfiguration redisClusterConfiguration = new RedisClusterConfiguration();
-        redisClusterConfiguration.clusterNode(redisProperties.getHost(), redisProperties.getPort());
-        redisClusterConfiguration.setPassword(redisProperties.getPassword());
-        return new LettuceConnectionFactory(redisClusterConfiguration);
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
+        redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
@@ -86,5 +88,4 @@ public class RedisConfig {
         container.addMessageListener(redisSubscriber, topic());
         return container;
     }
-
 }

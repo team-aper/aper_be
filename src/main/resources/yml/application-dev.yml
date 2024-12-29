@@ -44,6 +44,8 @@ spring:
       host: ${dev-redis.host}
       port: ${dev-redis.port}
       password: ${dev-redis.password}
+      ssl:
+        enabled: true
 
   elasticsearch:
     rest:
