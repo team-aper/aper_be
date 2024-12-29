@@ -1,0 +1,22 @@
+name: ECR Login and Push
+
+jobs:
+  ecr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+
+      - name: Tag Docker image
+        run: docker tag aper-repository:latest ${{ secrets.ECR_URI }}:latest
+
+      - name: Push Docker image to ECR
+        run: docker push ${{ secrets.ECR_URI }}:latest
