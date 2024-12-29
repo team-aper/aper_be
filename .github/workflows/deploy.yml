@@ -9,7 +9,7 @@ on:
       - dev
 
 jobs:
-  checkout-setup:
+  build-prepare:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code with Submodules
