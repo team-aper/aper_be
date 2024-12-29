@@ -9,9 +9,8 @@ on:
       - dev
 
 jobs:
-  deploy:
+  checkout-setup:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code with Submodules
         uses: actions/checkout@v3
@@ -32,10 +31,19 @@ jobs:
       - name: Update Submodule to latest commit
         run: git submodule update --remote --merge
 
+  build-prepare:
+    runs-on: ubuntu-latest
+    needs: checkout-setup
+    steps:
       - name: Create application-secret.yml from secret
         run: |
           mkdir -p ./src/main/resources/yml
           echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
+
+      - name: Add PEM file for SSL
+        run: |
+          mkdir -p ./src/main/resources/certs
+          echo "${{ secrets.AMAZON_ROOT_CA1 }}" > ./src/main/resources/certs/AmazonRootCA1.pem
 
       - name: Gradle Caching
         uses: actions/cache@v3
@@ -50,6 +58,10 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+  docker-setup:
+    runs-on: ubuntu-latest
+    needs: build-prepare
+    steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -66,18 +78,13 @@ jobs:
       - name: Tag Docker image
         run: docker tag aper-repository:latest ${{ secrets.ECR_URI }}:latest
 
-      - name: Delete latest image from ECR
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.EC2_PUBLIC_IP }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            aws ecr batch-delete-image --repository-name aper-repository --image-ids imageTag=latest
-
       - name: Push Docker image to ECR
         run: docker push ${{ secrets.ECR_URI }}:latest
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker-setup
+    steps:
       - name: Set ECR URI as environment variable
         run: echo "ECR_URI=${{ secrets.ECR_URI }}" >> $GITHUB_ENV
 
