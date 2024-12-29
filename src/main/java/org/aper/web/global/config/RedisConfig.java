@@ -1,7 +1,5 @@
 package org.aper.web.global.config;
 
-import io.lettuce.core.ClientOptions;
-import io.lettuce.core.SslOptions;
 import org.aper.web.global.properties.RedisProperties;
 import org.aper.web.global.sse.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +16,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.io.File;
 import java.time.Duration;
 
 @Configuration
@@ -31,29 +28,24 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisProperties.getHost());
         redisStandaloneConfiguration.setPort(redisProperties.getPort());
         redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
 
-        // 클라이언트 설정 구성
+        // ElastiCache Redis와 SSL 연결을 위한 설정
         LettuceClientConfiguration clientConfig;
         if (redisProperties.isSslEnabled()) {
+            // 인증서 검증을 비활성화
             clientConfig = LettuceClientConfiguration.builder()
                     .useSsl()
-                    .and()
-                    .clientOptions(ClientOptions.builder()
-                            .sslOptions(SslOptions.builder()
-                                    .truststore(new File("src/main/resources/certs/AmazonRootCA1.pem")) // truststore 설정
-                                    .build())
-                            .build())
+                    .disablePeerVerification()
                     .build();
         } else {
             clientConfig = LettuceClientConfiguration.builder().build();
         }
 
-        // RedisStandaloneConfiguration과 LettuceClientConfiguration을 연결
         return new LettuceConnectionFactory(redisStandaloneConfiguration, clientConfig);
     }
 
