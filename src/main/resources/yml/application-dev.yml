@@ -160,7 +160,7 @@ security:
 
 logging:
     level:
-      root: DEBUG
+      org.springframework.data.redis: DEBUG
       org.apache.kafka: INFO
       javax.management: INFO
       sun.rmi: INFO
