@@ -1,5 +1,7 @@
 package org.aper.web.global.config;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.SslOptions;
 import org.aper.web.global.properties.RedisProperties;
 import org.aper.web.global.sse.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.io.File;
 import java.time.Duration;
 
 @Configuration
@@ -27,7 +30,6 @@ public class RedisConfig {
         this.redisProperties = redisProperties;
     }
 
-
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -35,16 +37,20 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPort(redisProperties.getPort());
         redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
 
+        // 클라이언트 설정 구성
         LettuceClientConfiguration clientConfig;
-        if (Boolean.parseBoolean(redisProperties.getSslEnabled())) {
-            // SSL 사용 설정
+        if (redisProperties.isSslEnabled()) {
             clientConfig = LettuceClientConfiguration.builder()
-                    .useSsl()  // SSL 활성화
+                    .useSsl()
+                    .and()
+                    .clientOptions(ClientOptions.builder()
+                            .sslOptions(SslOptions.builder()
+                                    .truststore(new File("src/main/resources/certs/AmazonRootCA1.pem")) // truststore 설정
+                                    .build())
+                            .build())
                     .build();
         } else {
-            // SSL 비사용 설정
-            clientConfig = LettuceClientConfiguration.builder()
-                    .build();
+            clientConfig = LettuceClientConfiguration.builder().build();
         }
 
         // RedisStandaloneConfiguration과 LettuceClientConfiguration을 연결
