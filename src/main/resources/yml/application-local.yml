@@ -23,11 +23,11 @@ spring:
         use_sql_comments: true
     show-sql: true
 
-  redis:
-    host: ${local-redis.host}
-    port: ${local-redis.port}
-    password: ${local-redis.password}
-
+  data:
+    redis:
+      host: ${local-redis.host}
+      port: ${local-redis.port}
+      password: ${local-redis.password}
 
   mail:
     host: smtp.gmail.com # 서버 호스트

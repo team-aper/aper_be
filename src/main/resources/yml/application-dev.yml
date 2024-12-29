@@ -39,11 +39,13 @@ spring:
             enable: true # StartTLS 활성화 여부
             required: true
 
-  redis:
-    host: ${dev-redis.host}
-    port: ${dev-redis.port}
-    password: ${dev-redis.password}
-    ssl: true  # TLS 활성화
+  data:
+    redis:
+      host: ${dev-redis.host}
+      port: ${dev-redis.port}
+      password: ${dev-redis.password}
+      ssl:
+        enabled: true
 
   elasticsearch:
     rest:
