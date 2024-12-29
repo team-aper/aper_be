@@ -86,4 +86,5 @@ public class RedisConfig {
         container.addMessageListener(redisSubscriber, topic());
         return container;
     }
+
 }
