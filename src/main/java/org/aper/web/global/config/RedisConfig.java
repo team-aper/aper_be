@@ -8,6 +8,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -33,7 +34,21 @@ public class RedisConfig {
         redisStandaloneConfiguration.setHostName(redisProperties.getHost());
         redisStandaloneConfiguration.setPort(redisProperties.getPort());
         redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
-        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+
+        LettuceClientConfiguration clientConfig;
+        if (Boolean.parseBoolean(redisProperties.getSslEnabled())) {
+            // SSL 사용 설정
+            clientConfig = LettuceClientConfiguration.builder()
+                    .useSsl()  // SSL 활성화
+                    .build();
+        } else {
+            // SSL 비사용 설정
+            clientConfig = LettuceClientConfiguration.builder()
+                    .build();
+        }
+
+        // RedisStandaloneConfiguration과 LettuceClientConfiguration을 연결
+        return new LettuceConnectionFactory(redisStandaloneConfiguration, clientConfig);
     }
 
     @Bean
