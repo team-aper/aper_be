@@ -36,11 +36,6 @@ jobs:
           mkdir -p ./src/main/resources/yml
           echo "${{ secrets.APPLICATION_SECRET_YML }}" > ./src/main/resources/yml/application-secret.yml
 
-      - name: Add PEM file for SSL
-        run: |
-          mkdir -p ./src/main/resources/certs
-          echo "${{ secrets.AMAZON_ROOT_CA1 }}" > ./src/main/resources/certs/AmazonRootCA1.pem
-
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
