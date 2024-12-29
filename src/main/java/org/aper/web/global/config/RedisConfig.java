@@ -1,5 +1,7 @@
 package org.aper.web.global.config;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.SslOptions;
 import org.aper.web.global.properties.RedisProperties;
 import org.aper.web.global.sse.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
@@ -34,13 +36,17 @@ public class RedisConfig {
         redisStandaloneConfiguration.setPort(redisProperties.getPort());
         redisStandaloneConfiguration.setPassword(redisProperties.getPassword());
 
-        // ElastiCache Redis와 SSL 연결을 위한 설정
+        // Lettuce 클라이언트 설정
         LettuceClientConfiguration clientConfig;
         if (redisProperties.isSslEnabled()) {
-            // 인증서 검증을 비활성화
             clientConfig = LettuceClientConfiguration.builder()
                     .useSsl()
-                    .disablePeerVerification()
+                    .and()
+                    .clientOptions(ClientOptions.builder()
+                            .sslOptions(SslOptions.builder()
+                                    // 인증서 검증을 비활성화
+                                    .build())  // 인증서 검증을 비활성화하는 방법
+                            .build())
                     .build();
         } else {
             clientConfig = LettuceClientConfiguration.builder().build();
