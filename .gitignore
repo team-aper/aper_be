@@ -11,7 +11,7 @@ build/
 /src/main/resources/yml/oauth2-local.yml
 
 ### redis
-/src/main/resources/AmazonRootCA1.pem
+/src/main/resources/certs/AmazonRootCA1.pem
 
 ### STS ###
 .apt_generated
