@@ -10,6 +10,9 @@ build/
 /src/main/resources/yml/oauth2-dev.yml
 /src/main/resources/yml/oauth2-local.yml
 
+### redis
+/src/main/resources/certs/AmazonRootCA1.pem
+
 ### STS ###
 .apt_generated
 .classpath

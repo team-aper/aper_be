@@ -1,7 +1,7 @@
 package org.aper.web.global.config;
 
-import org.aper.web.global.sse.service.RedisSubscriber;
 import org.aper.web.global.properties.RedisProperties;
+import org.aper.web.global.sse.service.RedisSubscriber;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -27,7 +27,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
+    public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisProperties.getHost());
         redisStandaloneConfiguration.setPort(redisProperties.getPort());

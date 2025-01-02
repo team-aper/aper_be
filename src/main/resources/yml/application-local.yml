@@ -29,7 +29,6 @@ spring:
       port: ${local-redis.port}
       password: ${local-redis.password}
 
-
   mail:
     host: smtp.gmail.com # 서버 호스트
     port: 587 # 서버 포트
