@@ -28,8 +28,6 @@ public class TokenProvider {
     private final TokenValidationService tokenValidationService;
     private static final String BEARER_PREFIX = "Bearer ";
 
-    // 만료시간 바꾸고 테스트
-
     public TokenProvider(RefreshTokenService tokenService, JwtProperties jwtProperties, TokenValidationService tokenValidationService, TokenProperties tokenProperties) {
         this.tokenService = tokenService;
         this.accessKey = jwtProperties.accessKey();
