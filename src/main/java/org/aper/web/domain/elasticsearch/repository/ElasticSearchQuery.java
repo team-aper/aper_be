@@ -120,10 +120,7 @@ public class ElasticSearchQuery {
 
     public Highlight episodeHighLight(HighlightField highlightField) {
         return new Highlight(
-                HighlightParameters.builder()
-                        .withPreTags("")
-                        .withPostTags("")
-                        .build(),
+                HighlightParameters.builder().build(),
                 List.of(highlightField)
         );
     }
