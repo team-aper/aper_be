@@ -45,15 +45,11 @@ public class ElasticSearchQuery {
     }
 
     public Query penNameQuery(String filter) {
-//        return QueryBuilders.bool(bool ->
-//                bool.must(QueryBuilders.matchPhrase(multi -> multi
-//                        .query(filter)
-//                        .field("penName")
-//                ))
-//        );
-        return QueryBuilders.wildcard(wildcard ->
-                wildcard.field("penName")
-                        .value("*" + filter + "*") // "진선" 포함 검색
+        return QueryBuilders.bool(bool ->
+                bool.must(QueryBuilders.match(multi -> multi
+                        .query(filter)
+                        .field("penName")
+                ))
         );
     }
 
@@ -124,7 +120,10 @@ public class ElasticSearchQuery {
 
     public Highlight episodeHighLight(HighlightField highlightField) {
         return new Highlight(
-                HighlightParameters.builder().build(),
+                HighlightParameters.builder()
+                        .withPreTags("")
+                        .withPostTags("")
+                        .build(),
                 List.of(highlightField)
         );
     }
