@@ -47,9 +47,13 @@ public class ElasticSearchQuery {
     public Query penNameQuery(String filter) {
         return QueryBuilders.bool(bool ->
                 bool.must(QueryBuilders.match(multi -> multi
-                        .query(filter)
-                        .field("penName")
-                ))
+                                .query(filter)
+                                .field("penName")
+                        ))
+                        .must(QueryBuilders.term(term -> term
+                                .field("penName")
+                                .value(filter)
+                        ))
         );
     }
 
