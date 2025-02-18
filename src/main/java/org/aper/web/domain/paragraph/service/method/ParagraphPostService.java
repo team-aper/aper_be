@@ -15,6 +15,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
     private EntityManager entityManager;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean handleAddedOperation(List<ItemPayload> itemPayloads, Episode episode) {
         List<Paragraph> paragraphsToAdd = new ArrayList<>();
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();

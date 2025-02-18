@@ -12,6 +12,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.util.EnumUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
     private final EnumUtil enumUtil;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean handleModifiedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids) {
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();
         boolean firstParagraphUpdated = false;
