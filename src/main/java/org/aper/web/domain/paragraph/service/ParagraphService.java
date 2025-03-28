@@ -1,7 +1,6 @@
 package org.aper.web.domain.paragraph.service;
 
 import com.aperlibrary.episode.entity.Episode;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
@@ -32,7 +31,6 @@ public class ParagraphService implements BatchService<ItemPayload> {
     private final ParagraphHelper paragraphHelper;
 
     @Override
-    @Transactional
     public void processBatch(BatchRequest<ItemPayload> request, UserDetailsImpl userDetails) {
         List<BatchOperation<ItemPayload>> operations = request.batch();
         Set<String> deletedUuids = new HashSet<>();
