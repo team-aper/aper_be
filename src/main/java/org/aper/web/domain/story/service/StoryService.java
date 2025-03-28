@@ -11,6 +11,7 @@ import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.episode.service.EpisodeMapper;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
+import org.aper.web.domain.paragraph.repository.ParagraphRepository;
 import org.aper.web.domain.story.dto.StoryRequestDto;
 import org.aper.web.domain.story.dto.StoryRequestDto.StoryCreateDto;
 import org.aper.web.domain.story.dto.StoryResponseDto.CreatedStoryDto;
@@ -34,6 +35,7 @@ public class StoryService {
     private final StoryHelper storyHelper;
     private final StoryMapper storyMapper;
     private final EpisodeRepository episodeRepository;
+    private final ParagraphRepository paragraphRepository;
     private final KafkaEpisodesProducerService producerService;
     private final EnumUtil enumUtil;
 
@@ -104,10 +106,17 @@ public class StoryService {
     @Transactional
     public void deleteStory(UserDetailsImpl userDetails, Long storyId) {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
-        episodeRepository.findAllByStoryId(storyId).forEach(ep -> producerService.sendDelete(ep.getId()));
-        storyRepository.deleteEpisodesByStoryId(story.getId());
-        storyRepository.deleteById(story.getId());;
+
+        List<Long> episodeIds = episodeRepository.findEpisodeIdsByStoryId(storyId);
+
+        if (!episodeIds.isEmpty()) {
+            paragraphRepository.deleteByEpisodeIds(episodeIds);
+            episodeRepository.deleteByStoryId(storyId);
+        }
+
+        storyRepository.deleteById(story.getId());
     }
+
 
     public CreatedEpisodeDto createEpisode(UserDetailsImpl userDetails, Long storyId, Long chapter) {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);

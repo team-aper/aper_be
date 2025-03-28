@@ -96,4 +96,12 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long>, JpaSpec
     Page<Episode> findLatestEpisodesBySubscriberSinceSubscription(@Param("subscriberId") Long subscriberId, Pageable pageable);
 
     List<Episode> findByOnDisplayTrueAndStoryOnDisplayTrue();
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("DELETE FROM Episode e WHERE e.story.id = :storyId")
+    void deleteByStoryId(@Param("storyId") Long storyId);
+
+    @Query("SELECT e.id FROM Episode e WHERE e.story.id = :storyId")
+    List<Long> findEpisodeIdsByStoryId(Long storyId);
+
 }
