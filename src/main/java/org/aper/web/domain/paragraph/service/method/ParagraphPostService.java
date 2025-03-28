@@ -62,14 +62,15 @@ public class ParagraphPostService implements BatchPostService<ItemPayload> {
         }
 
         paragraphRepository.saveAll(paragraphsToAdd);
-        entityManager.flush();
+        paragraphRepository.flush();
+        entityManager.clear();
 
         for (ItemPayload itemPayload : itemPayloads) {
             paragraphHelper.updatePreviousParagraph(itemPayload.prev(), itemPayload.id(), paragraphsToUpdate);
         }
 
         paragraphRepository.saveAll(paragraphsToUpdate);
-        entityManager.flush();
+        paragraphRepository.flush();
         entityManager.clear();
 
         log.info("Created and updated paragraphs: {}", paragraphsToAdd.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
