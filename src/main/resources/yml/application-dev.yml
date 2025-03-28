@@ -43,7 +43,7 @@ spring:
     redis:
       host: ${dev-redis.host}
       port: ${dev-redis.port}
-      password: ${dev-redis.password}
+      ssl: true
 
   elasticsearch:
     rest:
