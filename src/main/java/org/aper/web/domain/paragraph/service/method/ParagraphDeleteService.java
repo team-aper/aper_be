@@ -1,6 +1,8 @@
 package org.aper.web.domain.paragraph.service.method;
 
 import com.aperlibrary.paragraph.entity.Paragraph;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
@@ -10,7 +12,6 @@ import org.aper.web.global.batch.service.method.BatchDeleteService;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -26,8 +27,11 @@ public class ParagraphDeleteService implements BatchDeleteService<ItemPayload> {
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void handleDeletedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids, Long episodeId) {
         List<Paragraph> paragraphsToUpdate = new ArrayList<>();
         List<Paragraph> paragraphsToDelete = new ArrayList<>();
@@ -47,11 +51,14 @@ public class ParagraphDeleteService implements BatchDeleteService<ItemPayload> {
         }
 
         paragraphRepository.deleteAllInBatch(paragraphsToDelete);
-        log.info("Deleted UUIDs: {}", paragraphsToDelete.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
         paragraphRepository.flush();
+        entityManager.clear();
 
         paragraphRepository.saveAll(paragraphsToUpdate);
         paragraphRepository.flush();
+        entityManager.clear();
+
+        log.info("Deleted UUIDs: {}", paragraphsToDelete.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
         log.info("Updated UUIDs : {}", paragraphsToUpdate.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
     }
 }

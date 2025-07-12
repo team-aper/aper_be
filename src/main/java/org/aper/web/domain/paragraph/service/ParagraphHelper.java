@@ -9,6 +9,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,10 +31,12 @@ public class ParagraphHelper {
         return episode;
     }
 
+    @Transactional
     public Episode validateEpisodeOwnership(Long episodeId, UserDetailsImpl userDetails) {
         return validateEpisode(episodeId, userDetails, true);
     }
 
+    @Transactional
     public Paragraph validateParagraphExists(String uuid) {
         return paragraphRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ServiceException(ErrorCode.PARAGRAPH_NOT_FOUND));
@@ -54,6 +57,7 @@ public class ParagraphHelper {
         return paragraph.length() > 250 ? paragraph.substring(0, 250) + "..." : paragraph + "...";
     }
 
+    @Transactional
     public void updateEpisodeDescription(Long episodeId) {
         Episode episode = episodeRepository.findByIdWithParagraphs(episodeId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.EPISODE_NOT_FOUND));
@@ -69,6 +73,7 @@ public class ParagraphHelper {
         episodeRepository.save(episode);
     }
 
+    @Transactional
     public void updatePreviousParagraph(String previousUuid, String nextUuid, List<Paragraph> paragraphsToUpdate) {
         if (previousUuid != null) {
             Paragraph previousParagraph = paragraphRepository.findByUuid(previousUuid)
@@ -78,6 +83,7 @@ public class ParagraphHelper {
         }
     }
 
+    @Transactional
     public void updateNextParagraph(String previousUuid, String nextUuid, List<Paragraph> paragraphsToUpdate) {
         if (nextUuid != null) {
             Paragraph nextParagraph = paragraphRepository.findByUuid(nextUuid)

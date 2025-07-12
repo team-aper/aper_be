@@ -2,6 +2,8 @@ package org.aper.web.domain.paragraph.service.method;
 
 import com.aperlibrary.paragraph.entity.Paragraph;
 import com.aperlibrary.paragraph.entity.TextAlignEnum;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;
@@ -26,6 +28,9 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
     private final ParagraphRepository paragraphRepository;
     private final ParagraphHelper paragraphHelper;
     private final EnumUtil enumUtil;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public boolean handleModifiedOperation(List<ItemPayload> itemPayloads, Set<String> deletedUuids) {
@@ -54,6 +59,7 @@ public class ParagraphPutService implements BatchPutService<ItemPayload> {
 
         paragraphRepository.saveAll(paragraphsToUpdate);
         paragraphRepository.flush();
+        entityManager.clear();
         log.info("Updated paragraphs: {}", paragraphsToUpdate.stream().map(Paragraph::getUuid).collect(Collectors.toList()));
 
         return firstParagraphUpdated;
