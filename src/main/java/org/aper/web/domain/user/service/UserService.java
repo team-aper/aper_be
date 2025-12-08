@@ -6,7 +6,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
-import org.aper.web.domain.kafka.service.KafkaUserProducerService;
+//import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.search.dto.SearchDto;
 import org.aper.web.domain.search.service.SearchMapper;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
@@ -28,7 +28,7 @@ public class UserService {
     private final ChatRoomRepository chatRoomRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
-    private final KafkaUserProducerService producerService;
+//    private final KafkaUserProducerService producerService;
     private final UserMapper userMapper;
     private final SearchMapper searchMapper;
 
@@ -36,13 +36,13 @@ public class UserService {
                        ChatRoomRepository chatRoomRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
-                       KafkaUserProducerService producerService,
+//                       KafkaUserProducerService producerService,
                        UserMapper userMapper, SearchMapper searchMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
-        this.producerService = producerService;
+//        this.producerService = producerService;
         this.userMapper = userMapper;
         this.searchMapper = searchMapper;
     }
@@ -68,7 +68,7 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        producerService.sendCreate(user);
+//        producerService.sendCreate(user);
     }
 
     @Transactional
@@ -76,7 +76,7 @@ public class UserService {
         String newPenName = changePenNameDto.penName();
         user.updatePenName(newPenName);
         userRepository.save((user));
-        producerService.sendUpdate(user);
+//        producerService.sendUpdate(user);
     }
 
     @Transactional

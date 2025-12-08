@@ -4,6 +4,12 @@ spring:
       - classpath:/yml/application-secret.yml
     activate:
       on-profile: local
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -27,7 +33,8 @@ spring:
     redis:
       host: ${local-redis.host}
       port: ${local-redis.port}
-      password: ${local-redis.password}
+#      password: ${local-redis.password}
+      ssl-enabled: false
 
   mail:
     host: smtp.gmail.com # 서버 호스트
@@ -45,11 +52,11 @@ spring:
             enable: true # StartTLS 활성화 여부
             required: true
 
-  elasticsearch:
-    rest:
-      uris: ${elasticsearch.rest.uris}
-      username: ${elasticsearch.rest.username}
-      password: ${elasticsearch.rest.password}
+#  elasticsearch:
+#    rest:
+#      uris: ${elasticsearch.local.rest.uris}
+#      username: ${elasticsearch.local.rest.username}
+#      password: ${elasticsearch.local.rest.password}
 
   security:
     oauth2:
@@ -150,13 +157,13 @@ iamport:
     key: ${iamport.api.key}
     secret: ${iamport.api.secret}
 
-kafka:
-  bootstrap-servers: ${kafka.bootstrap-servers}
-  key-serializer: ${kafka.key-serializer}
-  value-serializer: ${kafka.value-serializer}
-  episodes-topic: ${kafka.episodes-topic}
-  user-topic: ${kafka.user-topic}
-  consumer-group-id: ${kafka.consumer-group-id}
+#kafka:
+#  bootstrap-servers: ${kafka.bootstrap-servers}
+#  key-serializer: ${kafka.key-serializer}
+#  value-serializer: ${kafka.value-serializer}
+#  episodes-topic: ${kafka.episodes-topic}
+#  user-topic: ${kafka.user-topic}
+#  consumer-group-id: ${kafka.consumer-group-id}
 
 slack:
   webhook:
