@@ -1,12 +1,12 @@
 package org.aper.web.domain.field.service;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.review.entity.ReviewDetail;
-import com.aperlibrary.story.entity.Story;
-import com.aperlibrary.user.entity.User;
-import com.aperlibrary.user.entity.UserHistory;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.review.entity.ReviewDetail;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.chat.repository.ChatParticipantRepository;
+// REMOVED: Chat belongs to aper_chat_renewal - import org.aper.web.domain.chat.repository.ChatParticipantRepository;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.field.dto.FieldResponseDto.*;
 import org.aper.web.domain.review.repository.ReviewDetailRepository;
@@ -33,7 +33,8 @@ public class FieldService {
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
     private final UserHistoryRepository userHistoryRepository;
-    private final ChatParticipantRepository chatParticipantRepository;
+    // REMOVED: Chat belongs to aper_chat_renewal
+    // private final ChatParticipantRepository chatParticipantRepository;
     private final ReviewDetailRepository reviewDetailRepository;
     private final FieldMapper fieldMapper;
     private final FieldHelper fieldHelper;
@@ -89,7 +90,8 @@ public class FieldService {
         boolean isMyField = fieldHelper.isOwnField(authorId, userDetails);
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        Long totalClasses = chatParticipantRepository.countByUserUserIdAndIsTutorTrue(authorId);
+        // TODO: Chat service migration - fetch totalClasses via API call to aper_chat_renewal
+        Long totalClasses = 0L; // chatParticipantRepository.countByUserUserIdAndIsTutorTrue(authorId);
         List<ReviewDetail> reviews = reviewDetailRepository.findReviewDetailsByUserId(authorId);
         return fieldMapper.classDescriptionToDto(user, totalClasses, reviews, isMyField);
     }

@@ -1,11 +1,11 @@
 package org.aper.web.domain.user.service;
 
-import com.aperlibrary.user.entity.DeleteAccount;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.user.entity.DeleteAccount;
+import org.aper.web.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.kafka.service.KafkaUserProducerService;
+//import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.repository.DeleteAccountRepository;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +21,7 @@ public class DeleteService {
     private final DeleteAccountRepository deleteAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final KafkaUserProducerService producerService;
+//    private final KafkaUserProducerService producerService;
 
     @Transactional
     public void deleteAccount(User user) {
@@ -30,7 +30,7 @@ public class DeleteService {
 
         deleteAccountRepository.save(account);
         userRepository.save(user);
-        producerService.sendDelete(user.getUserId());
+//        producerService.sendDelete(user.getUserId());
     }
 
     @Transactional

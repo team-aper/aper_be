@@ -9,3 +9,4 @@ spring:
 server:
   tomcat:
     keep-alive-timeout: 65000ms
+  port: 8081

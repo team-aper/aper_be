@@ -1,8 +1,8 @@
 package org.aper.web.domain.kafka.service;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.story.entity.Story;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.User;
 import org.aper.web.domain.kafka.entity.dto.KafkaDto.*;
 import org.springframework.stereotype.Component;
 

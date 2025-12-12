@@ -4,13 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.authHandler.CustomAccessDeniedHandler;
 import org.aper.web.global.handler.authHandler.CustomAuthenticationEntryPoint;
-import org.aper.web.global.handler.authHandler.OAuth2AuthenticationFailureHandler;
-import org.aper.web.global.handler.authHandler.OAuth2AuthenticationSuccessHandler;
-import org.aper.web.global.jwt.TokenProvider;
-import org.aper.web.global.oauth2.CustomOAuth2UserService;
-import org.aper.web.global.oauth2.CustomRequestEntityConverter;
 import org.aper.web.global.security.UserDetailsServiceImpl;
-import org.aper.web.global.security.filter.JwtAuthorizationFilter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequestEntityConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,13 +28,10 @@ import java.util.List;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
-    private final TokenProvider tokenProvider;
     private final UserDetailsServiceImpl userDetailsService;
     public final UserRepository userRepository;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -67,29 +53,6 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CustomOAuth2UserService customOAuth2UserService() {
-        return new CustomOAuth2UserService(userRepository, userDetailsService);
-    }
-
-    @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(tokenProvider, userDetailsService);
-    }
-
-    @Bean
-    public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authorizationCodeTokenResponseClient() {
-        DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
-
-        tokenResponseClient.setRequestEntityConverter(request -> {
-            if ("kakao".equals(request.getClientRegistration().getRegistrationId()) || "naver".equals(request.getClientRegistration().getRegistrationId())) {
-                return new CustomRequestEntityConverter().convert(request);
-            }
-            return new OAuth2AuthorizationCodeGrantRequestEntityConverter().convert(request);
-        });
-        return tokenResponseClient;
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
 
@@ -97,31 +60,13 @@ public class WebSecurityConfig {
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         );
 
-        http.oauth2Login(oauth2Login ->
-                oauth2Login
-                        .successHandler(oAuth2AuthenticationSuccessHandler)
-                        .failureHandler(oAuth2AuthenticationFailureHandler)
-                        .tokenEndpoint(tokenEndpoint ->
-                                tokenEndpoint.accessTokenResponseClient(authorizationCodeTokenResponseClient())
-                        )
-                        .userInfoEndpoint(userInfoEndpoint ->
-                                userInfoEndpoint.userService(customOAuth2UserService())
-                        )
-        );
-
         // 시큐리티 CORS 설정
         http.cors(cors -> cors.configurationSource(configurationSource()));
 
-        // 권한에 따른 접근 설정
+        // Gateway에서 인증을 처리하므로 모든 요청 허용
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(AuthenticatedMatchers.flexiblePathArray).permitAll()
-                        .requestMatchers(AuthenticatedMatchers.swaggerArray).permitAll()
-                        .requestMatchers(AuthenticatedMatchers.excludedPathArray).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
         );
-
-        http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.formLogin(AbstractHttpConfigurer::disable);
         http.logout(AbstractHttpConfigurer::disable);

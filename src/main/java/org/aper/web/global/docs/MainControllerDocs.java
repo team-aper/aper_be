@@ -1,6 +1,6 @@
 package org.aper.web.global.docs;
 
-import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.common.constant.StoryGenreEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

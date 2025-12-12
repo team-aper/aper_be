@@ -1,9 +1,9 @@
 package org.aper.web.domain.search.service;
 
-import com.aperlibrary.story.entity.Story;
-import com.aperlibrary.user.entity.User;
-import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
-import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.User;
+//import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
+//import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
 import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.AuthorPenNameResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.AuthorStoryListResponseDto;
@@ -68,28 +68,28 @@ public class SearchMapper {
                 .toList();
     }
 
-    public List<StoryListResponseDto> episodesDocumentListToResponseDto(List<ElasticSearchEpisodeDocument> episodeDocumentList) {
-        return episodeDocumentList.stream()
-                .map(document -> new StoryListResponseDto(
-                            document.getStoryId(),
-                            document.getStoryTitle(),
-                            document.getUserId(),
-                            document.getStoryGenre(),
-                            document.getEpisodePublicDate(),
-                            document.getEpisodeId(),
-                            document.getEpisodeDescription(),
-                            document.getPenName(),
-                            document.getFieldImage()
-                    )
-                )
-                .toList();
-    }
-
-    public List<AuthorPenNameResponseDto> userDocumentListToPenNameResponseDto(List<ElasticSearchUserDocument> userList) {
-        return userList.stream()
-                .map(user ->
-                        new AuthorPenNameResponseDto(
-                                user.getPenName()))
-                .toList();
-    }
+//    public List<StoryListResponseDto> episodesDocumentListToResponseDto(List<ElasticSearchEpisodeDocument> episodeDocumentList) {
+//        return episodeDocumentList.stream()
+//                .map(document -> new StoryListResponseDto(
+//                            document.getStoryId(),
+//                            document.getStoryTitle(),
+//                            document.getUserId(),
+//                            document.getStoryGenre(),
+//                            document.getEpisodePublicDate(),
+//                            document.getEpisodeId(),
+//                            document.getEpisodeDescription(),
+//                            document.getPenName(),
+//                            document.getFieldImage()
+//                    )
+//                )
+//                .toList();
+//    }
+//
+//    public List<AuthorPenNameResponseDto> userDocumentListToPenNameResponseDto(List<ElasticSearchUserDocument> userList) {
+//        return userList.stream()
+//                .map(user ->
+//                        new AuthorPenNameResponseDto(
+//                                user.getPenName()))
+//                .toList();
+//    }
 }

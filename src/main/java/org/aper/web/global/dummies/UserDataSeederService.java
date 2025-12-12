@@ -1,11 +1,11 @@
 package org.aper.web.global.dummies;
 
-import com.aperlibrary.user.entity.User;
-import com.aperlibrary.user.entity.UserHistory;
-import com.aperlibrary.user.entity.constant.EndDateTypeEnum;
-import com.aperlibrary.user.entity.constant.HistoryTypeEnum;
-import com.aperlibrary.user.entity.constant.StartDateTypeEnum;
-import com.aperlibrary.user.entity.constant.UserRoleEnum;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.common.constant.EndDateTypeEnum;
+import org.aper.web.domain.common.constant.HistoryTypeEnum;
+import org.aper.web.domain.common.constant.StartDateTypeEnum;
+import org.aper.web.domain.common.constant.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
@@ -38,9 +38,11 @@ public class UserDataSeederService {
         for (int i = 0; i < userCount; i++) {
             String koreanName = KoreanNameGenerator.generateKoreanName();
             String email = faker.internet().emailAddress();
+            // MSA: password는 auth-server에서 관리
+            // Dummy 데이터는 aper_be 비즈니스 로직 테스트용
             User user = User.builder()
                     .email(email)
-                    .password(passwordEncoder.encode("Test123!"))
+                    // password 제거 - auth-server에서 관리
                     .role(UserRoleEnum.USER)
                     .penName(koreanName)
                     .build();

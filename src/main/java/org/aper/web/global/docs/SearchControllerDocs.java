@@ -1,6 +1,6 @@
 package org.aper.web.global.docs;
 
-import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.common.constant.StoryGenreEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -77,18 +77,18 @@ public interface SearchControllerDocs {
             @RequestParam String penName
     );
 
-    @Operation(summary = "mysql의 Episode테이블과 엘라스틱서치의 싱크를 맞추는 API",
-            description = "실제 서비스에서는 사용되지 않는 개발용 API 입니다."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "싱크 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-    })
-    ResponseDto<Void> testSyncEpisode();
-
-    @Operation(summary = "mysql의 User테이블과 엘라스틱서치의 싱크를 맞추는 API",
-            description = "실제 서비스에서는 사용되지 않는 개발용 API 입니다."
-    )
-    ResponseDto<Void> testSyncUser();
+//    @Operation(summary = "mysql의 Episode테이블과 엘라스틱서치의 싱크를 맞추는 API",
+//            description = "실제 서비스에서는 사용되지 않는 개발용 API 입니다."
+//    )
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "싱크 성공", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+//            @ApiResponse(responseCode = "500", description = "서버 오류 (ErrorCode: C001 - 내부 서버 오류가 발생했습니다)",
+//                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+//    })
+//    ResponseDto<Void> testSyncEpisode();
+//
+//    @Operation(summary = "mysql의 User테이블과 엘라스틱서치의 싱크를 맞추는 API",
+//            description = "실제 서비스에서는 사용되지 않는 개발용 API 입니다."
+//    )
+//    ResponseDto<Void> testSyncUser();
 }

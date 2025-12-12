@@ -1,43 +1,43 @@
-package org.aper.web.domain.user.service;
-
-
-import com.aperlibrary.user.entity.User;
-import lombok.extern.slf4j.Slf4j;
-import org.aper.web.domain.user.dto.UserRequestDto.*;
-import org.aper.web.domain.user.repository.UserRepository;
-import org.aper.web.global.handler.ErrorCode;
-import org.aper.web.global.handler.exception.ServiceException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-@Service
-@Slf4j
-public class PasswordService {
-
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public PasswordService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Transactional
-    public void changePassword(User user, PasswordChangeDto passChangeDto) {
-
-        if(!passwordEncoder.matches(passChangeDto.originPassword(), user.getPassword()) && passChangeDto.newPassword().equals(passChangeDto.originPassword())) {
-            throw new ServiceException(ErrorCode.PASSWORD_CHANGE_ERROR);
-        }
-
-        User updateUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
-        updateUser.updatePassword(passwordEncoder.encode(passChangeDto.newPassword()));
-        log.info(passChangeDto.newPassword());
-    }
-
-    public void verifyPassword(String originPassword, String password) {
-        if(!passwordEncoder.matches(password, originPassword)) {
-            throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
-        }
-    }
-}
+//package org.aper.web.domain.user.service;
+//
+//import org.aper.web.domain.user.entity.User;
+//import lombok.extern.slf4j.Slf4j;
+//import org.aper.web.domain.user.dto.UserRequestDto.*;
+//import org.aper.web.domain.user.repository.UserRepository;
+//import org.aper.web.global.handler.ErrorCode;
+//import org.aper.web.global.handler.exception.ServiceException;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
+//
+//@Service
+//@Slf4j
+//public class PasswordService {
+//
+//    private final UserRepository userRepository;
+//    private final PasswordEncoder passwordEncoder;
+//
+//    public PasswordService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//        this.userRepository = userRepository;
+//        this.passwordEncoder = passwordEncoder;
+//    }
+//
+//    // TODO: 이거 auth-service에서 관리하니까 지워도 됨.
+//    @Transactional
+//    public void changePassword(User user, PasswordChangeDto passChangeDto) {
+//
+//        if(!passwordEncoder.matches(passChangeDto.originPassword(), user.getPassword()) && passChangeDto.newPassword().equals(passChangeDto.originPassword())) {
+//            throw new ServiceException(ErrorCode.PASSWORD_CHANGE_ERROR);
+//        }
+//
+//        User updateUser = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
+//        updateUser.updatePassword(passwordEncoder.encode(passChangeDto.newPassword()));
+//        log.info(passChangeDto.newPassword());
+//    }
+//
+//    public void verifyPassword(String originPassword, String password) {
+//        if(!passwordEncoder.matches(password, originPassword)) {
+//            throw new ServiceException(ErrorCode.INCORRECT_PASSWORD);
+//        }
+//    }
+//}

@@ -35,9 +35,15 @@ public class RedisConfig {
 //        if (redisProperties.getPassword() != null && !redisProperties.getPassword().isBlank()) {
 //            redisConfig.setPassword(redisProperties.getPassword());
 //        }
-        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-                .useSsl()
-                .build();
+        LettuceClientConfiguration clientConfig;
+        if (redisProperties.isSslEnabled()) {
+            clientConfig = LettuceClientConfiguration.builder()
+                    .useSsl()
+                    .build();
+        } else {
+            clientConfig = LettuceClientConfiguration.builder()
+                    .build();
+        }
 
         return new LettuceConnectionFactory(redisConfig, clientConfig);
     }

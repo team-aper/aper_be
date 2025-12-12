@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.repository;
 
 
-import com.aperlibrary.user.entity.UserHistory;
+import org.aper.web.domain.user.entity.UserHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

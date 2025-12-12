@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.dto;
 
 
-import com.aperlibrary.review.entity.ReviewTypeEnum;
+import org.aper.web.domain.common.constant.ReviewTypeEnum;
 
 import java.time.YearMonth;
 import java.util.List;

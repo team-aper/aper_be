@@ -1,11 +1,8 @@
 package org.aper.web.domain.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.aper.web.domain.user.valid.UserValidationGroup.*;
-
-import java.time.YearMonth;
 
 public class UserRequestDto {
 
