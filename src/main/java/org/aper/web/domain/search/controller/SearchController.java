@@ -1,6 +1,6 @@
 //package org.aper.web.domain.search.controller;
 //
-//import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+//import org.aper.web.domain.common.constant.StoryGenreEnum;
 //import lombok.RequiredArgsConstructor;
 ////import org.aper.web.domain.elasticsearch.service.ElasticSyncService;
 //import org.aper.web.domain.search.dto.SearchDto.*;

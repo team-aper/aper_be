@@ -1,10 +1,10 @@
 package org.aper.web.domain.user.service;
 
-import com.aperlibrary.user.entity.User;
-import com.aperlibrary.user.entity.UserHistory;
-import com.aperlibrary.user.entity.constant.EndDateTypeEnum;
-import com.aperlibrary.user.entity.constant.HistoryTypeEnum;
-import com.aperlibrary.user.entity.constant.StartDateTypeEnum;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.common.constant.EndDateTypeEnum;
+import org.aper.web.domain.common.constant.HistoryTypeEnum;
+import org.aper.web.domain.common.constant.StartDateTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.repository.UserHistoryRepository;

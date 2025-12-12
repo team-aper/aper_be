@@ -1,6 +1,6 @@
 package org.aper.web.domain.user.service.method;
 
-import com.aperlibrary.user.entity.constant.UserBatchTypeEnum;
+import org.aper.web.domain.common.constant.UserBatchTypeEnum;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

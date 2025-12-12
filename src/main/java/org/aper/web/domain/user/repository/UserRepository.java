@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.repository;
 
-import com.aperlibrary.story.entity.constant.StoryGenreEnum;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.common.constant.StoryGenreEnum;
+import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.isExposed = true")
     Page<User> findAllForMain(Pageable pageable);
 
-    @Query("SELECT u FROM User u WHERE u.email = :email AND u.deleteAccount IS NULL")
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.deletedAt IS NULL")
     Optional<User> findByEmailWithOutDeleteAccount(String email);
 
     @Query("SELECT u FROM User u WHERE u.penName LIKE %:penName%")
@@ -42,12 +42,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE u.userId IN :ids")
     List<Object[]> findUserWithSubscriberAndReviewCounts(List<Long> ids, Long userId);
 
-    @Query("SELECT " +
-            " (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = :authorId) AS reviewCount, " +
-            " (SELECT COUNT(cp) FROM ChatParticipant cp WHERE cp.user.userId = :authorId AND cp.isTutor = true) AS tutorChatCount " +
-            "FROM User u " +
-            "WHERE u.userId = :authorId")
-    List<Object[]> findUserIsTutorAndReviewers(Long authorId);
+    // MSA: ChatParticipant는 aper_chat_renewal 서비스로 분리됨
+    // 필요시 Service 레이어에서 aper_chat_renewal API 호출로 tutorChatCount 조회
+    @Query("SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = :authorId")
+    Long findReviewCountByAuthorId(Long authorId);
 
     @Query("SELECT u FROM User u " +
             "JOIN u.storyList st " +

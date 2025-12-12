@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.service;
 
-import com.aperlibrary.user.entity.DeleteAccount;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.user.entity.DeleteAccount;
+import org.aper.web.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

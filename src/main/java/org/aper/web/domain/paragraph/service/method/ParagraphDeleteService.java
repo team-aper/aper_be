@@ -1,6 +1,6 @@
 package org.aper.web.domain.paragraph.service.method;
 
-import com.aperlibrary.paragraph.entity.Paragraph;
+import org.aper.web.domain.paragraph.entity.Paragraph;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;

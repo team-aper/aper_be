@@ -1,7 +1,7 @@
 package org.aper.web.domain.search.service;
 
-import com.aperlibrary.story.entity.Story;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.User;
 //import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 //import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;
 import org.aper.web.domain.search.dto.SearchDto.AuthorListResponseDto;

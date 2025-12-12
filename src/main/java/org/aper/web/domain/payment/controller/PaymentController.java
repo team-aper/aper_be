@@ -1,6 +1,6 @@
 package org.aper.web.domain.payment.controller;
 
-import com.aperlibrary.payment.dto.PreOrderRequestDto;
+import org.aper.web.domain.payment.dto.PreOrderRequestDto;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

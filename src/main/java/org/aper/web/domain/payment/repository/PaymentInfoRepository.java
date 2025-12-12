@@ -1,5 +1,5 @@
 package org.aper.web.domain.payment.repository;
-import com.aperlibrary.payment.entity.PaymentInfo;
+import org.aper.web.domain.payment.entity.PaymentInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

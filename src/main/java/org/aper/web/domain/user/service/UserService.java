@@ -1,10 +1,10 @@
 package org.aper.web.domain.user.service;
 
-import com.aperlibrary.user.entity.User;
-import com.aperlibrary.user.entity.constant.UserRoleEnum;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.common.constant.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.aper.web.domain.chat.repository.ChatRoomRepository;
+// REMOVED: Chat belongs to aper_chat_renewal - import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.image.service.S3ImageService;
 //import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.search.dto.SearchDto;
@@ -25,7 +25,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ChatRoomRepository chatRoomRepository;
+    // REMOVED: Chat belongs to aper_chat_renewal
+    // private final ChatRoomRepository chatRoomRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
 //    private final KafkaUserProducerService producerService;
@@ -33,13 +34,13 @@ public class UserService {
     private final SearchMapper searchMapper;
 
     public UserService(UserRepository userRepository,
-                       ChatRoomRepository chatRoomRepository,
+                       // ChatRoomRepository chatRoomRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
 //                       KafkaUserProducerService producerService,
                        UserMapper userMapper, SearchMapper searchMapper) {
         this.userRepository = userRepository;
-        this.chatRoomRepository = chatRoomRepository;
+        // this.chatRoomRepository = chatRoomRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
 //        this.producerService = producerService;
@@ -51,25 +52,25 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(() -> new ServiceException(ErrorCode.USER_NOT_FOUND));
     }
 
-    public void signupUser(@Valid SignupRequestDto requestDto) {
-        String penName = requestDto.penName();
-        String email = requestDto.email();
-        String password = passwordEncoder.encode(requestDto.password());
-
-        if (userRepository.existsByEmail(email)) {
-            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
-        }
-
-        User user = User.builder()
-                .email(email)
-                .password(password)
-                .penName(penName)
-                .role(UserRoleEnum.USER)
-                .build();
-
-        userRepository.save(user);
-//        producerService.sendCreate(user);
-    }
+//    public void signupUser(@Valid SignupRequestDto requestDto) {
+//        String penName = requestDto.penName();
+//        String email = requestDto.email();
+//        String password = passwordEncoder.encode(requestDto.password());
+//
+//        if (userRepository.existsByEmail(email)) {
+//            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
+//        }
+//
+//        User user = User.builder()
+//                .email(email)
+//                .password(password)
+//                .penName(penName)
+//                .role(UserRoleEnum.USER)
+//                .build();
+//
+//        userRepository.save(user);
+////        producerService.sendCreate(user);
+//    }
 
     @Transactional
     public void ChangePenName(User user, ChangePenNameDto changePenNameDto) {
@@ -79,15 +80,15 @@ public class UserService {
 //        producerService.sendUpdate(user);
     }
 
-    @Transactional
-    public void changeEmail(User user, ChangeEmailDto changeEmailDto) {
-        String newEmail = changeEmailDto.email();
-        if (userRepository.existsByEmail(newEmail)) {
-            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
-        }
-        user.updateEmail(newEmail);
-        userRepository.save((user));
-    }
+//    @Transactional
+//    public void changeEmail(User user, ChangeEmailDto changeEmailDto) {
+//        String newEmail = changeEmailDto.email();
+//        if (userRepository.existsByEmail(newEmail)) {
+//            throw new ServiceException(ErrorCode.ALREADY_EXIST_EMAIL);
+//        }
+//        user.updateEmail(newEmail);
+//        userRepository.save((user));
+//    }
 
     @Transactional
     public void changeDescription(User user, ChangeDescriptionDto descriptionDto) {

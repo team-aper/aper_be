@@ -1,6 +1,6 @@
 package org.aper.web.domain.review.dto;
 
-import com.aperlibrary.review.entity.ReviewTypeEnum;
+import org.aper.web.domain.common.constant.ReviewTypeEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 

@@ -1,11 +1,11 @@
 package org.aper.web.domain.payment.service;
 
-import com.aperlibrary.payment.dto.PreOrderRequestDto;
-import com.aperlibrary.payment.entity.DigitalProduct;
-import com.aperlibrary.payment.entity.Orders;
-import com.aperlibrary.payment.entity.OrdersDetail;
-import com.aperlibrary.payment.entity.PaymentInfo;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.payment.dto.PreOrderRequestDto;
+import org.aper.web.domain.payment.entity.DigitalProduct;
+import org.aper.web.domain.payment.entity.Orders;
+import org.aper.web.domain.payment.entity.OrdersDetail;
+import org.aper.web.domain.payment.entity.PaymentInfo;
+import org.aper.web.domain.user.entity.User;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.PrepareData;
@@ -61,7 +61,7 @@ public class PaymentService {
         }
         log.info("사전 결제 아임포트 추가 성공");
 
-        PaymentInfo prePaymentInfo = new PaymentInfo(preOrderRequestDto);
+        PaymentInfo prePaymentInfo = new PaymentInfo(String.valueOf(preOrderRequestDto));
         paymentInfoRepository.save(prePaymentInfo);
 
 

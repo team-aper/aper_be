@@ -1,8 +1,8 @@
 package org.aper.web.domain.episode.service;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.paragraph.entity.Paragraph;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.paragraph.entity.Paragraph;
+import org.aper.web.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.paragraph.dto.ParagraphResponseDto.Paragraphs;
