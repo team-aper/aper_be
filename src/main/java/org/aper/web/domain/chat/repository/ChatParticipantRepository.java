@@ -1,6 +1,6 @@
 package org.aper.web.domain.chat.repository;
 
-import com.aperlibrary.chat.entity.ChatParticipant;
+import org.aper.web.entity.chat.entity.ChatParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

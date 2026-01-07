@@ -1,11 +1,11 @@
 package org.aper.web.domain.payment.service;
 
-import com.aperlibrary.payment.dto.PreOrderRequestDto;
-import com.aperlibrary.payment.entity.DigitalProduct;
-import com.aperlibrary.payment.entity.Orders;
-import com.aperlibrary.payment.entity.OrdersDetail;
-import com.aperlibrary.payment.entity.PaymentInfo;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.payment.dto.PreOrderRequestDto;
+import org.aper.web.entity.payment.entity.DigitalProduct;
+import org.aper.web.entity.payment.entity.Orders;
+import org.aper.web.entity.payment.entity.OrdersDetail;
+import org.aper.web.entity.payment.entity.PaymentInfo;
+import org.aper.web.entity.user.entity.User;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.PrepareData;

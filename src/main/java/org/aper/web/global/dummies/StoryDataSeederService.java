@@ -1,15 +1,15 @@
 package org.aper.web.global.dummies;
 
-import com.aperlibrary.curation.entity.Curation;
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.paragraph.entity.Paragraph;
-import com.aperlibrary.paragraph.entity.TextAlignEnum;
-import com.aperlibrary.story.entity.Story;
-import com.aperlibrary.story.entity.constant.StoryGenreEnum;
-import com.aperlibrary.story.entity.constant.StoryLineStyleEnum;
-import com.aperlibrary.story.entity.constant.StoryRoutineEnum;
-import com.aperlibrary.subscription.entity.Subscription;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.curation.entity.Curation;
+import org.aper.web.entity.episode.entity.Episode;
+import org.aper.web.entity.paragraph.entity.Paragraph;
+import org.aper.web.entity.paragraph.entity.TextAlignEnum;
+import org.aper.web.entity.story.entity.Story;
+import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
+import org.aper.web.entity.story.entity.constant.StoryLineStyleEnum;
+import org.aper.web.entity.story.entity.constant.StoryRoutineEnum;
+import org.aper.web.entity.subscription.entity.Subscription;
+import org.aper.web.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;

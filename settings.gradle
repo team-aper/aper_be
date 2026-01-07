@@ -1,8 +1,5 @@
 rootProject.name = 'aper_be'
 
-include ':aper-library'
-project(':aper-library').projectDir = file('libs/aper-library')
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {

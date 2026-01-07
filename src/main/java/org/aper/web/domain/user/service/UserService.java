@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.service;
 
-import com.aperlibrary.user.entity.User;
-import com.aperlibrary.user.entity.constant.UserRoleEnum;
+import org.aper.web.entity.user.entity.User;
+import org.aper.web.entity.user.entity.constant.UserRoleEnum;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;

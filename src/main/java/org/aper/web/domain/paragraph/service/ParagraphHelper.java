@@ -1,7 +1,7 @@
 package org.aper.web.domain.paragraph.service;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.paragraph.entity.Paragraph;
+import org.aper.web.entity.episode.entity.Episode;
+import org.aper.web.entity.paragraph.entity.Paragraph;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.paragraph.repository.ParagraphRepository;

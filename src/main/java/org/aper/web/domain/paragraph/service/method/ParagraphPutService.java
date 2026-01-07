@@ -1,7 +1,7 @@
 package org.aper.web.domain.paragraph.service.method;
 
-import com.aperlibrary.paragraph.entity.Paragraph;
-import com.aperlibrary.paragraph.entity.TextAlignEnum;
+import org.aper.web.entity.paragraph.entity.Paragraph;
+import org.aper.web.entity.paragraph.entity.TextAlignEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.paragraph.dto.ParagraphRequestDto.ItemPayload;

@@ -1,6 +1,6 @@
 package org.aper.web.domain.review.controller;
 
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.review.service.ReviewService;

@@ -1,8 +1,8 @@
 package org.aper.web.domain.main.service;
 
-import com.aperlibrary.curation.entity.Curation;
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.curation.entity.Curation;
+import org.aper.web.entity.episode.entity.Episode;
+import org.aper.web.entity.user.entity.User;
 import org.aper.web.domain.main.dto.MainResponseDto.*;
 import org.springframework.stereotype.Component;
 

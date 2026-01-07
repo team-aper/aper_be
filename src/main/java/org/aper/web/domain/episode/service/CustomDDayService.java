@@ -1,6 +1,6 @@
 package org.aper.web.domain.episode.service;
 
-import com.aperlibrary.story.DDayService;
+import org.aper.web.entity.story.DDayService;
 import org.springframework.stereotype.Service;
 
 @Service

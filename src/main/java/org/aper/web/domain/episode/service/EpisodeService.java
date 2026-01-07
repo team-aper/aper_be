@@ -1,7 +1,7 @@
 package org.aper.web.domain.episode.service;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.subscription.entity.Subscription;
+import org.aper.web.entity.episode.entity.Episode;
+import org.aper.web.entity.subscription.entity.Subscription;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.DeleteEpisodeDto;
 import org.aper.web.domain.episode.dto.EpisodeRequestDto.TitleChangeDto;

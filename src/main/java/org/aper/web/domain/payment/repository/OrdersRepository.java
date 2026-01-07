@@ -1,6 +1,6 @@
 package org.aper.web.domain.payment.repository;
 
-import com.aperlibrary.payment.entity.Orders;
+import org.aper.web.entity.payment.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,8 +1,8 @@
 package org.aper.web.domain.paragraph.service.method;
 
-import com.aperlibrary.episode.entity.Episode;
-import com.aperlibrary.paragraph.entity.Paragraph;
-import com.aperlibrary.paragraph.entity.TextAlignEnum;
+import org.aper.web.entity.episode.entity.Episode;
+import org.aper.web.entity.paragraph.entity.Paragraph;
+import org.aper.web.entity.paragraph.entity.TextAlignEnum;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;

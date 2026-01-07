@@ -1,10 +1,10 @@
 package org.aper.web.domain.review.service;
 
-import com.aperlibrary.chat.entity.ChatRoom;
-import com.aperlibrary.review.entity.Review;
-import com.aperlibrary.review.entity.ReviewDetail;
-import com.aperlibrary.review.entity.ReviewTypeEnum;
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.chat.entity.ChatRoom;
+import org.aper.web.entity.review.entity.Review;
+import org.aper.web.entity.review.entity.ReviewDetail;
+import org.aper.web.entity.review.entity.ReviewTypeEnum;
+import org.aper.web.entity.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;

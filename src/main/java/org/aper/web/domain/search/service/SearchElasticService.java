@@ -1,6 +1,6 @@
 package org.aper.web.domain.search.service;
 
-import com.aperlibrary.story.entity.constant.StoryGenreEnum;
+import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;

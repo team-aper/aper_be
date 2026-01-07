@@ -1,6 +1,6 @@
 package org.aper.web.global.dummies;
 
-import com.aperlibrary.user.entity.User;
+import org.aper.web.entity.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
