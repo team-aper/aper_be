@@ -4,10 +4,14 @@ import com.aperlibrary.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.service.ElasticSyncService;
 import org.aper.web.domain.search.dto.SearchDto.*;
+import org.aper.web.domain.search.service.SearchDataBaseService;
 import org.aper.web.domain.search.service.SearchElasticService;
 import org.aper.web.global.docs.SearchControllerDocs;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/search")
 @RequiredArgsConstructor
 public class SearchController implements SearchControllerDocs {
-//    private final SearchDataBaseService searchService;
-    private final SearchElasticService searchService;
-    private final ElasticSyncService syncService;
+    private final SearchDataBaseService searchService;
+//    private final SearchElasticService searchService;
+    @Autowired(required = false)
+    private ElasticSyncService syncService;
     @Override
     @GetMapping("/story")
     public ResponseDto<SearchStoryResponseDto> getSearchStory(
@@ -56,14 +61,20 @@ public class SearchController implements SearchControllerDocs {
     @Override
     @PostMapping("/testsync-episode")
     public ResponseDto<Void> testSyncEpisode() {
-        syncService.syncEpisodes();
-        return ResponseDto.success("에피소드 엘라스틱 싱크 맞추기 테스트 API 성공");
+        if (syncService != null) {
+            syncService.syncEpisodes();
+            return ResponseDto.success("에피소드 엘라스틱 싱크 맞추기 테스트 API 성공");
+        }
+        return ResponseDto.fail("Elasticsearch가 비활성화되어 있습니다");
     }
 
     @Override
     @PostMapping("/testsync-user")
     public ResponseDto<Void> testSyncUser() {
-        syncService.syncUser();
-        return ResponseDto.success("유저 엘라스틱 싱크 맞추기 테스트 API 성공");
+        if (syncService != null) {
+            syncService.syncUser();
+            return ResponseDto.success("유저 엘라스틱 싱크 맞추기 테스트 API 성공");
+        }
+        return ResponseDto.fail("Elasticsearch가 비활성화되어 있습니다");
     }
 }

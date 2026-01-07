@@ -21,6 +21,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
 import org.aper.web.global.util.EnumUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,8 @@ public class StoryService {
     private final StoryMapper storyMapper;
     private final EpisodeRepository episodeRepository;
     private final ParagraphRepository paragraphRepository;
-    private final KafkaEpisodesProducerService producerService;
+    @Autowired(required = false)
+    private KafkaEpisodesProducerService producerService;
     private final EnumUtil enumUtil;
 
     @Transactional
@@ -51,7 +53,9 @@ public class StoryService {
 //            producerService.sendUpdateOnlyStory(existStory);
 //            return;
 //        }
-        existStory.getEpisodeList().forEach(producerService::sendUpdate);
+        if (producerService != null) {
+            existStory.getEpisodeList().forEach(producerService::sendUpdate);
+        }
     }
 
     @Transactional
@@ -71,8 +75,10 @@ public class StoryService {
 
         storyRepository.save(story);
 
-        Episode kafkaEpisode = Episode.builder().story(story).build();
-        producerService.sendCreate(kafkaEpisode);
+        if (producerService != null) {
+            Episode kafkaEpisode = Episode.builder().story(story).build();
+            producerService.sendCreate(kafkaEpisode);
+        }
 
         return new CreatedStoryDto(story.getId());
     }
@@ -122,7 +128,9 @@ public class StoryService {
         Story story = storyHelper.validateStoryOwnership(storyId, userDetails);
         Episode episode = Episode.builder().chapter(chapter).story(story).build();
         episodeRepository.save(episode);
-        producerService.sendCreate(episode);
+        if (producerService != null) {
+            producerService.sendCreate(episode);
+        }
         return episodeMapper.toEpisodeResponseDto(episode);
     }
 }

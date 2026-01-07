@@ -8,6 +8,8 @@ import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.service.KafkaEpisodesProducerService;
 import org.aper.web.domain.kafka.service.KafkaUserProducerService;
 import org.aper.web.domain.user.repository.UserRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -17,6 +19,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j(topic = "Sync ElasticSearch with MySQL DATA (TABLE : episodes, user)")
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class ElasticSyncService {
     private final EpisodeRepository episodeRepository;
     private final UserRepository userRepository;

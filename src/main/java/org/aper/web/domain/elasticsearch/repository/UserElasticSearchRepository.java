@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,8 +17,9 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class UserElasticSearchRepository {
-    @Autowired
+    @Autowired(required = false)
     private ElasticsearchTemplate elasticsearchTemplate;
     private final ElasticSearchMapper elasticSearchMapper;
     private final ElasticSearchQuery elasticSearchQuery;

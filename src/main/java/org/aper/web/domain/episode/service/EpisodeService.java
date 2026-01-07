@@ -16,6 +16,7 @@ import org.aper.web.global.sse.service.RedisPublisher;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,8 @@ public class EpisodeService {
     private final EpisodeHelper episodeHelper;
     private final EpisodeMapper episodeMapper;
     private final StoryHelper storyHelper;
-    private final KafkaEpisodesProducerService producerService;
+    @Autowired(required = false)
+    private KafkaEpisodesProducerService producerService;
     private final RedisPublisher redisPublisher;
     private final SubscriptionRepository subscriptionRepository;
 
@@ -40,7 +42,9 @@ public class EpisodeService {
         episode.updateOnDisplay();
         episodeRepository.save(episode);
 
-        producerService.sendUpdate(episode);
+        if (producerService != null) {
+            producerService.sendUpdate(episode);
+        }
 
         List<Subscription> subscribers = subscriptionRepository.findAllByAuthor_UserId(userDetails.user().getUserId());
         for (Subscription subscription : subscribers) {
@@ -58,7 +62,9 @@ public class EpisodeService {
 
         episodeRepository.save(episode);
 
-        producerService.sendUpdate(episode);
+        if (producerService != null) {
+            producerService.sendUpdate(episode);
+        }
     }
 
     @Transactional
@@ -69,7 +75,9 @@ public class EpisodeService {
         episodeRepository.flush();
         episodeRepository.decrementChaptersAfterDeletion(episodeDto.storyId(), episodeDto.chapter());
 
-        producerService.sendDelete(episodeId);
+        if (producerService != null) {
+            producerService.sendDelete(episodeId);
+        }
     }
 
     public EpisodeHeaderDto getEpisodeHeader(UserDetailsImpl userDetails, Long episodeId) {

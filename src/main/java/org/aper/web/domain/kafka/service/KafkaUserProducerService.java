@@ -9,6 +9,8 @@ import org.aper.web.domain.elasticsearch.repository.UserElasticSearchRepository;
 import org.aper.web.domain.episode.repository.EpisodeRepository;
 import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaUserDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class KafkaUserProducerService {
     private final KafkaProducer<String, String> producer;
     private final KafkaMapper kafkaMapper;

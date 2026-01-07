@@ -2,10 +2,16 @@ package org.aper.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {
+    ElasticsearchDataAutoConfiguration.class,
+    ElasticsearchRepositoriesAutoConfiguration.class,
+    org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration.class
+})
 @EnableJpaAuditing
 @EnableScheduling
 public class WebApplication {

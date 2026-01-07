@@ -14,6 +14,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.HighlightQuery;
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,8 +22,9 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class EpisodesElasticSearchRepository {
-    @Autowired
+    @Autowired(required = false)
     private ElasticsearchTemplate elasticsearchTemplate;
     private final ElasticSearchMapper elasticSearchMapper;
     private final ElasticSearchQuery elasticSearchQuery;

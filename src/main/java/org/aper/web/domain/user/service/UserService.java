@@ -16,6 +16,7 @@ import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ public class UserService {
     private final ChatRoomRepository chatRoomRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3ImageService s3ImageService;
-    private final KafkaUserProducerService producerService;
+    @Autowired(required = false)
+    private KafkaUserProducerService producerService;
     private final UserMapper userMapper;
     private final SearchMapper searchMapper;
 
@@ -36,13 +38,11 @@ public class UserService {
                        ChatRoomRepository chatRoomRepository,
                        PasswordEncoder passwordEncoder,
                        S3ImageService s3ImageService,
-                       KafkaUserProducerService producerService,
                        UserMapper userMapper, SearchMapper searchMapper) {
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3ImageService = s3ImageService;
-        this.producerService = producerService;
         this.userMapper = userMapper;
         this.searchMapper = searchMapper;
     }
@@ -68,7 +68,9 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        producerService.sendCreate(user);
+        if (producerService != null) {
+            producerService.sendCreate(user);
+        }
     }
 
     @Transactional
@@ -76,7 +78,9 @@ public class UserService {
         String newPenName = changePenNameDto.penName();
         user.updatePenName(newPenName);
         userRepository.save((user));
-        producerService.sendUpdate(user);
+        if (producerService != null) {
+            producerService.sendUpdate(user);
+        }
     }
 
     @Transactional

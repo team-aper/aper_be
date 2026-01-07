@@ -3,6 +3,8 @@ package org.aper.web.domain.kafka.service;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.repository.EpisodesElasticSearchRepository;
 import org.aper.web.domain.elasticsearch.repository.UserElasticSearchRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class KafkaConsumer {
     private final JsonObjectMapper objectMapper;
     private final EpisodesElasticSearchRepository episodeElasticSearchRepository;

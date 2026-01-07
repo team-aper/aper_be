@@ -13,14 +13,17 @@ import org.aper.web.domain.search.dto.SearchDto.SearchPenNameResponseDto;
 import org.aper.web.domain.search.dto.SearchDto.SearchStoryResponseDto;
 import org.aper.web.domain.user.repository.UserRepository;
 import org.aper.web.global.security.UserDetailsImpl;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnBean(ElasticsearchTemplate.class)
 public class SearchElasticService implements SearchServiceInterface{
     private final UserElasticSearchRepository userElasticSearchRepository;
     private final EpisodesElasticSearchRepository episodesElasticSearchRepository;

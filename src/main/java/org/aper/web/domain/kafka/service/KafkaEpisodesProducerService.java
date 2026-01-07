@@ -7,12 +7,14 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.aper.web.domain.kafka.entity.dto.KafkaDto.KafkaEpisodeDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnBean(KafkaProducer.class)
 public class KafkaEpisodesProducerService {
     private final KafkaProducer<String, String> producer;
     private final JsonObjectMapper objectMapper;
