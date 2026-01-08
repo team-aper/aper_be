@@ -1,8 +1,8 @@
 package org.aper.web.domain.review.entity;
 
-import org.aper.web.domain.chat.entity.ChatParticipant;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.aper.web.domain.chat.entity.ChatRoomMember;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class ReviewChatRoom {
     private Boolean isAccepted;
 
     @OneToMany(mappedBy = "chatRoom")
-    private List<ChatParticipant> chatParticipants = new ArrayList<>();
+    private List<ChatRoomMember> members = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")

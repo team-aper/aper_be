@@ -14,6 +14,9 @@ import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.chat.repository.MessageRepository;
 import org.aper.web.domain.chat.repository.UserReadTrackingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,23 +63,22 @@ public class ChatRoomService {
 
     // 사용자의 채팅방 목록 조회 - 최근 메시지 시간순, 읽지 않은 메시지 수 포함
     // TODO: n+1 문제 생각 필요
-    public List<ChatRoomResponseDto> getChatRoomsForUser(Long userId) {
+    public Slice<ChatRoomResponseDto> getChatRoomsForUser(Long userId, Pageable pageable) {
         userPolicy.validateUserExists(userId);
 
-        List<ChatRoom> chatRooms = chatRoomRepository.findRecentChatRooms(userId);
-        List<ChatRoomResponseDto> chatRoomResponses = new ArrayList<>();
+        Slice<ChatRoom> chatRooms = chatRoomRepository.findRecentChatRooms(userId, pageable);
+        List<ChatRoomResponseDto> content = new ArrayList<>(chatRooms.getNumberOfElements());
 
-        for (ChatRoom chatRoom : chatRooms) {
+        for (ChatRoom chatRoom : chatRooms.getContent()) {
             Message message = messageRepository.findLatestMessage(chatRoom);
 
             UserReadTracking tracking = userReadTrackingRepository.findByUserUserIdAndChatRoom(userId, chatRoom);
             Integer unreadCount = unreadCountCalculator.calculate(chatRoom.getId(), tracking, message);
 
-            ChatRoomResponseDto chatRoomResponse = ChatRoomResponseDto.from(chatRoom, message, unreadCount);
-            chatRoomResponses.add(chatRoomResponse);
+            content.add(ChatRoomResponseDto.from(chatRoom, message, unreadCount));
         }
 
-        return chatRoomResponses;
+        return new SliceImpl<>(content, pageable, chatRooms.hasNext());
     }
 
 

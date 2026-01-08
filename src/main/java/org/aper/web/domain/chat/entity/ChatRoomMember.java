@@ -42,8 +42,11 @@ public class ChatRoomMember extends BaseEntity {
     // 알림 설정
     private Boolean notificationEnabled = true;
 
+    private Boolean isTutor = false;
+
     @Builder(access = AccessLevel.PRIVATE)
-    private ChatRoomMember(Long id, ChatRoom chatRoom, User user, MemberRole role, LocalDateTime joinedAt, LocalDateTime lastSeenAt, Boolean notificationEnabled) {
+    private ChatRoomMember(Long id, ChatRoom chatRoom, User user, MemberRole role,
+                           LocalDateTime joinedAt, LocalDateTime lastSeenAt, Boolean notificationEnabled, Boolean isTutor) {
         this.id = id;
         this.chatRoom = chatRoom;
         this.user = user;
@@ -51,6 +54,7 @@ public class ChatRoomMember extends BaseEntity {
         this.joinedAt = joinedAt;
         this.lastSeenAt = lastSeenAt;
         this.notificationEnabled = notificationEnabled;
+        this.isTutor = isTutor != null ? isTutor : false;
     }
 
     public static ChatRoomMember create(ChatRoom chatRoom, User user, boolean isOwner) {
@@ -60,6 +64,17 @@ public class ChatRoomMember extends BaseEntity {
                 .role(isOwner ? MemberRole.OWNER : MemberRole.MEMBER)
                 .joinedAt(LocalDateTime.now())
                 .notificationEnabled(true)
+                .build();
+    }
+
+    public static ChatRoomMember createTutor(ChatRoom chatRoom, User user) {
+        return ChatRoomMember.builder()
+                .chatRoom(chatRoom)
+                .user(user)
+                .role(MemberRole.OWNER)
+                .joinedAt(LocalDateTime.now())
+                .notificationEnabled(true)
+                .isTutor(true)
                 .build();
     }
 }

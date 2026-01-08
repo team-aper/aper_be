@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT " +
             " (SELECT COUNT(r) FROM Review r WHERE r.reviewee.userId = :authorId) AS reviewCount, " +
-            " (SELECT COUNT(cp) FROM ChatParticipant cp WHERE cp.user.userId = :authorId AND cp.isTutor = true) AS tutorChatCount " +
+            " (SELECT COUNT(crm) FROM ChatRoomMemberEntity crm WHERE crm.user.userId = :authorId AND crm.isTutor = true) AS tutorChatCount " +
             "FROM User u " +
             "WHERE u.userId = :authorId")
     List<Object[]> findUserIsTutorAndReviewers(Long authorId);

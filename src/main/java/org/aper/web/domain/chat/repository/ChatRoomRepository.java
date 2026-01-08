@@ -1,6 +1,8 @@
 package org.aper.web.domain.chat.repository;
 
 import org.aper.web.domain.chat.entity.ChatRoom;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,6 +33,16 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
     ORDER BY cr.updatedAt DESC
     """)
     List<ChatRoom> findRecentChatRooms(@Param("userId") Long userId);
+
+
+    @Query("""
+    SELECT DISTINCT cr FROM ChatRoomEntity cr
+    WHERE EXISTS (
+        SELECT 1 FROM ChatRoomMemberEntity m
+        WHERE m.chatRoom = cr AND m.user.userId = :userId
+        )
+    """)
+    Slice<ChatRoom> findRecentChatRooms(@Param("userId") Long userId, Pageable pageable);
 
     Optional<ChatRoom> getChatRoomById(Long chatRoomId);
 }
