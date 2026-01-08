@@ -7,7 +7,7 @@ import org.aper.web.entity.review.entity.ReviewTypeEnum;
 import org.aper.web.entity.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.chat.repository.ChatRoomRepository;
+import org.aper.web.domain.review.repository.ReviewChatRoomRepository;
 import org.aper.web.domain.review.repository.ReviewRepository;
 import org.aper.web.domain.review.dto.ReviewRequestDto.CreateReviewRequestDto;
 import org.aper.web.domain.review.dto.ReviewResponseDto.CreatedReviewDto;
@@ -23,7 +23,7 @@ import java.util.List;
 public class ReviewService {
 
     private final UserRepository userRepository;
-    private final ChatRoomRepository chatRoomRepository;
+    private final ReviewChatRoomRepository chatRoomRepository;
     private final ReviewRepository reviewRepository;
     
     @Transactional

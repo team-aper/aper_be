@@ -1,6 +1,7 @@
 package org.aper.web.entity.user.entity;
 
-import org.aper.web.entity.chat.entity.ChatParticipant;
+import org.aper.web.entity.chat.ChatRoomMember;
+import org.aper.web.entity.chat.UserReadTracking;
 import org.aper.web.entity.review.entity.Review;
 import org.aper.web.entity.story.entity.Story;
 import org.aper.web.entity.subscription.entity.Subscription;
@@ -57,7 +58,10 @@ public class User {
     private String classDescription;
 
     @OneToMany(mappedBy = "user")
-    private List<ChatParticipant> chatParticipants = new ArrayList<>();
+    private List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserReadTracking> readTrackings = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private DeleteAccount deleteAccount;

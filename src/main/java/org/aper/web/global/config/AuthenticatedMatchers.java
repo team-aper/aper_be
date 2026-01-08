@@ -30,6 +30,10 @@ public class AuthenticatedMatchers {
             "/episode/**",
             "/user/tutors",
             "/login/oauth2/code/**",
-            "/oauth2/**"
+            "/oauth2/**",
+            "/ws-chat/**",
+            "/app/**",
+            "/topic/**",
+            "/queue/**"
     };
 }

@@ -1,17 +1,36 @@
 package org.aper.web.domain.chat.repository;
 
-import org.aper.web.entity.chat.entity.ChatRoom;
+import org.aper.web.entity.chat.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    /*
-    todo: 종료된 수업에 한해서 find 하도록 수정
-     */
-    @Query("SELECT c FROM ChatRoom c WHERE c.id = :chatRoomId AND c.isAccepted = true")
-    Optional<ChatRoom> findByIdForReview(Long chatRoomId);
+public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
+    @Query("SELECT DISTINCT cr FROM ChatRoomEntity cr " +
+           "JOIN cr.members m " +
+           "WHERE m.user.userId = :userId")
+    List<ChatRoom> findAllByMemberUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("UPDATE ChatRoomEntity cr SET cr.lastMessageAt = :messageTime WHERE cr.id = :chatRoomId")
+    void updateLastMessageAt(@Param("chatRoomId") Long chatRoomId,
+                            @Param("messageTime") LocalDateTime messageTime);
+
+
+    @Query("""
+    SELECT DISTINCT cr FROM ChatRoomEntity cr
+    JOIN cr.members m
+    WHERE m.user.userId = :userId
+    ORDER BY cr.updatedAt DESC
+    """)
+    List<ChatRoom> findRecentChatRooms(@Param("userId") Long userId);
+
+    Optional<ChatRoom> getChatRoomById(Long chatRoomId);
 }

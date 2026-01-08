@@ -74,6 +74,11 @@ public enum ErrorCode {
     CHAT_ROOM_REQUEST_NOT_FOUND(HttpStatus.NOT_FOUND, "CH005", "해당 채팅방 형성 요청이 없습니다."),
     CHAT_ROOM_REQUEST_ACCEPTED(HttpStatus.BAD_REQUEST, "CH006", "이미 요청을 수락하셨습니다."),
     CHAT_ROOM_REQUEST_REJECTED(HttpStatus.BAD_REQUEST, "CH007", "이미 요청을 거절하셨습니다."),
+    CHAT_ROOM_NAME_REQUIRED(HttpStatus.BAD_REQUEST, "CH008", "채팅방 이름은 필수입니다."),
+    CHAT_ROOM_MEMBER_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "CH009", "채팅방 멤버 수 제한을 초과했습니다."),
+    CHAT_ROOM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "CH010", "채팅방 멤버를 찾을 수 없습니다."),
+    MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CH011", "메시지를 찾을 수 없습니다."),
+    UNAUTHORIZED_CHATROOM_ACCESS(HttpStatus.FORBIDDEN, "CH012", "채팅방에 접근 권한이 없습니다."),
 
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),
