@@ -1,10 +1,10 @@
 package org.aper.web.domain.review.service;
 
-import org.aper.web.entity.chat.entity.ChatRoom;
-import org.aper.web.entity.review.entity.Review;
-import org.aper.web.entity.review.entity.ReviewDetail;
-import org.aper.web.entity.review.entity.ReviewTypeEnum;
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.review.entity.ReviewChatRoom;
+import org.aper.web.domain.review.entity.Review;
+import org.aper.web.domain.review.entity.ReviewDetail;
+import org.aper.web.domain.review.entity.ReviewTypeEnum;
+import org.aper.web.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.review.repository.ReviewChatRoomRepository;
@@ -37,7 +37,7 @@ public class ReviewService {
         User reviewee = userRepository.findByIdExceptMe(revieweeId, reviewerId).orElseThrow(() ->
                 new ServiceException(ErrorCode.USER_NOT_FOUND)
         );
-        ChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
+        ReviewChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
                 new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND)
         );
         String revieweePenName = reviewee.getPenName();

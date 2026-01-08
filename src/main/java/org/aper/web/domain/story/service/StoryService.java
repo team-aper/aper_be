@@ -1,10 +1,10 @@
 package org.aper.web.domain.story.service;
 
-import org.aper.web.entity.episode.entity.Episode;
-import org.aper.web.entity.story.entity.Story;
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
-import org.aper.web.entity.story.entity.constant.StoryLineStyleEnum;
-import org.aper.web.entity.story.entity.constant.StoryRoutineEnum;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;

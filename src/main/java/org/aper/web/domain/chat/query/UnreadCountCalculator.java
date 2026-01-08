@@ -1,7 +1,7 @@
 package org.aper.web.domain.chat.query;
 
-import org.aper.web.entity.chat.Message;
-import org.aper.web.entity.chat.UserReadTracking;
+import org.aper.web.domain.chat.entity.Message;
+import org.aper.web.domain.chat.entity.UserReadTracking;
 import org.aper.web.domain.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

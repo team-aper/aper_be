@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 })
 @EnableJpaAuditing
 @EnableScheduling
-@EntityScan(basePackages = {"org.aper.web.entity"})
+@EntityScan(basePackages = {"org.aper.web.domain"})
 public class WebApplication {
 
     public static void main(String[] args) {

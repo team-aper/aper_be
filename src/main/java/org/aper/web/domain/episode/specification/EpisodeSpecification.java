@@ -1,8 +1,8 @@
 package org.aper.web.domain.episode.specification;
 
-import org.aper.web.entity.episode.entity.Episode;
-import org.aper.web.entity.story.entity.Story;
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,8 +1,8 @@
 package org.aper.web.domain.subscription.service;
 
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
-import org.aper.web.entity.subscription.entity.Subscription;
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.subscription.entity.Subscription;
+import org.aper.web.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.subscription.dto.SubscriptionResponseDto.*;

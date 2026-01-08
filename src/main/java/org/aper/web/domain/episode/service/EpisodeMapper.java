@@ -1,9 +1,9 @@
 package org.aper.web.domain.episode.service;
 
-import org.aper.web.entity.episode.entity.Episode;
-import org.aper.web.entity.story.DDayService;
-import org.aper.web.entity.story.entity.Story;
-import org.aper.web.entity.story.entity.constant.StoryRoutineEnum;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.DDayService;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto;
 import org.aper.web.domain.episode.dto.EpisodeResponseDto.CreatedEpisodeDto;

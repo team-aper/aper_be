@@ -1,6 +1,6 @@
 package org.aper.web.domain.main.controller;
 
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.main.dto.MainResponseDto.*;

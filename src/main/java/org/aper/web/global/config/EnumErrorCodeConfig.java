@@ -1,14 +1,14 @@
 package org.aper.web.global.config;
 
-import org.aper.web.entity.paragraph.entity.TextAlignEnum;
-import org.aper.web.entity.review.entity.ReviewTypeEnum;
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
-import org.aper.web.entity.story.entity.constant.StoryLineStyleEnum;
-import org.aper.web.entity.story.entity.constant.StoryRoutineEnum;
-import org.aper.web.entity.user.entity.constant.EndDateTypeEnum;
-import org.aper.web.entity.user.entity.constant.HistoryTypeEnum;
-import org.aper.web.entity.user.entity.constant.StartDateTypeEnum;
-import org.aper.web.entity.user.entity.constant.UserBatchTypeEnum;
+import org.aper.web.domain.paragraph.entity.TextAlignEnum;
+import org.aper.web.domain.review.entity.ReviewTypeEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryLineStyleEnum;
+import org.aper.web.domain.story.entity.constant.StoryRoutineEnum;
+import org.aper.web.domain.user.entity.constant.EndDateTypeEnum;
+import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
+import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
+import org.aper.web.domain.user.entity.constant.UserBatchTypeEnum;
 import org.aper.web.global.handler.ErrorCode;
 import org.springframework.context.annotation.Configuration;
 

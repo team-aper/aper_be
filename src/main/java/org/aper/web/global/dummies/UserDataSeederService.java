@@ -1,11 +1,11 @@
 package org.aper.web.global.dummies;
 
-import org.aper.web.entity.user.entity.User;
-import org.aper.web.entity.user.entity.UserHistory;
-import org.aper.web.entity.user.entity.constant.EndDateTypeEnum;
-import org.aper.web.entity.user.entity.constant.HistoryTypeEnum;
-import org.aper.web.entity.user.entity.constant.StartDateTypeEnum;
-import org.aper.web.entity.user.entity.constant.UserRoleEnum;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
+import org.aper.web.domain.user.entity.constant.EndDateTypeEnum;
+import org.aper.web.domain.user.entity.constant.HistoryTypeEnum;
+import org.aper.web.domain.user.entity.constant.StartDateTypeEnum;
+import org.aper.web.domain.user.entity.constant.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;

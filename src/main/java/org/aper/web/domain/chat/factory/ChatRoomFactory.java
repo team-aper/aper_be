@@ -2,8 +2,8 @@ package org.aper.web.domain.chat.factory;
 
 import org.aper.web.domain.chat.policy.ChatRoomPolicy;
 import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
-import org.aper.web.entity.chat.ChatRoom;
-import org.aper.web.entity.chat.constant.ChatRoomType;
+import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.entity.constant.ChatRoomType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

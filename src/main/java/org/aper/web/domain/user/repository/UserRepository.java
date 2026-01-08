@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.repository;
 
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

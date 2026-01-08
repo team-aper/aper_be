@@ -1,11 +1,11 @@
 package org.aper.web.domain.field.service;
 
-import org.aper.web.entity.episode.entity.Episode;
-import org.aper.web.entity.review.entity.ReviewDetail;
-import org.aper.web.entity.review.entity.ReviewTypeEnum;
-import org.aper.web.entity.story.entity.Story;
-import org.aper.web.entity.user.entity.User;
-import org.aper.web.entity.user.entity.UserHistory;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.review.entity.ReviewDetail;
+import org.aper.web.domain.review.entity.ReviewTypeEnum;
+import org.aper.web.domain.story.entity.Story;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.domain.user.entity.UserHistory;
 import org.aper.web.domain.field.dto.FieldResponseDto.DetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.HomeDetailsResponseDto;
 import org.aper.web.domain.field.dto.FieldResponseDto.StoriesDetailsResponseDto;

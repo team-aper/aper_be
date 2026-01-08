@@ -1,6 +1,6 @@
 package org.aper.web.global.security;
 
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

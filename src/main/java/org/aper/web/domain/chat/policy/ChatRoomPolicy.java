@@ -1,6 +1,6 @@
 package org.aper.web.domain.chat.policy;
 
-import org.aper.web.entity.chat.ChatRoom;
+import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;

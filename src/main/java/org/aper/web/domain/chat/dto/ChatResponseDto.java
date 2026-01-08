@@ -1,9 +1,9 @@
 package org.aper.web.domain.chat.dto;
 
-import org.aper.web.entity.chat.ChatRoom;
-import org.aper.web.entity.chat.Message;
-import org.aper.web.entity.chat.constant.ChatRoomType;
-import org.aper.web.entity.chat.constant.MessageType;
+import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.entity.Message;
+import org.aper.web.domain.chat.entity.constant.ChatRoomType;
+import org.aper.web.domain.chat.entity.constant.MessageType;
 
 import java.time.LocalDateTime;
 

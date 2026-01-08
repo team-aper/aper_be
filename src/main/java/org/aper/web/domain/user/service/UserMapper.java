@@ -1,6 +1,6 @@
 package org.aper.web.domain.user.service;
 
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.field.service.FieldMapper;
 import org.aper.web.domain.user.dto.UserResponseDto.*;

@@ -1,7 +1,7 @@
 package org.aper.web.domain.kafka.service;
 
-import org.aper.web.entity.episode.entity.Episode;
-import org.aper.web.entity.story.entity.Story;
+import org.aper.web.domain.episode.entity.Episode;
+import org.aper.web.domain.story.entity.Story;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;

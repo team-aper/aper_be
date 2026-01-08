@@ -3,7 +3,7 @@ package org.aper.web.domain.elasticsearch.repository;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
 import co.elastic.clients.elasticsearch.core.search.FieldCollapse;
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import org.aper.web.domain.elasticsearch.entity.document.CustomSourceFilter;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.springframework.data.domain.Pageable;

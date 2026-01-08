@@ -1,7 +1,7 @@
 package org.aper.web.domain.chat.dto;
 
-import org.aper.web.entity.chat.constant.ChatRoomType;
-import org.aper.web.entity.chat.constant.MessageType;
+import org.aper.web.domain.chat.entity.constant.ChatRoomType;
+import org.aper.web.domain.chat.entity.constant.MessageType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

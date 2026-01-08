@@ -1,6 +1,6 @@
 package org.aper.web.domain.story.service;
 
-import org.aper.web.entity.story.entity.Story;
+import org.aper.web.domain.story.entity.Story;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.story.repository.StoryRepository;
 import org.aper.web.global.handler.ErrorCode;

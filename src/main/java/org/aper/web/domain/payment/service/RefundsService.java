@@ -1,8 +1,8 @@
 package org.aper.web.domain.payment.service;
 
-import org.aper.web.entity.payment.entity.OrdersDetail;
-import org.aper.web.entity.payment.entity.PaymentInfo;
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.payment.entity.OrdersDetail;
+import org.aper.web.domain.payment.entity.PaymentInfo;
+import org.aper.web.domain.user.entity.User;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;

@@ -1,7 +1,7 @@
 package org.aper.web.domain.elasticsearch.repository;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-import org.aper.web.entity.story.entity.constant.StoryGenreEnum;
+import org.aper.web.domain.story.entity.constant.StoryGenreEnum;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchEpisodeDocument;
 import org.aper.web.domain.elasticsearch.entity.document.ElasticSearchUserDocument;

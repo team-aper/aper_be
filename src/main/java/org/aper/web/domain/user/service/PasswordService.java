@@ -1,7 +1,7 @@
 package org.aper.web.domain.user.service;
 
 
-import org.aper.web.entity.user.entity.User;
+import org.aper.web.domain.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.user.dto.UserRequestDto.*;
 import org.aper.web.domain.user.repository.UserRepository;
