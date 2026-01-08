@@ -44,7 +44,8 @@ public class ChatRoom extends BaseEntity {
     private Integer memberCount;
 
     @Builder
-    private ChatRoom(Long id, String roomId, String name, ChatRoomType type, List<ChatRoomMember> members, List<Message> messages, LocalDateTime lastMessageAt, Integer memberCount) {
+    private ChatRoom(Long id, String roomId, String name, ChatRoomType type, List<ChatRoomMember> members,
+                     List<Message> messages, LocalDateTime lastMessageAt, Integer memberCount) {
         this.id = id;
         this.roomId = roomId;
         this.name = name;

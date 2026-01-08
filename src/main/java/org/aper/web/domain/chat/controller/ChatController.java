@@ -4,6 +4,8 @@ import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
 import org.aper.web.domain.chat.dto.ChatResponseDto.ChatRoomResponseDto;
 import org.aper.web.domain.chat.dto.ChatResponseDto.CreatedChatRoomResponseDto;
 import org.aper.web.domain.chat.service.ChatRoomService;
+import org.aper.web.domain.user.entity.User;
+import org.aper.web.global.annotation.CurrentUser;
 import org.aper.web.global.dto.ResponseDto;
 import org.aper.web.global.security.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -22,14 +24,14 @@ public class ChatController {
     @PostMapping("/rooms")
     public ResponseDto<CreatedChatRoomResponseDto> createChatRoom(
             @RequestBody @Valid CreateChatRoomRequestDto request,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        CreatedChatRoomResponseDto response = chatRoomService.createChatRoom(request, userDetails.user().getUserId());
+            @CurrentUser User user) {
+        CreatedChatRoomResponseDto response = chatRoomService.createChatRoom(request, user.getUserId());
         return ResponseDto.success("채팅방 생성 성공", response);
     }
 
     @GetMapping("/rooms")
-    public ResponseDto<List<ChatRoomResponseDto>> getChatRooms(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<ChatRoomResponseDto> responses = chatRoomService.getChatRoomsForUser(userDetails.user().getUserId());
+    public ResponseDto<List<ChatRoomResponseDto>> getChatRooms(@CurrentUser User user) {
+        List<ChatRoomResponseDto> responses = chatRoomService.getChatRoomsForUser(user.getUserId());
         return ResponseDto.success("채팅방 목록 조회 성공", responses);
     }
 
