@@ -22,7 +22,6 @@ public class ChatRoomFactory {
         chatRoomPolicy.validateMemberCount(memberCount);
 
         return ChatRoom.builder()
-                .roomId(UUID.randomUUID().toString())
                 .name(request.name())
                 .type(ChatRoomType.GROUP)
                 .memberCount(memberCount)

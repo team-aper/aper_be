@@ -62,7 +62,7 @@ public class ChatRoomService {
     }
 
     // 사용자의 채팅방 목록 조회 - 최근 메시지 시간순, 읽지 않은 메시지 수 포함
-    // TODO: n+1 문제 생각 필요
+    // TODO: n+1 문제 생각 필요 -> batch 조회 적용
     public Slice<ChatRoomResponseDto> getChatRoomsForUser(Long userId, Pageable pageable) {
         userPolicy.validateUserExists(userId);
 
@@ -75,7 +75,7 @@ public class ChatRoomService {
             UserReadTracking tracking = userReadTrackingRepository.findByUserUserIdAndChatRoom(userId, chatRoom);
             Integer unreadCount = unreadCountCalculator.calculate(chatRoom.getId(), tracking, message);
 
-            content.add(ChatRoomResponseDto.from(chatRoom, message, unreadCount));
+            content.add(ChatRoomResponseDto.from(chatRoom, message, unreadCount, userId));
         }
 
         return new SliceImpl<>(content, pageable, chatRooms.hasNext());

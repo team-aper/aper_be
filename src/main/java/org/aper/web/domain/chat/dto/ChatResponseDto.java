@@ -1,17 +1,20 @@
 package org.aper.web.domain.chat.dto;
 
 import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.entity.ChatRoomMember;
 import org.aper.web.domain.chat.entity.Message;
 import org.aper.web.domain.chat.entity.constant.ChatRoomType;
 import org.aper.web.domain.chat.entity.constant.MessageType;
+import org.aper.web.domain.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatResponseDto {
 
     public record CreatedChatRoomResponseDto(
             Long id,
-            String roomId,
             String name,
             ChatRoomType type,
             Integer memberCount,
@@ -20,7 +23,6 @@ public class ChatResponseDto {
         public static CreatedChatRoomResponseDto from(ChatRoom chatRoom) {
             return new CreatedChatRoomResponseDto(
                     chatRoom.getId(),
-                    chatRoom.getRoomId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
                     chatRoom.getMemberCount(),
@@ -31,27 +33,33 @@ public class ChatResponseDto {
 
     public record ChatRoomResponseDto(
             Long id,
-            String roomId,
             String name,
             ChatRoomType type,
             Integer memberCount,
-            LocalDateTime createdAt,
+            List<String> memberNames,
             String lastMessage,
             LocalDateTime lastMessageAt,
-            String lastMessageSenderName,
             Integer unreadCount
     ) {
-        public static ChatRoomResponseDto from(ChatRoom chatRoom, Message message, Integer unreadCount) {
+        public static ChatRoomResponseDto from(ChatRoom chatRoom, Message message, Integer unreadCount, Long userId) {
+
+            // TODO : 근데 이런 비즈니스 로직을 여기에다가 넣는게 적합할까 / 근데 밖에 넣으면 코드가 너무 지저분해질 것 같은데
+            List<String> memberNames = new ArrayList<>();
+
+            for (ChatRoomMember member : chatRoom.getMembers()) {
+                User user = member.getUser();
+
+                if (!user.getUserId().equals(userId)) memberNames.add(member.getUser().getPenName());
+            }
+
             return new ChatRoomResponseDto(
                     chatRoom.getId(),
-                    chatRoom.getRoomId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
                     chatRoom.getMemberCount(),
-                    chatRoom.getCreatedAt(),
+                    memberNames,
                     message != null ? message.getContent() : "",
                     message != null ? message.getCreatedAt() : null,
-                    message != null ? message.getSenderName() : "",
                     unreadCount != null ? unreadCount : 0
             );
         }
