@@ -1,5 +1,7 @@
 package org.aper.web.domain.chat.controller;
 
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
 import org.aper.web.domain.chat.dto.ChatResponseDto.ChatRoomResponseDto;
 import org.aper.web.domain.chat.dto.ChatResponseDto.CreatedChatRoomResponseDto;
@@ -7,16 +9,10 @@ import org.aper.web.domain.chat.service.ChatRoomService;
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.annotation.CurrentUser;
 import org.aper.web.global.dto.ResponseDto;
-import org.aper.web.global.security.UserDetailsImpl;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -32,9 +28,9 @@ public class ChatController {
         return ResponseDto.success("채팅방 생성 성공", response);
     }
 
-
+    // FE Figma에서 더 잘 사용할 수 있게끔 제공해주자.
     @GetMapping("/rooms")
-    public Slice<ChatRoomResponseDto> getChatRooms(@CurrentUser User user,
+    public ResponseDto<Slice<ChatRoomResponseDto>> getChatRooms(@CurrentUser User user,
                                                    @PageableDefault(size = 20) Pageable pageable ) {
         Slice<ChatRoomResponseDto> responses = chatRoomService.getChatRoomsForUser(user.getUserId(), pageable);
         return ResponseDto.success("채팅방 목록 조회 성공", responses);

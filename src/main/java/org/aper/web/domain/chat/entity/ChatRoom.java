@@ -39,7 +39,12 @@ public class ChatRoom extends BaseEntity {
     @OneToMany(mappedBy = "chatRoom")
     private List<Message> messages = new ArrayList<>();
 
+    @Column
     private LocalDateTime lastMessageAt;
+
+    @ManyToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "last_message_id")
+    private Message lastMessage;
 
     private Integer memberCount;
 

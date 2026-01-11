@@ -29,6 +29,9 @@ spring:
       port: ${local-redis.port}
       password: ${local-redis.password}
 
+    mongodb:
+      uri: mongodb://localhost:27017/aper_chat
+
   mail:
     host: smtp.gmail.com # 서버 호스트
     port: 587 # 서버 포트

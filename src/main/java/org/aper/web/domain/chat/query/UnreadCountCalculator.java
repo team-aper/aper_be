@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class UnreadCountCalculator {
     private final MessageRepository messageRepository;
 
+    // TODO: 추후에 Batch 변경으로 N+1 문제 해결
     public Integer calculate(Long chatRoomId,
                              UserReadTracking readTracking,
                              Message lastMessage) {
