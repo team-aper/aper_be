@@ -2,19 +2,14 @@ package org.aper.web.domain.chat.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-<<<<<<< HEAD
 import org.aper.web.domain.chat.dto.ChatWebSocketDto.*;
 import org.aper.web.domain.chat.service.ChatMessageService;
-=======
-import org.aper.web.domain.chat.dto.ChatWebSocketDto;
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-<<<<<<< HEAD
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -33,21 +28,6 @@ public class ChatMessageController {
             @Payload SendMessageRequest request,
             SimpMessageHeaderAccessor headerAccessor
     ) {
-=======
-@Slf4j
-@Controller
-@RequiredArgsConstructor
-public class ChatMessageController {
-    private final ChatMessageService chatMessageService;
-
-    @MessageMapping("/chat/{roomId}/send")
-    public void sendMessage(
-            @DestinationVariable Long roomId,
-            @Payload ChatWebSocketDto.SendMessageRequest request,
-            SimpMessageHeaderAccessor headerAccessor
-    ) {
-        // TODO: 이거 말고 더 좋은 방법은 없나.
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
         Long userId = extractUserId(headerAccessor);
 
         log.info("Message received - roomId: {}, userId: {}, content: {}",
@@ -56,7 +36,6 @@ public class ChatMessageController {
         chatMessageService.sendMessage(roomId, userId, request);
     }
 
-<<<<<<< HEAD
     /**
      * 읽음 처리
      * Client → /app/chat/{roomId}/read
@@ -105,7 +84,3 @@ public class ChatMessageController {
         return 1L;
     }
 }
-=======
-
-}
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd

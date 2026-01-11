@@ -60,20 +60,7 @@ dependencies {
     // Dev / Test Data
     implementation 'net.datafaker:datafaker:2.2.2'
 
-<<<<<<< HEAD
-    //websocket
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-
-    // mongoddb
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-=======
     // Lombok
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
@@ -82,7 +69,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-
 
 tasks.named('test') {
     useJUnitPlatform()

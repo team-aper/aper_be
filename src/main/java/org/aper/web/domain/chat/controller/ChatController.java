@@ -16,28 +16,20 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.List;
 
-=======
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
 @RestController
 @RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
-<<<<<<< HEAD
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
 
     /**
      * 채팅방 생성
      */
-=======
-    // TODO: 메시지 같은 거 영어로 적용 필요.
-
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
     @PostMapping("/rooms")
     public ResponseDto<CreatedChatRoomResponseDto> createChatRoom(
             @RequestBody @Valid CreateChatRoomRequestDto request,
@@ -47,7 +39,6 @@ public class ChatController {
         return ResponseDto.success("채팅방 생성 성공", response);
     }
 
-<<<<<<< HEAD
     /**
      * 채팅방 목록 조회
      */
@@ -56,12 +47,6 @@ public class ChatController {
             @CurrentUser User user,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-=======
-    // FE friendly code
-    @GetMapping("/rooms")
-    public ResponseDto<Slice<ChatRoomResponseDto>> getChatRooms(@CurrentUser User user,
-                                                   @PageableDefault(size = 10) Pageable pageable ) {
->>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
         Slice<ChatRoomResponseDto> responses = chatRoomService.getChatRoomsForUser(user.getUserId(), pageable);
         return ResponseDto.success("채팅방 목록 조회 성공", responses);
     }
