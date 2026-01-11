@@ -11,6 +11,7 @@ import org.aper.web.domain.chat.entity.ChatRoomMember;
 import org.aper.web.domain.chat.factory.ChatRoomFactory;
 import org.aper.web.domain.chat.policy.ChatRoomPolicy;
 import org.aper.web.domain.chat.policy.UserPolicy;
+import org.aper.web.domain.chat.query.UnreadCountCalculator;
 import org.aper.web.domain.chat.repository.ChatRoomMemberRepository;
 import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.chat.repository.ChatRoomSummaryDocumentRepository;
@@ -38,6 +39,8 @@ public class ChatRoomService {
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final UserReadTrackingDocumentRepository userReadTrackingDocumentRepository;
     private final ChatRoomSummaryDocumentRepository chatRoomSummaryDocumentRepository;
+    private final UnreadCountCalculator unreadCountCalculator;
+    private final UnreadCountCacheService unreadCountCacheService;
 
     private final UserPolicy userPolicy;
     private final ChatRoomFactory chatRoomFactory;
@@ -73,10 +76,10 @@ public class ChatRoomService {
     }
 
     /**
-     * 사용자의 채팅방 목록 조회 - MongoDB 전용, N+1 해결
+     * 사용자의 채팅방 목록 조회 - MongoDB + Redis, N+1 해결
      *
      * 쿼리 수: 1 (MySQL) + 2 (MongoDB) = 3개
-     * 안읽은 메시지 개수는 시퀀스 차이로 메모리 계산
+     * 안읽은 메시지 개수는 Redis 캐시 → 시퀀스 차이로 계산
      */
     public Slice<ChatRoomResponseDto> getChatRoomsForUser(Long userId, Pageable pageable) {
         userPolicy.validateUserExists(userId);
@@ -112,9 +115,17 @@ public class ChatRoomService {
                         t -> t
                 ));
 
-        // 5. 안읽은 개수 계산 (메모리 연산 - 시퀀스 차이)
+        // 5. 안읽은 개수 계산 (Redis 캐시 우선, 시퀀스 차이로 계산)
         Map<Long, Integer> unreadCountMap = new HashMap<>();
         for (Long chatRoomId : chatRoomIds) {
+            // Redis 캐시 확인
+            Integer cachedCount = unreadCountCacheService.getCachedUnreadCount(chatRoomId, userId);
+            if (cachedCount != null) {
+                unreadCountMap.put(chatRoomId, cachedCount);
+                continue;
+            }
+
+            // 캐시 미스 - 시퀀스 기반 계산
             ChatRoomSummaryDocument summary = summaryMap.get(chatRoomId);
             UserReadTrackingDocument tracking = trackingMap.get(chatRoomId);
 
@@ -123,14 +134,17 @@ public class ChatRoomService {
                 continue;
             }
 
-            // 시퀀스 기반 계산 (COUNT 쿼리 불필요)
             Long lastSequence = summary.getCurrentSequence();
             Long readSequence = tracking != null && tracking.getLastReadSequence() != null
                     ? tracking.getLastReadSequence()
                     : 0L;
             Integer unreadCount = (int) (lastSequence - readSequence);
 
-            unreadCountMap.put(chatRoomId, Math.max(0, unreadCount));
+            unreadCount = Math.max(0, unreadCount);
+            unreadCountMap.put(chatRoomId, unreadCount);
+
+            // Redis에 캐싱
+            unreadCountCacheService.cacheUnreadCount(chatRoomId, userId, unreadCount);
         }
 
         // 6. DTO 생성
@@ -150,20 +164,17 @@ public class ChatRoomService {
         return new SliceImpl<>(content, pageable, chatRooms.hasNext());
     }
 
-    // 마지막 메시지 기록을 mongoDB에서 관리하도록 이전하여 제거 
-//    @Transactional
-//    public void updateLastMessageAt(Long chatRoomId, LocalDateTime messageTime) {
-//        chatRoomRepository.updateLastMessageAt(chatRoomId, messageTime);
-//    }
-
     @Transactional
     public void deleteChatRoom(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomPolicy.validateChatRoomExists(chatRoomId);
         chatRoom.delete();
         chatRoomRepository.save(chatRoom);
 
-        // MongoDB 데이터도 삭제 (소프트 삭제)
+        // MongoDB 데이터 삭제
         chatRoomSummaryDocumentRepository.findByChatRoomId(chatRoomId)
                 .ifPresent(chatRoomSummaryDocumentRepository::delete);
+
+        // Redis 캐시 삭제
+        unreadCountCacheService.evictChatRoomCache(chatRoomId);
     }
 }

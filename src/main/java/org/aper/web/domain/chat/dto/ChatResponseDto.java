@@ -7,6 +7,7 @@ import org.aper.web.domain.chat.entity.constant.ChatRoomType;
 import org.aper.web.domain.chat.entity.constant.MessageType;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class ChatResponseDto {
 
@@ -57,7 +58,6 @@ public class ChatResponseDto {
             );
         }
 
-        // MongoDB용 메서드 추가 (record 안으로 이동)
         public static ChatRoomResponseDto fromMongo(
                 ChatRoom chatRoom,
                 ChatRoomSummaryDocument.LastMessageInfo lastMessage,
@@ -120,4 +120,26 @@ public class ChatResponseDto {
             String profileImage
     ) {}
 
+    /**
+     * MongoDB 메시지 조회 응답
+     */
+    public record MessageDocumentResponseDto(
+            String messageId,
+            Long chatRoomId,
+            MessageSenderInfo sender,
+            String content,
+            MessageType type,
+            Map<String, Object> payload,
+            Long messageSequence,
+            LocalDateTime createdAt
+    ) {}
+
+    /**
+     * 메시지 발신자 정보
+     */
+    public record MessageSenderInfo(
+            Long userId,
+            String nickname,
+            String profileImage
+    ) {}
 }
