@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.dto;
 
+import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.Message;
 import org.aper.web.domain.chat.entity.constant.ChatRoomType;
@@ -55,6 +56,26 @@ public class ChatResponseDto {
                     unreadCount != null ? unreadCount : 0
             );
         }
+
+        // MongoDB용 메서드 추가 (record 안으로 이동)
+        public static ChatRoomResponseDto fromMongo(
+                ChatRoom chatRoom,
+                ChatRoomSummaryDocument.LastMessageInfo lastMessage,
+                Integer unreadCount
+        ) {
+            return new ChatRoomResponseDto(
+                    chatRoom.getId(),
+                    chatRoom.getRoomId(),
+                    chatRoom.getName(),
+                    chatRoom.getType(),
+                    chatRoom.getMemberCount(),
+                    chatRoom.getCreatedAt(),
+                    lastMessage != null ? lastMessage.getContent() : "",
+                    lastMessage != null ? lastMessage.getCreatedAt() : null,
+                    lastMessage != null ? lastMessage.getSenderName() : "",
+                    unreadCount != null ? unreadCount : 0
+            );
+        }
     }
 
     public record ChatRoomListResponseDto(
@@ -81,7 +102,7 @@ public class ChatResponseDto {
                     message.getSenderName(),
                     message.getSenderImage()
             );
-            
+
             return new MessageResponseDto(
                     message.getId(),
                     message.getContent(),
@@ -98,4 +119,5 @@ public class ChatResponseDto {
             String nickname,
             String profileImage
     ) {}
+
 }

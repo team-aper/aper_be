@@ -1,33 +1,60 @@
 package org.aper.web.domain.chat.query;
 
-import org.aper.web.domain.chat.entity.Message;
-import org.aper.web.domain.chat.entity.UserReadTracking;
-import org.aper.web.domain.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.chat.document.MessageDocument;
+import org.aper.web.domain.chat.document.UserReadTrackingDocument;
+import org.aper.web.domain.chat.repository.MessageDocumentRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class UnreadCountCalculator {
-    private final MessageRepository messageRepository;
+    private final MessageDocumentRepository messageDocumentRepository;
 
-    // TODO: 추후에 Batch 변경으로 N+1 문제 해결
+    /**
+     * 단일 채팅방의 안읽은 메시지 수 계산
+     */
     public Integer calculate(Long chatRoomId,
-                             UserReadTracking readTracking,
-                             Message lastMessage) {
-        if (readTracking == null) {
-            return messageRepository.countByChatRoomId(chatRoomId);
-        }
-
+                             UserReadTrackingDocument tracking,
+                             MessageDocument lastMessage) {
         if (lastMessage == null) {
             return 0;
         }
 
-        if (readTracking.getLastReadMessage() == null) {
-            return messageRepository.countByChatRoomId(chatRoomId);
+        if (tracking == null || tracking.getLastReadSequence() == null) {
+            // 한 번도 읽지 않은 경우: 전체 메시지 개수
+            return messageDocumentRepository.countByChatRoomIdAndIsDeletedFalse(chatRoomId).intValue();
         }
 
-        Long lastReadMessageId = readTracking.getLastReadMessage().getId();
-        return messageRepository.countUnreadMessages(chatRoomId, lastReadMessageId);
+        // 마지막 읽은 시퀀스 이후의 메시지 개수
+        return messageDocumentRepository
+                .countUnreadMessages(chatRoomId, tracking.getLastReadSequence())
+                .intValue();
+    }
+
+    /**
+     * Batch로 여러 채팅방의 안읽은 메시지 수 계산
+     */
+    public Map<Long, Integer> calculateBatch(
+            Long userId,
+            List<Long> chatRoomIds,
+            Map<Long, UserReadTrackingDocument> trackingMap,
+            Map<Long, MessageDocument> latestMessageMap
+    ) {
+        Map<Long, Integer> result = new HashMap<>();
+
+        for (Long chatRoomId : chatRoomIds) {
+            UserReadTrackingDocument tracking = trackingMap.get(chatRoomId);
+            MessageDocument lastMessage = latestMessageMap.get(chatRoomId);
+
+            Integer unreadCount = calculate(chatRoomId, tracking, lastMessage);
+            result.put(chatRoomId, unreadCount);
+        }
+
+        return result;
     }
 }

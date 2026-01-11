@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,41 +22,27 @@ public class ChatRoom extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String roomId;  // UUID or custom ID
+    private String roomId;
 
     @Column(nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private ChatRoomType type;  // DIRECT, GROUP, CHANNEL
+    private ChatRoomType type;
 
-    @OneToMany(mappedBy = "chatRoom", cascade =
-            CascadeType.ALL)
-    private List<ChatRoomMember> members = new
-            ArrayList<>();
-
-    @OneToMany(mappedBy = "chatRoom")
-    private List<Message> messages = new ArrayList<>();
-
-    @Column
-    private LocalDateTime lastMessageAt;
-
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "last_message_id")
-    private Message lastMessage;
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<ChatRoomMember> members = new ArrayList<>();
 
     private Integer memberCount;
 
     @Builder
-    private ChatRoom(Long id, String roomId, String name, ChatRoomType type, List<ChatRoomMember> members,
-                     List<Message> messages, LocalDateTime lastMessageAt, Integer memberCount) {
+    private ChatRoom(Long id, String roomId, String name, ChatRoomType type,
+                     List<ChatRoomMember> members, Integer memberCount) {
         this.id = id;
         this.roomId = roomId;
         this.name = name;
         this.type = type;
         this.members = members;
-        this.messages = messages;
-        this.lastMessageAt = lastMessageAt;
         this.memberCount = memberCount;
     }
 }
