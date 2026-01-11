@@ -20,39 +20,47 @@ configurations {
 }
 
 dependencies {
-    //elastic
+    // Data / Storage
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
-    //kafka
-    implementation 'org.apache.kafka:kafka-clients:3.5.1'
-    implementation 'org.springframework.kafka:spring-kafka'
-
-    //aws
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
-    //iamport
-    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
-
-    //swagger
+    // Web / API
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    //validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    //smtp
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    //oauth2
+    // Security / Auth
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    //jwt
-    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    // Messaging / Async
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-clients:3.5.1'
 
-    //dummies
+    // Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // Payments (Iamport)
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
+
+    // JWT
+    compileOnly 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Dev / Test Data
     implementation 'net.datafaker:datafaker:2.2.2'
 
+<<<<<<< HEAD
     //websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
@@ -63,14 +71,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+=======
+    // Lombok
+>>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-
 
 
 tasks.named('test') {

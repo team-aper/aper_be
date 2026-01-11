@@ -40,7 +40,7 @@ public class SearchDto {
             List<AuthorStoryListResponseDto> storyList,
             Long reviewers,
             Long subscribers,
-            boolean isSubscribed
+            boolean isSubscribed // TODO: 이게 어떤 것을 나타내는 필드지?
     ) {}
 
     public record AuthorStoryListResponseDto(

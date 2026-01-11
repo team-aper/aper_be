@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.aper.web.domain.chat.entity.constant.ChatRoomType;
 import org.aper.web.domain.chat.entity.constant.MessageType;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +12,7 @@ import java.util.List;
 public class ChatRequestDto {
 
     public record CreateChatRoomRequestDto(
-            @NotBlank(message = "Room name is required")
+            @Schema(description = "chat Room name", nullable = true)
             String name,
 
             @NotNull(message = "Room type is required")

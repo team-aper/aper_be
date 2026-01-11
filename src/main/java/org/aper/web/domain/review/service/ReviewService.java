@@ -1,13 +1,13 @@
 package org.aper.web.domain.review.service;
 
-import org.aper.web.domain.review.entity.ReviewChatRoom;
+import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.repository.ChatRoomRepository;
 import org.aper.web.domain.review.entity.Review;
 import org.aper.web.domain.review.entity.ReviewDetail;
 import org.aper.web.domain.review.entity.ReviewTypeEnum;
 import org.aper.web.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.aper.web.domain.review.repository.ReviewChatRoomRepository;
 import org.aper.web.domain.review.repository.ReviewRepository;
 import org.aper.web.domain.review.dto.ReviewRequestDto.CreateReviewRequestDto;
 import org.aper.web.domain.review.dto.ReviewResponseDto.CreatedReviewDto;
@@ -23,7 +23,7 @@ import java.util.List;
 public class ReviewService {
 
     private final UserRepository userRepository;
-    private final ReviewChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final ReviewRepository reviewRepository;
     
     @Transactional
@@ -37,7 +37,7 @@ public class ReviewService {
         User reviewee = userRepository.findByIdExceptMe(revieweeId, reviewerId).orElseThrow(() ->
                 new ServiceException(ErrorCode.USER_NOT_FOUND)
         );
-        ReviewChatRoom chatRoom = chatRoomRepository.findByIdForReview(chatRoomId).orElseThrow(() ->
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() ->
                 new ServiceException(ErrorCode.CHAT_ROOM_NOT_FOUND)
         );
         String revieweePenName = reviewee.getPenName();

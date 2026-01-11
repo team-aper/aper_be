@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.document;
 
+<<<<<<< HEAD
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,10 +15,20 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+=======
+
+import lombok.Builder;
+import lombok.Data;
+import org.aper.web.domain.chat.entity.constant.MessageType;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
+>>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+<<<<<<< HEAD
 @Document(collection="messages")
 @CompoundIndex(
         name = "room_created_idx",
@@ -25,10 +36,19 @@ import java.util.Map;
 )
 @Data
 @Getter
+=======
+@Document(collection = "messages")
+@CompoundIndex(
+        name = "room_created_idx",
+        def = "{'chatRoomId':1, 'createdAt':-1, '_id' : -1}"
+)
+@Data
+>>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
 @Builder
 public class MessageDocument {
     @Id
     private String id;
+<<<<<<< HEAD
 
     @Indexed
     @Field("chatRoomId")
@@ -80,4 +100,22 @@ public class MessageDocument {
                 .build();
     }
 
+=======
+    private Long chatRoomId;
+
+    private Long senderId;
+    private String senderName;
+    private String senderImage;
+
+    private String content;
+    private MessageType type;
+
+    private Boolean isDeleted;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    private Map<String, Object> payload;
+
+>>>>>>> 80ce204a29200e7a0a45d6203171bf5b5c8348fd
 }

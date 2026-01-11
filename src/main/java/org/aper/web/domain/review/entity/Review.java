@@ -1,12 +1,12 @@
 package org.aper.web.domain.review.entity;
 
-import org.aper.web.domain.review.entity.ReviewChatRoom;
-import org.aper.web.domain.global.entity.BaseSoftDeleteEntity;
-import org.aper.web.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.global.entity.BaseSoftDeleteEntity;
+import org.aper.web.domain.user.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +34,10 @@ public class Review extends BaseSoftDeleteEntity {
 
     @OneToOne
     @JoinColumn(name = "chat_room_id")
-    private ReviewChatRoom chatRoom;
+    private ChatRoom chatRoom;
 
     @Builder
-    public Review( String revieweePenName, String reviewerPenName, User reviewee, User reviewer, ReviewChatRoom chatRoom) {
+    public Review( String revieweePenName, String reviewerPenName, User reviewee, User reviewer, ChatRoom chatRoom) {
         this.revieweePenName = revieweePenName;
         this.reviewerPenName = reviewerPenName;
         this.reviewee = reviewee;

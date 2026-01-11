@@ -33,7 +33,7 @@ public class ChatRoomMember extends BaseEntity {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private MemberRole role;  // OWNER, ADMIN, MEMBER
+    private MemberRole role;
 
     private LocalDateTime joinedAt;
 

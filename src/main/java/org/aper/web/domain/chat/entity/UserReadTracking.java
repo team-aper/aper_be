@@ -29,6 +29,7 @@ public class UserReadTracking {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // TODO: 이걸 언제 어떻게 업데이트 할 것인가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_read_message_id")
     private Message lastReadMessage;
