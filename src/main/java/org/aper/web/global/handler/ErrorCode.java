@@ -22,6 +22,7 @@ public enum ErrorCode {
     BLACK_LISTED_TOKEN(HttpStatus.FORBIDDEN,"A008", "블랙리스트에 등록된 토큰입니다."),
     AUTH_NOT_FOUND(HttpStatus.FORBIDDEN,"A009", "사용자의 권한을 찾을 수 없습니다."),
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "A010", "로그인 필요. 인증되지 않은 사용자입니다."),
+    USER_NOT_A_CHATROOM_MEMBER(HttpStatus.FORBIDDEN, "A011", "채팅방 멤버가 아닙니다."),
 
     // User
     ALREADY_EXIST_EMAIL(HttpStatus.BAD_REQUEST,"U001", "이미 가입된 이메일입니다."),
@@ -79,6 +80,7 @@ public enum ErrorCode {
     CHAT_ROOM_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "CH010", "채팅방 멤버를 찾을 수 없습니다."),
     MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "CH011", "메시지를 찾을 수 없습니다."),
     UNAUTHORIZED_CHATROOM_ACCESS(HttpStatus.FORBIDDEN, "CH012", "채팅방에 접근 권한이 없습니다."),
+    INVALID_LESSON_ACTION(HttpStatus.BAD_REQUEST, "CH013", "유효하지 않은 수업 액션입니다."),
 
     // User History
     HISTORY_NOT_FOUND(HttpStatus.NOT_FOUND, "UH001", "존재하지 않는 이력 내용입니다."),

@@ -1,6 +1,9 @@
 package org.aper.web.domain.chat.dto;
 
+import org.aper.web.domain.chat.document.MessageDocument;
 import org.aper.web.domain.chat.entity.constant.MessageType;
+import org.aper.web.domain.user.entity.User;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -23,7 +26,22 @@ public class ChatWebSocketDto {
             Map<String, Object> payload,
             Integer unreadCount,
             LocalDateTime createdAt
-    ) {}
+    ) {
+        public static MessageResponse from(MessageDocument message, Long roomId, User sender, SendMessageRequest request) {
+            return new MessageResponse(
+                    message.getId(),
+                    roomId,
+                    sender.getUserId(),
+                    sender.getPenName(),
+                    sender.getFieldImage(),
+                    request.content(),
+                    request.type(),
+                    request.payload(),
+                    null,
+                    message.getCreatedAt()
+            );
+        }
+    }
 
     /**
      * 읽음 처리 요청

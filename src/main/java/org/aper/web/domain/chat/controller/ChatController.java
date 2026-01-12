@@ -37,9 +37,6 @@ public class ChatController {
         return ResponseDto.success("채팅방 생성 성공", response);
     }
 
-    /**
-     * 채팅방 목록 조회
-     */
     @GetMapping("/rooms")
     public ResponseDto<Slice<ChatRoomResponseDto>> getChatRooms(
             @CurrentUser User user,
@@ -49,18 +46,12 @@ public class ChatController {
         return ResponseDto.success("채팅방 목록 조회 성공", responses);
     }
 
-    /**
-     * 채팅방 삭제
-     */
     @DeleteMapping("/rooms/{chatRoomId}")
     public ResponseDto<Void> deleteChatRoom(@PathVariable("chatRoomId") Long chatRoomId) {
         chatRoomService.deleteChatRoom(chatRoomId);
         return ResponseDto.success("채팅방 삭제 성공");
     }
 
-    /**
-     * 채팅방의 메시지 목록 조회
-     */
     @GetMapping("/rooms/{roomId}/messages")
     public ResponseDto<Slice<ChatResponseDto.MessageDocumentResponseDto>> getMessages(
             @PathVariable Long roomId,
@@ -72,9 +63,6 @@ public class ChatController {
         return ResponseDto.success("메시지 조회 성공", messages);
     }
 
-    /**
-     * 특정 시간 이후 메시지 조회 (실시간 동기화용)
-     */
     @GetMapping("/rooms/{roomId}/messages/since")
     public ResponseDto<List<ChatResponseDto.MessageDocumentResponseDto>> getMessagesSince(
             @PathVariable Long roomId,

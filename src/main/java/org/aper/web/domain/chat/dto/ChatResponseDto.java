@@ -1,6 +1,6 @@
 package org.aper.web.domain.chat.dto;
 
-import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
+import org.aper.web.domain.chat.document.LastMessageInfo;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.Message;
 import org.aper.web.domain.chat.entity.constant.ChatRoomType;
@@ -56,7 +56,7 @@ public class ChatResponseDto {
 
         public static ChatRoomResponseDto fromMongo(
                 ChatRoom chatRoom,
-                ChatRoomSummaryDocument.LastMessageInfo lastMessage,
+                LastMessageInfo lastMessage,
                 Integer unreadCount
         ) {
             return new ChatRoomResponseDto(

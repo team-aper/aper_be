@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aper.web.domain.chat.dto.ChatWebSocketDto.*;
 import org.aper.web.domain.chat.service.ChatMessageService;
+import org.aper.web.global.handler.ErrorCode;
+import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -48,8 +50,7 @@ public class ChatMessageController {
     ) {
         Long userId = extractUserId(headerAccessor);
 
-        log.info("Mark as read - roomId: {}, userId: {}, lastMessageId: {}",
-                roomId, userId, request.lastReadMessageId());
+        log.info("Mark as read - roomId: {}, userId: {}, lastMessageId: {}", roomId, userId, request.lastReadMessageId());
 
         chatMessageService.markAsRead(roomId, userId, request);
     }
@@ -72,15 +73,13 @@ public class ChatMessageController {
         chatMessageService.handleLessonAction(roomId, userId, request.action());
     }
 
-    /**
-     * WebSocket 세션에서 userId 추출
-     * TODO: 실제 인증 구현 시 JWT에서 userId 추출
-     */
+
     private Long extractUserId(SimpMessageHeaderAccessor headerAccessor) {
         Object userIdObj = headerAccessor.getSessionAttributes().get("userId");
-        if (userIdObj != null) {
-            return Long.parseLong(userIdObj.toString());
+        if (userIdObj == null) {
+            log.error("UserId not found in WebSocket session");
+            throw new ServiceException(ErrorCode.UNAUTHORIZED_USER);
         }
-        return 1L;
+        return Long.parseLong(userIdObj.toString());
     }
 }

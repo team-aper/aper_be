@@ -20,12 +20,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom,Long> {
            "WHERE m.user.userId = :userId")
     List<ChatRoom> findAllByMemberUserId(@Param("userId") Long userId);
 
-//    MongoDB로 이전되어 제거
-//    @Modifying
-//    @Query("UPDATE ChatRoomEntity cr SET cr.lastMessageAt = :messageTime WHERE cr.id = :chatRoomId")
-//    void updateLastMessageAt(@Param("chatRoomId") Long chatRoomId,
-//                            @Param("messageTime") LocalDateTime messageTime);
-
 
     @Query("""
     SELECT DISTINCT cr FROM ChatRoomEntity cr

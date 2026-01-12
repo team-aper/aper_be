@@ -68,6 +68,10 @@ public class TokenProvider {
         return tokenValidationService.verifyAccessToken(accessToken);
     }
 
+    public Claims parseClaims(String accessToken) {
+        return getUserInfoFromAccessToken(accessToken);
+    }
+
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(tokenProperties.getAuthorizationHeader());
         return removeBearerPrefix(bearerToken);

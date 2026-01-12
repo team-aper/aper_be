@@ -45,4 +45,19 @@ public class UserReadTrackingDocument {
     @LastModifiedDate
     @Field("lastReadAt")
     private LocalDateTime lastReadAt;
+
+    public void markAsRead(String messageId, Long sequence) {
+        this.lastReadMessageId = messageId;
+        this.lastReadSequence = sequence;
+        this.lastReadAt = LocalDateTime.now();
+    }
+
+    public static UserReadTrackingDocument create(Long userId, Long chatRoomId) {
+        return UserReadTrackingDocument.builder()
+                .userId(userId)
+                .chatRoomId(chatRoomId)
+                .lastReadSequence(0L)
+                .lastReadAt(LocalDateTime.now())
+                .build();
+    }
 }

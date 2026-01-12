@@ -69,21 +69,16 @@ public class UnreadCountCacheService {
         redisTemplate.expire(key, CACHE_TTL_HOURS, TimeUnit.HOURS);
     }
 
-    /**
-     * 안읽은 개수 초기화 (읽음 처리 시)
-     */
+
     public void resetUnreadCount(Long chatRoomId, Long userId) {
         String key = getKey(chatRoomId, userId);
         redisTemplate.opsForValue().set(key, "0", CACHE_TTL_HOURS, TimeUnit.HOURS);
         log.debug("Reset unread count - chatRoomId: {}, userId: {}", chatRoomId, userId);
     }
 
-    /**
-     * 채팅방의 모든 멤버에 대한 안읽은 개수 증가
-     */
     public void incrementUnreadCountForMembers(Long chatRoomId, List<Long> memberIds, Long senderId) {
         for (Long memberId : memberIds) {
-            if (!memberId.equals(senderId)) { // 발신자는 제외
+            if (!memberId.equals(senderId)) {
                 incrementUnreadCount(chatRoomId, memberId);
             }
         }
