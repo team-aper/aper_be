@@ -1,5 +1,6 @@
 package org.aper.web.domain.chat.query;
 
+import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
 import org.aper.web.domain.chat.document.MessageDocument;
 import org.aper.web.domain.chat.document.UserReadTrackingDocument;
 import org.aper.web.domain.chat.repository.MessageDocumentRepository;
@@ -23,21 +24,15 @@ public class UnreadCountCalculator {
     /**
      * 단일 채팅방의 안읽은 메시지 수 계산 (Redis 캐싱)
      */
-    public Integer calculate(Long chatRoomId, Long userId, UserReadTrackingDocument tracking, MessageDocument lastMessage) {
-        // 1. Redis 캐시 확인
-        Integer cachedCount = cacheService.getCachedUnreadCount(chatRoomId, userId);
-        if (cachedCount != null) {
-            log.debug("Cache hit - chatRoomId: {}, userId: {}, count: {}", chatRoomId, userId, cachedCount);
-            return cachedCount;
-        }
+    public Integer calculate(Long roomId, ChatRoomSummaryDocument summary, UserReadTrackingDocument tracking) {
+        if (summary == null || summary.getCurrentSequence() == null) return 0;
 
-        // 2. 캐시 미스 - 계산
-        Integer unreadCount = calculateFromDatabase(chatRoomId, tracking, lastMessage);
+        long lastSeq = summary.getCurrentSequence();
+        long readSeq = (tracking != null && tracking.getLastReadSequence() != null)
+                ? tracking.getLastReadSequence()
+                : 0L;
 
-        // 3. Redis에 캐싱
-        cacheService.cacheUnreadCount(chatRoomId, userId, unreadCount);
-
-        return unreadCount;
+        return (int) Math.max(0, lastSeq - readSeq);
     }
 
     /**

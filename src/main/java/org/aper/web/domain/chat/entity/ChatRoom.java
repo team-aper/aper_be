@@ -21,9 +21,6 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String roomId;
-
     @Column(nullable = false)
     private String name;
 
@@ -36,10 +33,9 @@ public class ChatRoom extends BaseEntity {
     private Integer memberCount;
 
     @Builder
-    private ChatRoom(Long id, String roomId, String name, ChatRoomType type,
+    private ChatRoom(Long id, String name, ChatRoomType type,
                      List<ChatRoomMember> members, Integer memberCount) {
         this.id = id;
-        this.roomId = roomId;
         this.name = name;
         this.type = type;
         this.members = members;

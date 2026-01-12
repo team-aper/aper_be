@@ -1,5 +1,6 @@
-package org.aper.web.domain.chat.policy;
+package org.aper.web.domain.chat.validator;
 
+import org.aper.web.domain.chat.dto.ChatRequestDto;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.aper.web.global.handler.ErrorCode;
@@ -9,11 +10,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ChatRoomPolicy {
-
-    private final ChatRoomRepository chatRoomRepository;
+public class ChatRoomValidator {
 
     private static final int MAX_MEMBERS = 100;
+    private final ChatRoomRepository chatRoomRepository;
+
+    public void validateCreate(ChatRequestDto.CreateChatRoomRequestDto request) {
+        validateRoomName(request.name());
+        validateMemberCount(request.memberIds().size() + 1);
+    }
 
     public void validateRoomName(String name) {
         if (name == null || name.isBlank()) {

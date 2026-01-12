@@ -13,7 +13,6 @@ public class ChatResponseDto {
 
     public record CreatedChatRoomResponseDto(
             Long id,
-            String roomId,
             String name,
             ChatRoomType type,
             Integer memberCount,
@@ -22,7 +21,6 @@ public class ChatResponseDto {
         public static CreatedChatRoomResponseDto from(ChatRoom chatRoom) {
             return new CreatedChatRoomResponseDto(
                     chatRoom.getId(),
-                    chatRoom.getRoomId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
                     chatRoom.getMemberCount(),
@@ -33,7 +31,6 @@ public class ChatResponseDto {
 
     public record ChatRoomResponseDto(
             Long id,
-            String roomId,
             String name,
             ChatRoomType type,
             Integer memberCount,
@@ -46,7 +43,6 @@ public class ChatResponseDto {
         public static ChatRoomResponseDto from(ChatRoom chatRoom, Message message, Integer unreadCount) {
             return new ChatRoomResponseDto(
                     chatRoom.getId(),
-                    chatRoom.getRoomId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
                     chatRoom.getMemberCount(),
@@ -65,7 +61,6 @@ public class ChatResponseDto {
         ) {
             return new ChatRoomResponseDto(
                     chatRoom.getId(),
-                    chatRoom.getRoomId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
                     chatRoom.getMemberCount(),

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.aper.web.domain.chat.entity.ChatRoom;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -55,5 +56,13 @@ public class ChatRoomSummaryDocument {
         private String senderImage;
         private String content;
         private LocalDateTime createdAt;
+    }
+
+    public ChatRoomSummaryDocument(ChatRoom chatRoom) {
+        ChatRoomSummaryDocument.builder()
+                .chatRoomId(chatRoom.getId())
+                .currentSequence(0L)
+                .updatedAt(LocalDateTime.now())
+                .build();
     }
 }

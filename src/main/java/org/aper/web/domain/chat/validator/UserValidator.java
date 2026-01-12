@@ -1,4 +1,4 @@
-package org.aper.web.domain.chat.policy;
+package org.aper.web.domain.chat.validator;
 
 import org.aper.web.domain.user.entity.User;
 import org.aper.web.global.handler.exception.ServiceException;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPolicy {
+public class UserValidator {
 
     private final UserRepository userRepository;
 

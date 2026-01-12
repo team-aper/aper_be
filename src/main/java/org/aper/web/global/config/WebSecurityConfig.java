@@ -50,8 +50,9 @@ public class WebSecurityConfig {
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
-        configuration.addAllowedOriginPattern("https://*.aper.cc");
+//        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+//        configuration.addAllowedOriginPattern("https://*.aper.cc");
+        configuration.addAllowedOriginPattern("*"); // TODO : 배포 테스트 이후, 재설정
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie", "Cache-Control", "Content-Type"));

@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -113,5 +110,35 @@ public class UnreadCountCacheService {
 
     private String getKey(Long chatRoomId, Long userId) {
         return UNREAD_COUNT_PREFIX + chatRoomId + ":" + userId;
+    }
+
+    public Map<Long, Integer> getBulkUnreadCounts(Long userId, List<Long> chatRoomIds) {
+        if (chatRoomIds == null || chatRoomIds.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        List<String> keys = new ArrayList<>();
+        for(Long chatRoomId : chatRoomIds) {
+            keys.add(getKey(chatRoomId, userId));
+        }
+
+        List<String> values = redisTemplate.opsForValue().multiGet(keys);
+
+        Map<Long, Integer> result = new HashMap<>();
+        for (int i = 0; i < chatRoomIds.size(); i++) {
+            String value = values != null ? values.get(i) : null;
+            if (value == null) continue;
+
+            try {
+                result.put(chatRoomIds.get(i), Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                log.warn("Invalid cached count for chatRoomId: {}, value: {}", chatRoomIds.get(i), value);
+            }
+        }
+
+        log.debug("Bulk fetched unread counts - userId: {}, roomCount: {}, hitCount: {}",
+                userId, chatRoomIds.size(), result.size());
+
+        return result;
     }
 }

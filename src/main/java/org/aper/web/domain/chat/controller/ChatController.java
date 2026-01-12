@@ -27,9 +27,7 @@ public class ChatController {
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
 
-    /**
-     * 채팅방 생성
-     */
+
     @PostMapping("/rooms")
     public ResponseDto<CreatedChatRoomResponseDto> createChatRoom(
             @RequestBody @Valid CreateChatRoomRequestDto request,

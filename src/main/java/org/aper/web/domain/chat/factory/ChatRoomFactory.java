@@ -1,30 +1,40 @@
 package org.aper.web.domain.chat.factory;
 
-import org.aper.web.domain.chat.policy.ChatRoomPolicy;
-import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
-import org.aper.web.domain.chat.entity.ChatRoom;
-import org.aper.web.domain.chat.entity.constant.ChatRoomType;
 import lombok.RequiredArgsConstructor;
+import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
+import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
+import org.aper.web.domain.chat.dto.ChatResponseDto;
+import org.aper.web.domain.chat.entity.ChatRoom;
+import org.aper.web.domain.chat.entity.ChatRoomMember;
+import org.aper.web.domain.chat.entity.constant.ChatRoomType;
+import org.aper.web.domain.user.entity.User;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class ChatRoomFactory {
 
-    private final ChatRoomPolicy chatRoomPolicy;
 
     public ChatRoom create(CreateChatRoomRequestDto request) {
-        chatRoomPolicy.validateRoomName(request.name());
-
         int memberCount = request.memberIds().size() + 1;
-        chatRoomPolicy.validateMemberCount(memberCount);
 
         return ChatRoom.builder()
                 .name(request.name())
                 .type(ChatRoomType.GROUP)
                 .memberCount(memberCount)
                 .build();
+    }
+
+    public ChatRoomMember createMember(ChatRoom chatRoom, User user, boolean isOwner) {
+        return ChatRoomMember.create(chatRoom, user, isOwner);
+    }
+
+    public ChatResponseDto.ChatRoomResponseDto response(ChatRoom room,
+                                                        ChatRoomSummaryDocument summary,
+                                                        Integer unreadCount) {
+        return ChatResponseDto.ChatRoomResponseDto.fromMongo(
+                room,
+                summary != null ? summary.getLastMessage() : null,
+                unreadCount != null ? unreadCount : 0);
     }
 }
