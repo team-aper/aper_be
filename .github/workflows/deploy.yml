@@ -75,6 +75,15 @@ jobs:
 
             sudo docker pull ${{ secrets.ECR_URI }}:latest
 
+            # Redis 컨테이너 재생성
+            sudo docker stop redis_container || true
+            sudo docker rm redis_container || true
+            sudo docker run -d \
+              --name redis_container \
+              --restart unless-stopped \
+              -p 6379:6379 \
+              redis:7-alpine redis-server --requirepass ${{ secrets.REDIS_PASSWORD }}
+
             sudo docker stop aper-be || true
             sudo docker rm aper-be || true
 
@@ -85,6 +94,7 @@ jobs:
               --dns 8.8.8.8 \
               --dns 8.8.4.4 \
               --dns 1.1.1.1 \
+              --link redis_container:redis_container \
               -e SPRING_PROFILES_ACTIVE=dev \
               ${{ secrets.ECR_URI }}:latest
 
