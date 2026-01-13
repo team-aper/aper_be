@@ -96,9 +96,6 @@ jobs:
               --name aper-be \
               -p 8080:8080 \
               --restart unless-stopped \
-              --dns 8.8.8.8 \
-              --dns 8.8.4.4 \
-              --dns 1.1.1.1 \
               --link redis_container:redis_container \
               -e SPRING_PROFILES_ACTIVE=dev \
               ${{ secrets.ECR_URI }}:latest

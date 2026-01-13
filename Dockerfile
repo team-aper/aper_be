@@ -21,8 +21,8 @@ COPY build/libs/*.jar /app/app.jar
 
 EXPOSE 8080
 
-# JVM 옵션 최적화 (메모리 제한)
-ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+# JVM 옵션 최적화 (메모리 제한 + TLS 설정)
+ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djdk.tls.client.protocols=TLSv1.2,TLSv1.3"
 
 # 프로파일은 실행 시 지정 (docker-compose에서)
 CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
