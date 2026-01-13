@@ -15,6 +15,7 @@ public class AuthenticatedMatchers {
             "/user/signup",
             "/login",
             "/health",
+            "/actuator/health",
             "/user/email/*",
             "/user/password/*",
             "/logout",
