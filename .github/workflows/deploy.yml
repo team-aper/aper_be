@@ -53,7 +53,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+        run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
       - name: Build Docker image
         run: docker build -t aper-be .
@@ -71,7 +71,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
+            aws ecr get-login-password --region us-east-2 | sudo docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
             sudo docker pull ${{ secrets.ECR_URI }}:latest
 
