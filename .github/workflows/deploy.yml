@@ -75,14 +75,19 @@ jobs:
 
             sudo docker pull ${{ secrets.ECR_URI }}:latest
 
-            # Redis 컨테이너 재생성
-            sudo docker stop redis_container || true
-            sudo docker rm redis_container || true
-            sudo docker run -d \
-              --name redis_container \
-              --restart unless-stopped \
-              -p 6379:6379 \
-              redis:7-alpine redis-server --requirepass ${{ secrets.REDIS_PASSWORD }}
+            # Redis 컨테이너 확인 및 시작
+            if sudo docker ps -a --format '{{.Names}}' | grep -q '^redis_container$'; then
+              echo "Redis 컨테이너가 이미 존재합니다. 재시작합니다."
+              sudo docker start redis_container || true
+            else
+              echo "Redis 컨테이너를 새로 생성합니다."
+              sudo docker run -d \
+                --name redis_container \
+                --restart unless-stopped \
+                -p 6379:6379 \
+                -v redis_data:/data \
+                redis:7-alpine redis-server --requirepass ${{ secrets.REDIS_PASSWORD }} --appendonly yes
+            fi
 
             sudo docker stop aper-be || true
             sudo docker rm aper-be || true
