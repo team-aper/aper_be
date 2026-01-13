@@ -170,16 +170,18 @@ management:
     web:
       exposure:
         include: health, info
-    endpoint:
-      health:
-        show-details: always
-        probes:
-          enabled: true
+  endpoint:
     health:
-      livenessState:
+      show-details: always
+      probes:
         enabled: true
-      readinessState:
-        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+    elasticsearch:
+      enabled: false
 
 
 #logging:
