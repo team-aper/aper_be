@@ -56,10 +56,10 @@ jobs:
         run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.ECR_URI }}
 
       - name: Build Docker image
-        run: docker build -t aper-repository .
+        run: docker build -t aper-be .
 
       - name: Tag Docker image
-        run: docker tag aper-repository:latest ${{ secrets.ECR_URI }}:latest
+        run: docker tag aper-be:latest ${{ secrets.ECR_URI }}:latest
 
       - name: Push Docker image to ECR
         run: docker push ${{ secrets.ECR_URI }}:latest
