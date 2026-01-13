@@ -25,16 +25,16 @@ public class ChatRoomFactory {
                 .build();
     }
 
-    public ChatRoomMember createMember(ChatRoom chatRoom, User user, boolean isOwner) {
-        return ChatRoomMember.create(chatRoom, user, isOwner);
-    }
+//    public ChatRoomMember createMember(ChatRoom chatRoom, User user, boolean isOwner) {
+//        return ChatRoomMember.create(chatRoom, user, isOwner);
+//    }
 
-    public ChatRoomSummaryDto response(ChatRoom room,
-                                       ChatRoomSummaryDocument summary,
-                                       Integer unreadCount) {
-        return ChatRoomSummaryDto.fromMongo(
-                room,
-                summary != null ? summary.getLastMessage() : null,
-                unreadCount != null ? unreadCount : 0);
-    }
+//    public ChatRoomSummaryDto response(ChatRoom room,
+//                                       ChatRoomSummaryDocument summary,
+//                                       Integer unreadCount) {
+//        return ChatRoomSummaryDto.fromMongo(
+//                room,
+//                summary != null ? summary.getLastMessage() : null,
+//                unreadCount != null ? unreadCount : 0);
+//    }
 }

@@ -9,6 +9,7 @@ import org.aper.web.domain.chat.dto.response.ChatRoomResponse.CreatedChatRoomDto
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.ChatRoomMember;
 import org.aper.web.domain.chat.factory.ChatRoomFactory;
+import org.aper.web.domain.chat.mapper.ChatRoomMapper;
 import org.aper.web.domain.chat.query.ChatRoomSummaryQuery;
 import org.aper.web.domain.chat.query.UserReadTrackingQuery;
 import org.aper.web.domain.chat.repository.ChatRoomMemberRepository;
@@ -46,6 +47,7 @@ public class ChatRoomService {
     private final UserValidator userValidator;
     private final ChatRoomFactory chatRoomFactory;
     private final ChatRoomValidator chatRoomValidator;
+    private final ChatRoomMapper chatRoomMapper;
 
     @Transactional
     public CreatedChatRoomDto createChatRoom(CreateChatRoomRequestDto request, Long userId) {
@@ -90,7 +92,8 @@ public class ChatRoomService {
         Map<Long, Integer> unreadMap = unreadCountService.resolveUnreadCounts(userId, roomIds, summaryMap, trackingMap);
 
         List<ChatRoomSummaryDto> content = rooms.stream()
-                .map(room -> chatRoomFactory.response(room, summaryMap.get(room.getId()), unreadMap.get(room.getId())))
+                .map(room -> chatRoomMapper.toSummaryDto(room, summaryMap.get(room.getId()).getLastMessage(),
+                        unreadMap.get(room.getId())))
                 .toList();
 
         return new SliceImpl<>(content, pageable, roomsSlice.hasNext());
