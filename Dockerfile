@@ -5,6 +5,12 @@ FROM eclipse-temurin:17-jre
 ENV TZ=Asia/Seoul
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+# CA 인증서 업데이트 (MongoDB Atlas SSL 연결용)
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # JAR 파일만 복사 (secret은 환경변수로 관리)
