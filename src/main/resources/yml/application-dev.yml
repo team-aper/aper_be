@@ -45,6 +45,9 @@ spring:
       port: ${dev-redis.port}
       password: ${dev-redis.password}
 
+    mongodb:
+      uri: ${dev-mongodb.uri}
+
   elasticsearch:
     rest:
       uris: ${elasticsearch.rest.uris}
@@ -121,6 +124,9 @@ secret:
     access: ${jwt.secret.key.access}
     refresh: ${jwt.secret.key.refresh}
 
+server:
+  port: 8080
+
 iamport:
   api:
     key: ${iamport.api.key}
@@ -135,6 +141,8 @@ cloud:
       secretKey: ${aws.credentials.secretKey}
     s3:
       bucket: ${aws.s3.bucket}
+    stack:
+      auto: ${aws.stack.auto}
 
 kafka:
   bootstrap-servers: ${kafka.bootstrap-servers}
@@ -155,6 +163,24 @@ security:
   bearer-prefix: ${security.bearer-prefix}
   access-token-expiration: ${security.access-token-expiration}
   refresh-token-expiration: ${security.refresh-token-expiration}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+    endpoint:
+      health:
+        show-details: always
+        probes:
+          enabled: true
+    health:
+      livenessState:
+        enabled: true
+      readinessState:
+        enabled: true
+
 
 #logging:
 #    level:
