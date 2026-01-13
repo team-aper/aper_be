@@ -1,8 +1,25 @@
-FROM openjdk:17
+# 경량 JRE 이미지 사용 (500MB -> 200MB)
+FROM eclipse-temurin:17-jre-alpine
+
+# 타임존 설정
+ENV TZ=Asia/Seoul
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone && \
+    apk del tzdata
+
 WORKDIR /app
+
+# JAR 파일만 복사 (secret은 환경변수로 관리)
 COPY build/libs/*.jar /app/app.jar
-COPY src/main/resources/yml/application-secret.yml src/main/resources/yml/application-secret.yml
-COPY src/main/resources/yml/application-dev.yml src/main/resources/yml/application-dev.yml
+
+# 설정 파일은 빌드 시 포함됨 (submodule)
+# secret.yml은 이미지에 포함하지 않음 (보안)
+
 EXPOSE 8080
-ENV SPRING_PROFILES_ACTIVE=dev
-CMD ["java", "-jar", "app.jar"]
+
+# JVM 옵션 최적화 (메모리 제한)
+ENV JAVA_OPTS="-Xmx512m -Xms256m -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
+# 프로파일은 실행 시 지정 (docker-compose에서)
+CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

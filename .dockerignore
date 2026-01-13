@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+.gitmodules
+.github
+
+# Gradle
+.gradle
+gradle
+gradlew
+gradlew.bat
+build
+!build/libs/*.jar
+
+# IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Test
+src/test
+
+# Documentation
+README.md
+docs
+
+# 환경 변수 및 설정
+.env
+.env.local
+*.properties
+src/main/resources/yml/*.yml
+!src/main/resources/yml/application.yml
