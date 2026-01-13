@@ -1,12 +1,9 @@
 # 경량 JRE 이미지 사용 (500MB -> 200MB)
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 # 타임존 설정
 ENV TZ=Asia/Seoul
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apk del tzdata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
 
