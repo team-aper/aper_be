@@ -1,14 +1,13 @@
 package org.aper.web.domain.user.entity;
 
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.aper.web.domain.chat.entity.ChatRoomMember;
-import org.aper.web.domain.chat.entity.UserReadTracking;
 import org.aper.web.domain.review.entity.Review;
 import org.aper.web.domain.story.entity.Story;
 import org.aper.web.domain.subscription.entity.Subscription;
 import org.aper.web.domain.user.entity.constant.UserRoleEnum;
-import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +59,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<ChatRoomMember> chatRoomMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<UserReadTracking> readTrackings = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<UserReadTracking> readTrackings = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private DeleteAccount deleteAccount;

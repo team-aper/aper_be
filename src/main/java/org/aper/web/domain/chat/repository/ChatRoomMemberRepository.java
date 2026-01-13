@@ -20,9 +20,6 @@ public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMember,L
 
     Optional<ChatRoomMember> findByChatRoomAndUserUserId(ChatRoom chatRoom, Long userId);
 
-    /**
-     * 채팅방의 멤버 ID만 조회 (성능 최적화 - stream 제거)
-     */
     @Query("SELECT m.user.userId FROM ChatRoomMemberEntity m WHERE m.chatRoom = :chatRoom")
     List<Long> findMemberIdsByChatRoom(@Param("chatRoom") ChatRoom chatRoom);
 }

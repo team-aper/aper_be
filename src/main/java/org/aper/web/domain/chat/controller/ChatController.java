@@ -3,9 +3,9 @@ package org.aper.web.domain.chat.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
-import org.aper.web.domain.chat.dto.ChatResponseDto;
-import org.aper.web.domain.chat.dto.ChatResponseDto.ChatRoomResponseDto;
-import org.aper.web.domain.chat.dto.ChatResponseDto.CreatedChatRoomResponseDto;
+import org.aper.web.domain.chat.dto.response.ChatRoomResponse.ChatRoomSummaryDto;
+import org.aper.web.domain.chat.dto.response.ChatRoomResponse.CreatedChatRoomDto;
+import org.aper.web.domain.chat.dto.response.MessageResponse.MessageDocumentDto;
 import org.aper.web.domain.chat.service.ChatMessageService;
 import org.aper.web.domain.chat.service.ChatRoomService;
 import org.aper.web.domain.user.entity.User;
@@ -29,20 +29,20 @@ public class ChatController {
 
 
     @PostMapping("/rooms")
-    public ResponseDto<CreatedChatRoomResponseDto> createChatRoom(
+    public ResponseDto<CreatedChatRoomDto> createChatRoom(
             @RequestBody @Valid CreateChatRoomRequestDto request,
             @CurrentUser User user
     ) {
-        CreatedChatRoomResponseDto response = chatRoomService.createChatRoom(request, user.getUserId());
+        CreatedChatRoomDto response = chatRoomService.createChatRoom(request, user.getUserId());
         return ResponseDto.success("채팅방 생성 성공", response);
     }
 
     @GetMapping("/rooms")
-    public ResponseDto<Slice<ChatRoomResponseDto>> getChatRooms(
+    public ResponseDto<Slice<ChatRoomSummaryDto>> getChatRooms(
             @CurrentUser User user,
             @PageableDefault(size = 20) Pageable pageable
     ) {
-        Slice<ChatRoomResponseDto> responses = chatRoomService.getChatRoomsForUser(user.getUserId(), pageable);
+        Slice<ChatRoomSummaryDto> responses = chatRoomService.getChatRoomsForUser(user.getUserId(), pageable);
         return ResponseDto.success("채팅방 목록 조회 성공", responses);
     }
 
@@ -53,24 +53,24 @@ public class ChatController {
     }
 
     @GetMapping("/rooms/{roomId}/messages")
-    public ResponseDto<Slice<ChatResponseDto.MessageDocumentResponseDto>> getMessages(
+    public ResponseDto<Slice<MessageDocumentDto>> getMessages(
             @PathVariable Long roomId,
             @CurrentUser User user,
             @PageableDefault(size = 50) Pageable pageable
     ) {
-        Slice<ChatResponseDto.MessageDocumentResponseDto> messages =
+        Slice<MessageDocumentDto> messages =
                 chatMessageService.getMessages(roomId, user.getUserId(), pageable);
         return ResponseDto.success("메시지 조회 성공", messages);
     }
 
     @GetMapping("/rooms/{roomId}/messages/since")
-    public ResponseDto<List<ChatResponseDto.MessageDocumentResponseDto>> getMessagesSince(
+    public ResponseDto<List<MessageDocumentDto>> getMessagesSince(
             @PathVariable Long roomId,
             @RequestParam String since,
             @CurrentUser User user
     ) {
         LocalDateTime sinceTime = LocalDateTime.parse(since);
-        List<ChatResponseDto.MessageDocumentResponseDto> messages =
+        List<MessageDocumentDto> messages =
                 chatMessageService.getMessagesSince(roomId, user.getUserId(), sinceTime);
         return ResponseDto.success("최근 메시지 조회 성공", messages);
     }

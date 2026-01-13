@@ -6,9 +6,9 @@ import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
 import org.aper.web.domain.chat.document.LastMessageInfo;
 import org.aper.web.domain.chat.document.MessageDocument;
 import org.aper.web.domain.chat.document.UserReadTrackingDocument;
-import org.aper.web.domain.chat.dto.ChatResponseDto;
+import org.aper.web.domain.chat.dto.response.MessageResponse;
+import org.aper.web.domain.chat.dto.ChatWebSocketDto;
 import org.aper.web.domain.chat.dto.ChatWebSocketDto.MarkAsReadRequest;
-import org.aper.web.domain.chat.dto.ChatWebSocketDto.MessageResponse;
 import org.aper.web.domain.chat.dto.ChatWebSocketDto.SendMessageRequest;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.constant.MessageType;
@@ -99,7 +99,7 @@ public class ChatMessageService {
         MessageDocument message = context.getMessage();
         User sender = context.getSender();
 
-        MessageResponse response = MessageResponse.from(message, context.getRoomId(), sender, context.getRequest());
+        ChatWebSocketDto.MessageResponse response = ChatWebSocketDto.MessageResponse.from(message, context.getRoomId(), sender, context.getRequest());
 
         messagingTemplate.convertAndSend("/topic/chatroom/" + context.getRoomId(), response);
 
@@ -154,20 +154,20 @@ public class ChatMessageService {
 
 
     @Transactional(readOnly = true)
-    public Slice<ChatResponseDto.MessageDocumentResponseDto> getMessages(Long roomId, Long userId, Pageable pageable) {
+    public Slice<MessageResponse.MessageDocumentDto> getMessages(Long roomId, Long userId, Pageable pageable) {
         accessValidator.validate(roomId, userId);
 
         Slice<MessageDocument> messages = messageDocumentRepository
                 .findByChatRoomIdAndIsDeletedFalseOrderByCreatedAtDesc(roomId, pageable);
 
-        List<ChatResponseDto.MessageDocumentResponseDto> content = messageMapper.toDtoList(messages.getContent());
+        List<MessageResponse.MessageDocumentDto> content = messageMapper.toDtoList(messages.getContent());
 
         return new SliceImpl<>(content, pageable, messages.hasNext());
     }
 
     // 특정 시간 이후의 메시지 조회 : 동기화용
     @Transactional(readOnly = true)
-    public List<ChatResponseDto.MessageDocumentResponseDto> getMessagesSince(Long roomId, Long userId, LocalDateTime since) {
+    public List<MessageResponse.MessageDocumentDto> getMessagesSince(Long roomId, Long userId, LocalDateTime since) {
         accessValidator.validate(roomId, userId);
 
         Slice<MessageDocument> messages = messageDocumentRepository

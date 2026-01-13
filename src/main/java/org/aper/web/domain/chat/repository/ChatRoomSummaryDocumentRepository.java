@@ -10,13 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ChatRoomSummaryDocumentRepository extends MongoRepository<ChatRoomSummaryDocument, String> {
 
-    /**
-     * MySQL chatRoomId로 조회
-     */
     Optional<ChatRoomSummaryDocument> findByChatRoomId(Long chatRoomId);
 
-    /**
-     * 여러 채팅방 요약 정보 조회 (Batch)
-     */
     List<ChatRoomSummaryDocument> findByChatRoomIdIn(List<Long> chatRoomIds);
 }

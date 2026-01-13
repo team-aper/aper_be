@@ -14,10 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-/**
- * 채팅방 목록 조회 최적화를 위한 요약 정보
- * MySQL ChatRoom과 동기화됨
- */
 @Document(collection = "chat_room_summaries")
 @Data
 @Builder

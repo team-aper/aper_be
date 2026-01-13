@@ -43,9 +43,6 @@ public class ChatWebSocketDto {
         }
     }
 
-    /**
-     * 읽음 처리 요청
-     */
     public record MarkAsReadRequest(
             String lastReadMessageId,  // MongoDB _id는 String
             Long lastReadSequence

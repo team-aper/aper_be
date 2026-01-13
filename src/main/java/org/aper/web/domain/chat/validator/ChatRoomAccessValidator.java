@@ -11,9 +11,7 @@ import org.aper.web.global.handler.ErrorCode;
 import org.aper.web.global.handler.exception.ServiceException;
 import org.springframework.stereotype.Component;
 
-/**
- * 채팅방 접근 권한 검증
- */
+
 @Component
 @RequiredArgsConstructor
 public class ChatRoomAccessValidator {

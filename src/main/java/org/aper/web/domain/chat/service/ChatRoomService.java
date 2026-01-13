@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.aper.web.domain.chat.document.ChatRoomSummaryDocument;
 import org.aper.web.domain.chat.document.UserReadTrackingDocument;
 import org.aper.web.domain.chat.dto.ChatRequestDto.CreateChatRoomRequestDto;
-import org.aper.web.domain.chat.dto.ChatResponseDto.ChatRoomResponseDto;
-import org.aper.web.domain.chat.dto.ChatResponseDto.CreatedChatRoomResponseDto;
+import org.aper.web.domain.chat.dto.response.ChatRoomResponse.ChatRoomSummaryDto;
+import org.aper.web.domain.chat.dto.response.ChatRoomResponse.CreatedChatRoomDto;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.ChatRoomMember;
 import org.aper.web.domain.chat.factory.ChatRoomFactory;
@@ -48,7 +48,7 @@ public class ChatRoomService {
     private final ChatRoomValidator chatRoomValidator;
 
     @Transactional
-    public CreatedChatRoomResponseDto createChatRoom(CreateChatRoomRequestDto request, Long userId) {
+    public CreatedChatRoomDto createChatRoom(CreateChatRoomRequestDto request, Long userId) {
         User creator = userValidator.validateUserExists(userId);
         ChatRoom chatRoom = chatRoomFactory.create(request);
         chatRoom = chatRoomRepository.save(chatRoom);
@@ -63,7 +63,7 @@ public class ChatRoomService {
             addMember(chatRoom, member, false);
         }
 
-        return CreatedChatRoomResponseDto.from(chatRoom);
+        return CreatedChatRoomDto.from(chatRoom);
     }
 
     private void addMember(ChatRoom chatRoom, User user, boolean isOwner) {
@@ -72,7 +72,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public Slice<ChatRoomResponseDto> getChatRoomsForUser(Long userId, Pageable pageable) {
+    public Slice<ChatRoomSummaryDto> getChatRoomsForUser(Long userId, Pageable pageable) {
         userValidator.validateUserExists(userId);
 
         Slice<ChatRoom> roomsSlice = chatRoomRepository.findRecentChatRooms(userId, pageable);
@@ -89,7 +89,7 @@ public class ChatRoomService {
 
         Map<Long, Integer> unreadMap = unreadCountService.resolveUnreadCounts(userId, roomIds, summaryMap, trackingMap);
 
-        List<ChatRoomResponseDto> content = rooms.stream()
+        List<ChatRoomSummaryDto> content = rooms.stream()
                 .map(room -> chatRoomFactory.response(room, summaryMap.get(room.getId()), unreadMap.get(room.getId())))
                 .toList();
 

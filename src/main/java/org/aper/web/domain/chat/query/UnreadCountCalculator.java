@@ -21,9 +21,6 @@ public class UnreadCountCalculator {
     private final MessageDocumentRepository messageDocumentRepository;
     private final UnreadCountCacheService cacheService;
 
-    /**
-     * 단일 채팅방의 안읽은 메시지 수 계산 (Redis 캐싱)
-     */
     public Integer calculate(Long roomId, ChatRoomSummaryDocument summary, UserReadTrackingDocument tracking) {
         if (summary == null || summary.getCurrentSequence() == null) return 0;
 
@@ -35,9 +32,6 @@ public class UnreadCountCalculator {
         return (int) Math.max(0, lastSeq - readSeq);
     }
 
-    /**
-     * DB에서 안읽은 메시지 개수 계산
-     */
     private Integer calculateFromDatabase(Long chatRoomId, UserReadTrackingDocument tracking, MessageDocument lastMessage) {
         if (lastMessage == null) {
             return 0;
@@ -54,9 +48,6 @@ public class UnreadCountCalculator {
                 .intValue();
     }
 
-    /**
-     * Batch로 여러 채팅방의 안읽은 메시지 수 조회 (Redis 우선)
-     */
     public Map<Long, Integer> calculateBatch(
             Long userId,
             List<Long> chatRoomIds,

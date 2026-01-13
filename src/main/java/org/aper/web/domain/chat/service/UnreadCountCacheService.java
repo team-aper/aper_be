@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Redis를 사용한 안읽은 메시지 개수 캐싱
- */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,18 +19,13 @@ public class UnreadCountCacheService {
     private static final String UNREAD_COUNT_PREFIX = "chat:unread:";
     private static final long CACHE_TTL_HOURS = 24;
 
-    /**
-     * 안읽은 개수 캐싱 - Key: chat:unread:{chatRoomId}:{userId}
-     */
+
     public void cacheUnreadCount(Long chatRoomId, Long userId, Integer count) {
         String key = getKey(chatRoomId, userId);
         redisTemplate.opsForValue().set(key, String.valueOf(count), CACHE_TTL_HOURS, TimeUnit.HOURS);
         log.debug("Cached unread count - chatRoomId: {}, userId: {}, count: {}", chatRoomId, userId, count);
     }
 
-    /**
-     * 캐시된 안읽은 개수 조회
-     */
     public Integer getCachedUnreadCount(Long chatRoomId, Long userId) {
         String key = getKey(chatRoomId, userId);
         String value = redisTemplate.opsForValue().get(key);
@@ -44,9 +37,6 @@ public class UnreadCountCacheService {
         return Integer.parseInt(value);
     }
 
-    /**
-     * 여러 채팅방의 안읽은 개수 일괄 조회
-     */
     public Map<Long, Integer> getCachedUnreadCounts(Long userId, List<Long> chatRoomIds) {
         Map<Long, Integer> result = new HashMap<>();
 
@@ -60,9 +50,6 @@ public class UnreadCountCacheService {
         return result;
     }
 
-    /**
-     * 안읽은 개수 증가 (메시지 전송 시)
-     */
     public void incrementUnreadCount(Long chatRoomId, Long userId) {
         String key = getKey(chatRoomId, userId);
         redisTemplate.opsForValue().increment(key);
@@ -84,17 +71,11 @@ public class UnreadCountCacheService {
         }
     }
 
-    /**
-     * 캐시 삭제
-     */
     public void evictCache(Long chatRoomId, Long userId) {
         String key = getKey(chatRoomId, userId);
         redisTemplate.delete(key);
     }
 
-    /**
-     * 채팅방 전체 캐시 삭제
-     */
     public void evictChatRoomCache(Long chatRoomId) {
         String pattern = UNREAD_COUNT_PREFIX + chatRoomId + ":*";
         Set<String> keys = redisTemplate.keys(pattern);

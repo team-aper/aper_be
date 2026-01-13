@@ -1,25 +1,24 @@
-package org.aper.web.domain.chat.dto;
+package org.aper.web.domain.chat.dto.response;
 
 import org.aper.web.domain.chat.document.LastMessageInfo;
 import org.aper.web.domain.chat.entity.ChatRoom;
 import org.aper.web.domain.chat.entity.Message;
 import org.aper.web.domain.chat.entity.constant.ChatRoomType;
-import org.aper.web.domain.chat.entity.constant.MessageType;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
-public class ChatResponseDto {
 
-    public record CreatedChatRoomResponseDto(
+public class ChatRoomResponse {
+
+    public record CreatedChatRoomDto(
             Long id,
             String name,
             ChatRoomType type,
             Integer memberCount,
             LocalDateTime createdAt
     ) {
-        public static CreatedChatRoomResponseDto from(ChatRoom chatRoom) {
-            return new CreatedChatRoomResponseDto(
+        public static CreatedChatRoomDto from(ChatRoom chatRoom) {
+            return new CreatedChatRoomDto(
                     chatRoom.getId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
@@ -29,7 +28,7 @@ public class ChatResponseDto {
         }
     }
 
-    public record ChatRoomResponseDto(
+    public record ChatRoomDetailDto(
             Long id,
             String name,
             ChatRoomType type,
@@ -40,8 +39,8 @@ public class ChatResponseDto {
             String lastMessageSenderName,
             Integer unreadCount
     ) {
-        public static ChatRoomResponseDto from(ChatRoom chatRoom, Message message, Integer unreadCount) {
-            return new ChatRoomResponseDto(
+        public static ChatRoomDetailDto from(ChatRoom chatRoom, Message message, Integer unreadCount) {
+            return new ChatRoomDetailDto(
                     chatRoom.getId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
@@ -54,12 +53,12 @@ public class ChatResponseDto {
             );
         }
 
-        public static ChatRoomResponseDto fromMongo(
+        public static ChatRoomDetailDto fromMongo(
                 ChatRoom chatRoom,
                 LastMessageInfo lastMessage,
                 Integer unreadCount
         ) {
-            return new ChatRoomResponseDto(
+            return new ChatRoomDetailDto(
                     chatRoom.getId(),
                     chatRoom.getName(),
                     chatRoom.getType(),
@@ -73,7 +72,8 @@ public class ChatResponseDto {
         }
     }
 
-    public record ChatRoomListResponseDto(
+
+    public record ChatRoomSummaryDto(
             Long roomId,
             String roomName,
             String roomImage,
@@ -81,60 +81,21 @@ public class ChatResponseDto {
             LocalDateTime lastMessageTime,
             Integer unreadCount,
             Integer memberCount
-    ) {}
-
-    public record MessageResponseDto(
-            Long messageId,
-            String content,
-            MessageType type,
-            SenderInfo sender,
-            LocalDateTime createdAt,
-            Integer unreadCount
     ) {
-        public static MessageResponseDto from(Message message, Integer unreadCount) {
-            SenderInfo senderInfo = new SenderInfo(
-                    message.getSenderId(),
-                    message.getSenderName(),
-                    message.getSenderImage()
-            );
-
-            return new MessageResponseDto(
-                    message.getId(),
-                    message.getContent(),
-                    message.getType(),
-                    senderInfo,
-                    message.getCreatedAt(),
-                    unreadCount
+        public static ChatRoomSummaryDto fromMongo(
+                ChatRoom chatRoom,
+                LastMessageInfo lastMessage,
+                Integer unreadCount
+        ) {
+            return new ChatRoomSummaryDto(
+                    chatRoom.getId(),
+                    chatRoom.getName(),
+                    null, // roomImage
+                    lastMessage != null ? lastMessage.getContent() : "",
+                    lastMessage != null ? lastMessage.getCreatedAt() : null,
+                    unreadCount != null ? unreadCount : 0,
+                    chatRoom.getMemberCount()
             );
         }
     }
-
-    public record SenderInfo(
-            Long userId,
-            String nickname,
-            String profileImage
-    ) {}
-
-    /**
-     * MongoDB 메시지 조회 응답
-     */
-    public record MessageDocumentResponseDto(
-            String messageId,
-            Long chatRoomId,
-            MessageSenderInfo sender,
-            String content,
-            MessageType type,
-            Map<String, Object> payload,
-            Long messageSequence,
-            LocalDateTime createdAt
-    ) {}
-
-    /**
-     * 메시지 발신자 정보
-     */
-    public record MessageSenderInfo(
-            Long userId,
-            String nickname,
-            String profileImage
-    ) {}
 }
