@@ -102,13 +102,13 @@ jobs:
 
             sudo docker image prune -af --filter "label!=keep"
 
-            sleep 5
-            for i in {1..6}; do
+            sleep 10
+            for i in {1..10}; do
               if curl -f http://localhost:8080/actuator/health > /dev/null 2>&1; then
                 echo "✅ 배포 성공! 애플리케이션이 정상 구동 중입니다."
                 exit 0
               fi
-              echo "⏳ 애플리케이션 시작 대기 중... ($i/6)"
+              echo "⏳ 애플리케이션 시작 대기 중... ($i/10)"
               sleep 5
             done
             echo "❌ 헬스체크 실패. 로그를 확인하세요: sudo docker logs aper-be"
