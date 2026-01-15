@@ -38,7 +38,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor {
                         token = token.substring(7);
                     }
 
-                    Claims claims = tokenProvider.parseClaims("Bearer " + token);
+                    Claims claims = tokenProvider.parseClaims(token);
                     String email = claims.getSubject();
 
                      User user = userRepository.findByEmail(email)
